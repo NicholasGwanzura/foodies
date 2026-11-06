@@ -2,7 +2,7 @@
 
 Every screen and WhatsApp flow, with the endpoints it calls. Paths are relative to `/api/v1` and match [api/openapi.yaml](../api/openapi.yaml). Requirements are in [spec.md](spec.md).
 
-This map has 151 screens. Together they use 866 of the 870 API operations. The other 4 are webhooks with no screen, listed at the end.
+This map has 151 screens. Together they use 866 of the 871 API operations. The other 5 are system endpoints with no screen, listed at the end.
 
 ## How to read this map
 
@@ -2395,7 +2395,7 @@ Request to close-out.
 
 ## System endpoints with no screen
 
-These are called by Meta or by external systems, not by a screen.
+These are called by Meta, external systems or monitoring, not by a screen.
 
 | Method | Path | Operation | Caller |
 |---|---|---|---|
@@ -2403,3 +2403,4 @@ These are called by Meta or by external systems, not by a screen.
 | POST | `/webhooks/whatsapp` | `receiveWhatsappWebhook` | Meta WhatsApp platform |
 | POST | `/webhooks/whatsapp/flows` | `exchangeWhatsappFlowData` | Meta WhatsApp platform |
 | POST | `/integrations/inbound/{system}/events` | `receiveIntegrationEvents` | External system |
+| GET | `/health` | `getHealth` | Deployment and monitoring |

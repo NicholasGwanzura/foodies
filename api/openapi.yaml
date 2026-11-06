@@ -66,6 +66,9 @@ tags:
 - name: WhatsApp
   description: 'The WhatsApp channel: identities, webhooks, templates and message log.'
   x-group: Platform
+- name: System
+  description: Service health for deployment and monitoring.
+  x-group: Platform
 - name: Integrations
   description: GAAP POS, GAAP Unity, SAP Business One, Belina, bank and CCTV connections, imports and postings.
   x-group: Platform
@@ -164,6 +167,7 @@ x-tagGroups:
   - Notifications
   - Sync
   - WhatsApp
+  - System
   - Integrations
   - Reporting
   - Retention
@@ -204,6 +208,21 @@ x-tagGroups:
   - Products & NPD
   - External Visits
 paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Check that the API and its database are up
+      tags:
+      - System
+      security: []
+      x-phase: 0
+      x-channels:
+      - web
+      responses:
+        '204':
+          description: Healthy.
+        default:
+          $ref: '#/components/responses/ServerError'
   /complexes:
     get:
       operationId: listComplexes

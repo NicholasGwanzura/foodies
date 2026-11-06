@@ -2,6 +2,7 @@ package httpapi
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"log/slog"
@@ -10,7 +11,52 @@ import (
 	"testing"
 
 	"foodies/api/internal/http/apigen"
+	"foodies/api/internal/service"
 )
+
+type stubQuerier struct{ err error }
+
+func (s stubQuerier) Ping(context.Context) (int32, error) { return 1, s.err }
+
+func TestHealth(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		pingErr    error
+		wantStatus int
+	}{
+		{name: "database reachable", wantStatus: http.StatusNoContent},
+		{name: "database down", pingErr: errors.New("connection refused"), wantStatus: http.StatusInternalServerError},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			svc := service.New(stubQuerier{err: tt.pingErr})
+			handler := NewHandler(svc, slog.New(slog.DiscardHandler))
+			rec := httptest.NewRecorder()
+			handler.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/api/v1/health", nil))
+
+			if rec.Code != tt.wantStatus {
+				t.Fatalf("status = %d, want %d", rec.Code, tt.wantStatus)
+			}
+			if tt.pingErr == nil {
+				if rec.Body.Len() != 0 {
+					t.Errorf("body = %q, want empty", rec.Body)
+				}
+				return
+			}
+			if got := decodeProblem(t, rec); got.Code != apigen.ErrorCodeInternalError {
+				t.Errorf("code = %q, want internal_error", got.Code)
+			}
+			if bytes.Contains(rec.Body.Bytes(), []byte("refused")) {
+				t.Errorf("internal error reached the client: %s", rec.Body)
+			}
+		})
+	}
+}
 
 func TestHandlerErrorsAreProblems(t *testing.T) {
 	t.Parallel()

@@ -38391,6 +38391,9 @@ type ServerInterface interface {
 	// UpdateGrievance Update grievance
 	// (PATCH /grievances/{grievance_id})
 	UpdateGrievance(w http.ResponseWriter, r *http.Request, grievanceId openapi_types.UUID, params UpdateGrievanceParams)
+	// GetHealth Check that the API and its database are up
+	// (GET /health)
+	GetHealth(w http.ResponseWriter, r *http.Request)
 	// ListHolds List holds
 	// (GET /holds)
 	ListHolds(w http.ResponseWriter, r *http.Request, params ListHoldsParams)
@@ -64089,6 +64092,20 @@ func (siw *ServerInterfaceWrapper) UpdateGrievance(w http.ResponseWriter, r *htt
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.UpdateGrievance(w, r, grievanceId, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetHealth operation middleware
+func (siw *ServerInterfaceWrapper) GetHealth(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetHealth(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -94840,6 +94857,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/grievances", wrapper.CreateGrievance)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/grievances/{grievance_id}", wrapper.GetGrievance)
 	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/grievances/{grievance_id}", wrapper.UpdateGrievance)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/health", wrapper.GetHealth)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/holds", wrapper.ListHolds)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/holds", wrapper.CreateHold)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/holds/{hold_id}", wrapper.GetHold)
@@ -156745,6 +156763,42 @@ type UpdateGrievancedefaultApplicationProblemPlusJSONResponse struct {
 }
 
 func (response UpdateGrievancedefaultApplicationProblemPlusJSONResponse) VisitUpdateGrievanceResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response.Body); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/problem+json")
+	if response.Headers.XRequestId != nil {
+		w.Header().Set("X-Request-Id", fmt.Sprint(*response.Headers.XRequestId))
+	}
+	w.WriteHeader(response.StatusCode)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetHealthRequestObject struct {
+}
+
+type GetHealthResponseObject interface {
+	VisitGetHealthResponse(w http.ResponseWriter) error
+}
+
+type GetHealth204Response struct {
+}
+
+func (response GetHealth204Response) VisitGetHealthResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type GetHealthdefaultApplicationProblemPlusJSONResponse struct {
+	Body       Problem
+	Headers    ServerErrorResponseHeaders
+	StatusCode int
+}
+
+func (response GetHealthdefaultApplicationProblemPlusJSONResponse) VisitGetHealthResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response.Body); err != nil {
@@ -235103,6 +235157,9 @@ type StrictServerInterface interface {
 	// UpdateGrievance Update grievance
 	// (PATCH /grievances/{grievance_id})
 	UpdateGrievance(ctx context.Context, request UpdateGrievanceRequestObject) (UpdateGrievanceResponseObject, error)
+	// GetHealth Check that the API and its database are up
+	// (GET /health)
+	GetHealth(ctx context.Context, request GetHealthRequestObject) (GetHealthResponseObject, error)
 	// ListHolds List holds
 	// (GET /holds)
 	ListHolds(ctx context.Context, request ListHoldsRequestObject) (ListHoldsResponseObject, error)
@@ -247973,6 +248030,30 @@ func (sh *strictHandler) UpdateGrievance(w http.ResponseWriter, r *http.Request,
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(UpdateGrievanceResponseObject); ok {
 		if err := validResponse.VisitUpdateGrievanceResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetHealth operation middleware
+func (sh *strictHandler) GetHealth(w http.ResponseWriter, r *http.Request) {
+	var request GetHealthRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetHealth(ctx, request.(GetHealthRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetHealth")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetHealthResponseObject); ok {
+		if err := validResponse.VisitGetHealthResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -263910,6 +263991,10 @@ func (Unimplemented) GetGrievance(_ context.Context, _ GetGrievanceRequestObject
 }
 
 func (Unimplemented) UpdateGrievance(_ context.Context, _ UpdateGrievanceRequestObject) (UpdateGrievanceResponseObject, error) {
+	return nil, ErrNotImplemented
+}
+
+func (Unimplemented) GetHealth(_ context.Context, _ GetHealthRequestObject) (GetHealthResponseObject, error) {
 	return nil, ErrNotImplemented
 }
 

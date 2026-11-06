@@ -20,7 +20,7 @@ The scope covers all 11 checklist modules and 792 checklist items, plus the SOP 
 
 | Measure | Count |
 |---|---:|
-| API operations | 870 |
+| API operations | 871 |
 | API resources | 173 |
 | Data tables | 200 |
 | Screens | 151 |
@@ -531,7 +531,7 @@ Items are counted once, at the phase holding most of their area. Some areas span
 
 ## 12. API conventions
 
-The contract is [api/openapi.yaml](../api/openapi.yaml), OpenAPI 3.1, with 870 operations.
+The contract is [api/openapi.yaml](../api/openapi.yaml), OpenAPI 3.1, with 871 operations.
 
 ### 12.1 Basics
 
@@ -673,7 +673,7 @@ These targets are proposals from this spec, not from the source documents. Pleas
 | GAAP, SAP and Belina integration may not be possible | Manual effort, delays | File import and manual posting on every path. Check feasibility in Phase 0. |
 | WhatsApp as a full channel | Cost for all staff, Flow size limits, template approval, dependence on Meta | Estimate message volumes before committing. Keep the web app as a complete alternative for all role work. |
 | Staff phones and data | WhatsApp-only staff may lack a smartphone or data | Survey staff. Shared branch tablets as fallback. |
-| Scale of the design | 870 operations is a large build | Phasing, the form engine, and an honest review of scope after Phase 1. |
+| Scale of the design | 871 operations is a large build | Phasing, the form engine, and an honest review of scope after Phase 1. |
 | Double entry | Staff key the same thing into POS, GAAP and Foodies | Prefill from feeds. Measure entry time in the pilot. |
 | Parallel paper and digital | Two versions of the truth during rollout | Agree per register whether it is replaced or runs in parallel (C-11.09). |
 | SOP conflicts | Digitising a conflict locks it in | Open decisions in Appendix C must close first. The pizza oven cleaning contradiction (C-02.09, C-02.10) is a safety example. |

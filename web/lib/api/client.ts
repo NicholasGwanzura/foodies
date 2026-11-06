@@ -140,7 +140,7 @@ type Args<O> = object extends RequestOptions<O>
   ? [RequestOptions<O>?]
   : [RequestOptions<O>];
 
-/** Fixing the method here is what keeps 870 operations inside compiler limits. */
+/** Fixing the method here is what keeps the full API inside compiler limits. */
 type MethodClient<M extends Method> = <P extends PathWith<M>>(
   path: P,
   ...options: Args<Operation<M, P>>
