@@ -1,0 +1,32 @@
+{
+  "name": "foodies-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "node --test \"lib/**/*.test.ts\"",
+    "gen": "openapi-typescript ../api/openapi.yaml --output lib/api/schema.d.ts"
+  },
+  "dependencies": {
+    "next": "16.4.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.5",
+    "openapi-typescript": "7.13.0",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@12.4.1",
+  "engines": {
+    "node": ">=22.18"
+  }
+}

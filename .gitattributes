@@ -1,0 +1,5 @@
+# Collapse generated code in diffs and exclude it from language stats.
+api/internal/db/*.go linguist-generated=true
+api/internal/http/apigen/apigen.gen.go linguist-generated=true
+web/lib/api/schema.d.ts linguist-generated=true
+web/pnpm-lock.yaml linguist-generated=true

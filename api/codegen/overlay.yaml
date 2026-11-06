@@ -1,0 +1,26 @@
+# Applied only by oapi-codegen, in memory. openapi.yaml stays the contract and
+# is not changed by this file, and web types are generated from it directly.
+#
+# oapi-codegen v2.8.2 cannot turn OpenAPI 3.1 multi-type schemas into Go types.
+# A new combination fails `make gen` until it gets an action here.
+overlay: 1.0.0
+info:
+  title: Go code generation shims
+  version: 1.0.0
+actions:
+  # Free-form values (rule values, form answers, conditions) and DashboardTile
+  # values. The service owning each one validates and decodes it.
+  - target: "$..[?(@.type && @.type[0] == 'object' && @.type[1] == 'array')]"
+    update:
+      x-go-type: json.RawMessage
+  - target: "$..[?(@.type && @.type[0] == 'string' && @.type[1] == 'number')]"
+    update:
+      x-go-type: json.RawMessage
+  # Cursors are null on the last page and must serialise as null, not vanish.
+  - target: "$.components.schemas.PageInfo.properties['next_cursor','prev_cursor'].type"
+    remove: true
+  - target: "$.components.schemas.PageInfo.properties['next_cursor','prev_cursor']"
+    update:
+      type: string
+      nullable: true
+      x-omitempty: false

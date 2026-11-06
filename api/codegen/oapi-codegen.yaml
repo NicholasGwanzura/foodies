@@ -1,0 +1,12 @@
+# Run from api/ through `make gen`.
+package: apigen
+output: internal/http/apigen/apigen.gen.go
+generate:
+  models: true
+  std-http-server: true
+  strict-server: true
+output-options:
+  overlay:
+    path: codegen/overlay.yaml
+  user-templates:
+    strict/strict-http.tmpl: codegen/templates/strict-http.tmpl
