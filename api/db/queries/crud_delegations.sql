@@ -27,3 +27,15 @@ UPDATE delegations
 SET status = sqlc.arg(status), updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
 WHERE id = sqlc.arg(id)
 RETURNING *;
+
+-- name: ActSubmitDelegation :one
+UPDATE delegations
+SET status = 'pending_approval', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
+WHERE id = sqlc.arg(id) AND status IN ('draft')
+RETURNING *;
+
+-- name: ActRevokeDelegation :one
+UPDATE delegations
+SET status = 'revoked', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
+WHERE id = sqlc.arg(id) AND status IN ('draft', 'pending_approval', 'active')
+RETURNING *;

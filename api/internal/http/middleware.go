@@ -106,6 +106,7 @@ func (s *Server) authorize(f apigen.StrictHandlerFunc, operationID string) apige
 			p.Active = scope
 		}
 		ctx = auth.With(ctx, p)
+		ctx = context.WithValue(ctx, tokenKey{}, bearer(r))
 		if op.Restricted && r.Method == http.MethodGet {
 			if err := s.service.LogRead(ctx, operationID, r.URL.Path); err != nil {
 				return nil, err

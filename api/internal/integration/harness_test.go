@@ -37,6 +37,7 @@ const (
 var (
 	api  *httptest.Server
 	pool *pgxpool.Pool
+	svc  *service.Service
 )
 
 func TestMain(m *testing.M) {
@@ -74,7 +75,13 @@ func setup(m *testing.M) (int, error) {
 		return 0, err
 	}
 
-	svc := service.New(db.New(pool), pool, auth.NewSigner(secret))
+	uploads, err := os.MkdirTemp("", "foodies-uploads")
+	if err != nil {
+		return 0, fmt.Errorf("upload dir: %w", err)
+	}
+	defer os.RemoveAll(uploads) //nolint:errcheck // temp dir
+	svc = service.New(db.New(pool), pool, auth.NewSigner(secret))
+	svc.Configure(service.Config{UploadDir: uploads, SigningSecret: secret})
 	api = httptest.NewServer(httpapi.NewHandler(svc, slog.New(slog.DiscardHandler)))
 	defer api.Close()
 	return m.Run(), nil
@@ -111,7 +118,7 @@ func seed(ctx context.Context) error {
 		return fmt.Errorf("acquire: %w", err)
 	}
 	defer conn.Release()
-	for _, f := range []string{"../../cmd/seed/sql/reference.sql", "../../cmd/seed/sql/demo.sql"} {
+	for _, f := range []string{"../../cmd/seed/sql/reference.sql", "../../cmd/seed/sql/rules.sql", "../../cmd/seed/sql/demo.sql"} {
 		raw, err := os.ReadFile(f)
 		if err != nil {
 			return fmt.Errorf("read %s: %w", f, err)

@@ -90,12 +90,39 @@ CREATE TRIGGER audit_events_append_only BEFORE UPDATE OR DELETE ON audit_events
 """
 
 
+WORKFLOW_UP = """
+-- Which rules must have an active value before a workflow can go live. The data
+-- model keeps this on templates (required_rule_keys); dedicated workflows use this.
+CREATE TABLE workflow_requirements (
+  workflow_key text NOT NULL,
+  rule_key text NOT NULL,
+  PRIMARY KEY (workflow_key, rule_key)
+);
+"""
+WORK_UP = """
+CREATE TABLE notification_preferences (
+  user_id uuid PRIMARY KEY,
+  categories jsonb NOT NULL DEFAULT '{}',
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+"""
+WORK_POST = """
+CREATE UNIQUE INDEX tasks_once_per_day ON tasks (schedule_id, site_id, business_date) WHERE schedule_id IS NOT NULL;
+CREATE INDEX ON tasks (assignee_user_id);
+CREATE INDEX ON notifications (recipient_user_id, read_at);
+ALTER TABLE tasks ADD COLUMN reminded_at timestamptz;
+"""
+
+
 def tables(*sections):
     return [t for t in sc.ORDER if sc.T[t]["section"] in sections]
 
 
 SLICES = [
     (2, "organisation_people", "org", ["Organisation", "People & Access", "Audit"], INFRA_UP, INFRA_DOWN, AUDIT_UP),
+    (3, "rules_approvals_evidence", "core", ["Rules & Readiness", "Approvals", "Signatures", "Evidence"], WORKFLOW_UP, "DROP TABLE IF EXISTS workflow_requirements;", ""),
+    (4, "tasks_forms_escalations", "work", ["Tasks & Schedules", "Forms", "Escalations & Actions", "Notifications"], WORK_UP, "DROP TABLE IF EXISTS notification_preferences;", WORK_POST),
+    (5, "integrations_reporting", "ops", ["Sync", "WhatsApp", "Integrations", "Reporting", "Retention"], "", "", ""),
 ]
 
 
@@ -104,8 +131,14 @@ def main():
     for number, name, key, sections, up, down, post in SLICES:
         ts = tables(*sections)
         done = sc.write_migration(number, name, ts, done, up, down, post)
+    sc.write_search([t for s in SLICES for t in tables(*s[3])])
     for number, name, key, sections, *_ in SLICES:
         sc.scaffold_section(key, tables(*sections))
+    sc.write_registry([t for s in SLICES for t in tables(*s[3])])
+    sc.subprocess.call("gofmt -w internal/service", shell=True, cwd=sc.API)
+    import ui
+    built = [t for *_x, sections, _u, _d, _p in [(s[0], s[1], s[2], s[3], s[4], s[5], s[6]) for s in SLICES] for t in tables(*sections)]
+    ui.emit(built, os.path.join(sc.ROOT, "web", "lib", "resources.gen.ts"))
 
 
 if __name__ == "__main__":

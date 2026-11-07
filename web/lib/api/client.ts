@@ -85,7 +85,8 @@ function buildUrl(
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(query ?? {})) {
     if (Array.isArray(value)) {
-      for (const item of value) search.append(key, String(item));
+      // The spec's array parameters are `explode: false`.
+      if (value.length > 0) search.set(key, value.join(","));
     } else if (value !== undefined && value !== null) {
       search.set(key, String(value));
     }

@@ -13,6 +13,134 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const actDisableUser = `-- name: ActDisableUser :one
+UPDATE users
+SET status = 'disabled', updated_at = now(), updated_by = $1, row_version = row_version + 1
+WHERE id = $2 AND status IN ('invited', 'active', 'locked')
+RETURNING id, employee_id, channels, mfa_required, last_sign_in_at, credential_status, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type ActDisableUserParams struct {
+	UpdatedBy *uuid.UUID `json:"updated_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) ActDisableUser(ctx context.Context, arg ActDisableUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, actDisableUser, arg.UpdatedBy, arg.ID)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.EmployeeID,
+		&i.Channels,
+		&i.MfaRequired,
+		&i.LastSignInAt,
+		&i.CredentialStatus,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const actLockUser = `-- name: ActLockUser :one
+UPDATE users
+SET status = 'locked', updated_at = now(), updated_by = $1, row_version = row_version + 1
+WHERE id = $2 AND status IN ('active')
+RETURNING id, employee_id, channels, mfa_required, last_sign_in_at, credential_status, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type ActLockUserParams struct {
+	UpdatedBy *uuid.UUID `json:"updated_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) ActLockUser(ctx context.Context, arg ActLockUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, actLockUser, arg.UpdatedBy, arg.ID)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.EmployeeID,
+		&i.Channels,
+		&i.MfaRequired,
+		&i.LastSignInAt,
+		&i.CredentialStatus,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const actResetCredentialsUser = `-- name: ActResetCredentialsUser :one
+UPDATE users
+SET updated_at = now(), updated_by = $1, row_version = row_version + 1
+WHERE id = $2 AND status IN ('invited', 'active', 'locked')
+RETURNING id, employee_id, channels, mfa_required, last_sign_in_at, credential_status, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type ActResetCredentialsUserParams struct {
+	UpdatedBy *uuid.UUID `json:"updated_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) ActResetCredentialsUser(ctx context.Context, arg ActResetCredentialsUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, actResetCredentialsUser, arg.UpdatedBy, arg.ID)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.EmployeeID,
+		&i.Channels,
+		&i.MfaRequired,
+		&i.LastSignInAt,
+		&i.CredentialStatus,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const actUnlockUser = `-- name: ActUnlockUser :one
+UPDATE users
+SET status = 'active', updated_at = now(), updated_by = $1, row_version = row_version + 1
+WHERE id = $2 AND status IN ('locked')
+RETURNING id, employee_id, channels, mfa_required, last_sign_in_at, credential_status, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type ActUnlockUserParams struct {
+	UpdatedBy *uuid.UUID `json:"updated_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) ActUnlockUser(ctx context.Context, arg ActUnlockUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, actUnlockUser, arg.UpdatedBy, arg.ID)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.EmployeeID,
+		&i.Channels,
+		&i.MfaRequired,
+		&i.LastSignInAt,
+		&i.CredentialStatus,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (employee_id, channels, created_by, updated_by)
 VALUES ($1, $2, $3, $3)

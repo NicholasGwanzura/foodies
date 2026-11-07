@@ -11,6 +11,8 @@ import (
 	"foodies/api/internal/db"
 )
 
+var _ uuid.UUID
+
 // ListComplex returns a page of complexes.
 func (s *Service) ListComplex(ctx context.Context, p db.ListComplexParams) ([]db.Complex, error) {
 	return wrap2(s.q(ctx).ListComplex(ctx, p))("list complexes")
@@ -33,7 +35,7 @@ func (s *Service) CreateComplex(ctx context.Context, p db.CreateComplexParams) (
 	if err != nil {
 		return zero, wrap(err, "create complexes")
 	}
-	return row, s.audit(ctx, "complexes.create", "complexes", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "org.complex.write", "complexes", row.ID, nil, nil, row)
 }
 
 // UpdateComplex changes one row of complexes.
@@ -50,7 +52,10 @@ func (s *Service) UpdateComplex(ctx context.Context, p db.UpdateComplexParams) (
 	if err != nil {
 		return before, wrap(err, "update complexes")
 	}
-	return row, s.audit(ctx, "complexes.update", "complexes", row.ID, nil, before, row)
+	if err := s.voidSignatures(ctx, "complexes", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.complex.write", "complexes", row.ID, nil, before, row)
 }
 
 // ListSite returns a page of sites.
@@ -76,7 +81,7 @@ func (s *Service) CreateSite(ctx context.Context, p db.CreateSiteParams) (db.Sit
 	if err != nil {
 		return zero, wrap(err, "create sites")
 	}
-	return row, s.audit(ctx, "sites.create", "sites", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "org.site.write", "sites", row.ID, nil, nil, row)
 }
 
 // UpdateSite changes one row of sites.
@@ -93,7 +98,10 @@ func (s *Service) UpdateSite(ctx context.Context, p db.UpdateSiteParams) (db.Sit
 	if err != nil {
 		return before, wrap(err, "update sites")
 	}
-	return row, s.audit(ctx, "sites.update", "sites", row.ID, &row.ID, before, row)
+	if err := s.voidSignatures(ctx, "sites", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.site.write", "sites", row.ID, &row.ID, before, row)
 }
 
 // ListDepartment returns a page of departments.
@@ -118,7 +126,7 @@ func (s *Service) CreateDepartment(ctx context.Context, p db.CreateDepartmentPar
 	if err != nil {
 		return zero, wrap(err, "create departments")
 	}
-	return row, s.audit(ctx, "departments.create", "departments", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "org.department.write", "departments", row.ID, nil, nil, row)
 }
 
 // UpdateDepartment changes one row of departments.
@@ -135,7 +143,10 @@ func (s *Service) UpdateDepartment(ctx context.Context, p db.UpdateDepartmentPar
 	if err != nil {
 		return before, wrap(err, "update departments")
 	}
-	return row, s.audit(ctx, "departments.update", "departments", row.ID, nil, before, row)
+	if err := s.voidSignatures(ctx, "departments", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.department.write", "departments", row.ID, nil, before, row)
 }
 
 // ListCostCentre returns a page of cost centres.
@@ -164,7 +175,7 @@ func (s *Service) CreateCostCentre(ctx context.Context, p db.CreateCostCentrePar
 	if err != nil {
 		return zero, wrap(err, "create cost centres")
 	}
-	return row, s.audit(ctx, "cost_centres.create", "cost_centres", row.ID, p.SiteID, nil, row)
+	return row, s.audit(ctx, "org.cost_centre.write", "cost_centres", row.ID, p.SiteID, nil, row)
 }
 
 // UpdateCostCentre changes one row of cost centres.
@@ -181,7 +192,10 @@ func (s *Service) UpdateCostCentre(ctx context.Context, p db.UpdateCostCentrePar
 	if err != nil {
 		return before, wrap(err, "update cost centres")
 	}
-	return row, s.audit(ctx, "cost_centres.update", "cost_centres", row.ID, row.SiteID, before, row)
+	if err := s.voidSignatures(ctx, "cost_centres", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.cost_centre.write", "cost_centres", row.ID, row.SiteID, before, row)
 }
 
 // ListProductionLine returns a page of production lines.
@@ -210,7 +224,7 @@ func (s *Service) CreateProductionLine(ctx context.Context, p db.CreateProductio
 	if err != nil {
 		return zero, wrap(err, "create production lines")
 	}
-	return row, s.audit(ctx, "production_lines.create", "production_lines", row.ID, &p.SiteID, nil, row)
+	return row, s.audit(ctx, "org.production_line.write", "production_lines", row.ID, &p.SiteID, nil, row)
 }
 
 // UpdateProductionLine changes one row of production lines.
@@ -227,7 +241,10 @@ func (s *Service) UpdateProductionLine(ctx context.Context, p db.UpdateProductio
 	if err != nil {
 		return before, wrap(err, "update production lines")
 	}
-	return row, s.audit(ctx, "production_lines.update", "production_lines", row.ID, &row.SiteID, before, row)
+	if err := s.voidSignatures(ctx, "production_lines", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.production_line.write", "production_lines", row.ID, &row.SiteID, before, row)
 }
 
 // ListTill returns a page of tills.
@@ -256,7 +273,7 @@ func (s *Service) CreateTill(ctx context.Context, p db.CreateTillParams) (db.Til
 	if err != nil {
 		return zero, wrap(err, "create tills")
 	}
-	return row, s.audit(ctx, "tills.create", "tills", row.ID, &p.SiteID, nil, row)
+	return row, s.audit(ctx, "org.till.write", "tills", row.ID, &p.SiteID, nil, row)
 }
 
 // UpdateTill changes one row of tills.
@@ -273,7 +290,10 @@ func (s *Service) UpdateTill(ctx context.Context, p db.UpdateTillParams) (db.Til
 	if err != nil {
 		return before, wrap(err, "update tills")
 	}
-	return row, s.audit(ctx, "tills.update", "tills", row.ID, &row.SiteID, before, row)
+	if err := s.voidSignatures(ctx, "tills", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.till.write", "tills", row.ID, &row.SiteID, before, row)
 }
 
 // ListSafe returns a page of safes.
@@ -302,7 +322,7 @@ func (s *Service) CreateSafe(ctx context.Context, p db.CreateSafeParams) (db.Saf
 	if err != nil {
 		return zero, wrap(err, "create safes")
 	}
-	return row, s.audit(ctx, "safes.create", "safes", row.ID, &p.SiteID, nil, row)
+	return row, s.audit(ctx, "org.safe.write", "safes", row.ID, &p.SiteID, nil, row)
 }
 
 // UpdateSafe changes one row of safes.
@@ -319,7 +339,10 @@ func (s *Service) UpdateSafe(ctx context.Context, p db.UpdateSafeParams) (db.Saf
 	if err != nil {
 		return before, wrap(err, "update safes")
 	}
-	return row, s.audit(ctx, "safes.update", "safes", row.ID, &row.SiteID, before, row)
+	if err := s.voidSignatures(ctx, "safes", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.safe.write", "safes", row.ID, &row.SiteID, before, row)
 }
 
 // ListStorageLocation returns a page of storage locations.
@@ -348,7 +371,7 @@ func (s *Service) CreateStorageLocation(ctx context.Context, p db.CreateStorageL
 	if err != nil {
 		return zero, wrap(err, "create storage locations")
 	}
-	return row, s.audit(ctx, "storage_locations.create", "storage_locations", row.ID, &p.SiteID, nil, row)
+	return row, s.audit(ctx, "org.storage_location.write", "storage_locations", row.ID, &p.SiteID, nil, row)
 }
 
 // UpdateStorageLocation changes one row of storage locations.
@@ -365,7 +388,10 @@ func (s *Service) UpdateStorageLocation(ctx context.Context, p db.UpdateStorageL
 	if err != nil {
 		return before, wrap(err, "update storage locations")
 	}
-	return row, s.audit(ctx, "storage_locations.update", "storage_locations", row.ID, &row.SiteID, before, row)
+	if err := s.voidSignatures(ctx, "storage_locations", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.storage_location.write", "storage_locations", row.ID, &row.SiteID, before, row)
 }
 
 // ListCurrency returns a page of currencies.
@@ -390,7 +416,7 @@ func (s *Service) CreateCurrency(ctx context.Context, p db.CreateCurrencyParams)
 	if err != nil {
 		return zero, wrap(err, "create currencies")
 	}
-	return row, s.audit(ctx, "currencies.create", "currencies", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "org.currency.write", "currencies", row.ID, nil, nil, row)
 }
 
 // UpdateCurrency changes one row of currencies.
@@ -407,7 +433,10 @@ func (s *Service) UpdateCurrency(ctx context.Context, p db.UpdateCurrencyParams)
 	if err != nil {
 		return before, wrap(err, "update currencies")
 	}
-	return row, s.audit(ctx, "currencies.update", "currencies", row.ID, nil, before, row)
+	if err := s.voidSignatures(ctx, "currencies", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.currency.write", "currencies", row.ID, nil, before, row)
 }
 
 // ListFxRate returns a page of fx rates.
@@ -432,24 +461,7 @@ func (s *Service) CreateFxRate(ctx context.Context, p db.CreateFxRateParams) (db
 	if err != nil {
 		return zero, wrap(err, "create fx rates")
 	}
-	return row, s.audit(ctx, "fx_rates.create", "fx_rates", row.ID, nil, nil, row)
-}
-
-// UpdateFxRate changes one row of fx rates.
-func (s *Service) UpdateFxRate(ctx context.Context, p db.UpdateFxRateParams) (db.FxRate, error) {
-	before, err := s.GetFxRate(ctx, p.ID)
-	if err != nil {
-		return before, err
-	}
-	if err := checkVersion(before.RowVersion, p.RowVersion); err != nil {
-		return before, err
-	}
-	p.UpdatedBy = actorID(ctx)
-	row, err := s.q(ctx).UpdateFxRate(ctx, p)
-	if err != nil {
-		return before, wrap(err, "update fx rates")
-	}
-	return row, s.audit(ctx, "fx_rates.update", "fx_rates", row.ID, nil, before, row)
+	return row, s.audit(ctx, "org.fx_rate.write", "fx_rates", row.ID, nil, nil, row)
 }
 
 // ListPublicHoliday returns a page of public holidays.
@@ -474,7 +486,7 @@ func (s *Service) CreatePublicHoliday(ctx context.Context, p db.CreatePublicHoli
 	if err != nil {
 		return zero, wrap(err, "create public holidays")
 	}
-	return row, s.audit(ctx, "public_holidays.create", "public_holidays", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "org.public_holiday.write", "public_holidays", row.ID, nil, nil, row)
 }
 
 // UpdatePublicHoliday changes one row of public holidays.
@@ -491,7 +503,10 @@ func (s *Service) UpdatePublicHoliday(ctx context.Context, p db.UpdatePublicHoli
 	if err != nil {
 		return before, wrap(err, "update public holidays")
 	}
-	return row, s.audit(ctx, "public_holidays.update", "public_holidays", row.ID, nil, before, row)
+	if err := s.voidSignatures(ctx, "public_holidays", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "org.public_holiday.write", "public_holidays", row.ID, nil, before, row)
 }
 
 // DeletePublicHoliday removes one row of public holidays.
@@ -537,7 +552,7 @@ func (s *Service) CreateEmployee(ctx context.Context, p db.CreateEmployeeParams)
 	if err != nil {
 		return zero, wrap(err, "create employees")
 	}
-	return row, s.audit(ctx, "employees.create", "employees", row.ID, &p.SiteID, nil, row)
+	return row, s.audit(ctx, "iam.employee.write", "employees", row.ID, &p.SiteID, nil, row)
 }
 
 // UpdateEmployee changes one row of employees.
@@ -554,7 +569,10 @@ func (s *Service) UpdateEmployee(ctx context.Context, p db.UpdateEmployeeParams)
 	if err != nil {
 		return before, wrap(err, "update employees")
 	}
-	return row, s.audit(ctx, "employees.update", "employees", row.ID, &row.SiteID, before, row)
+	if err := s.voidSignatures(ctx, "employees", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "iam.employee.write", "employees", row.ID, &row.SiteID, before, row)
 }
 
 // ListEmployeeStatusChange returns a page of employee status changes.
@@ -569,17 +587,6 @@ func (s *Service) GetEmployeeStatusChange(ctx context.Context, id uuid.UUID) (db
 		return row, notFound(err, "employee status changes")
 	}
 	return row, nil
-}
-
-// CreateEmployeeStatusChange adds one row to employee status changes.
-func (s *Service) CreateEmployeeStatusChange(ctx context.Context, p db.CreateEmployeeStatusChangeParams) (db.EmployeeStatusChange, error) {
-	var zero db.EmployeeStatusChange
-	p.CreatedBy = actorID(ctx)
-	row, err := s.q(ctx).CreateEmployeeStatusChange(ctx, p)
-	if err != nil {
-		return zero, wrap(err, "create employee status changes")
-	}
-	return row, s.audit(ctx, "employee_status_changes.create", "employee_status_changes", row.ID, nil, nil, row)
 }
 
 // ListEmployeeTransfer returns a page of employee transfers.
@@ -604,7 +611,27 @@ func (s *Service) CreateEmployeeTransfer(ctx context.Context, p db.CreateEmploye
 	if err != nil {
 		return zero, wrap(err, "create employee transfers")
 	}
-	return row, s.audit(ctx, "employee_transfers.create", "employee_transfers", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "iam.employee_transfer.write", "employee_transfers", row.ID, nil, nil, row)
+}
+
+// SubmitEmployeeTransfer is the submit for approval action on employee transfers.
+func (s *Service) SubmitEmployeeTransfer(ctx context.Context, p db.ActSubmitEmployeeTransferParams) (db.EmployeeTransfer, error) {
+	before, err := s.GetEmployeeTransfer(ctx, p.ID)
+	if err != nil {
+		return before, err
+	}
+	if err := s.checkSod(ctx, "iam.employee_transfer.submit", "employee_transfers", p.ID); err != nil {
+		return before, err
+	}
+	p.UpdatedBy = actorID(ctx)
+	row, err := s.q(ctx).ActSubmitEmployeeTransfer(ctx, p)
+	if err != nil {
+		return before, stateError(err, "submit employee transfers")
+	}
+	if err := s.audit(ctx, "iam.employee_transfer.submit", "employee_transfers", row.ID, nil, before, row); err != nil {
+		return row, err
+	}
+	return row, s.startApproval(ctx, "employee_transfers", row.ID, nil, row)
 }
 
 // ListEmployeeDocument returns a page of employee documents.
@@ -629,7 +656,7 @@ func (s *Service) CreateEmployeeDocument(ctx context.Context, p db.CreateEmploye
 	if err != nil {
 		return zero, wrap(err, "create employee documents")
 	}
-	return row, s.audit(ctx, "employee_documents.create", "employee_documents", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "iam.employee_document.write", "employee_documents", row.ID, nil, nil, row)
 }
 
 // DeleteEmployeeDocument removes one row of employee documents.
@@ -666,7 +693,7 @@ func (s *Service) CreateEmergencyContact(ctx context.Context, p db.CreateEmergen
 	if err != nil {
 		return zero, wrap(err, "create emergency contacts")
 	}
-	return row, s.audit(ctx, "emergency_contacts.create", "emergency_contacts", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "iam.emergency_contact.write", "emergency_contacts", row.ID, nil, nil, row)
 }
 
 // UpdateEmergencyContact changes one row of emergency contacts.
@@ -683,7 +710,10 @@ func (s *Service) UpdateEmergencyContact(ctx context.Context, p db.UpdateEmergen
 	if err != nil {
 		return before, wrap(err, "update emergency contacts")
 	}
-	return row, s.audit(ctx, "emergency_contacts.update", "emergency_contacts", row.ID, nil, before, row)
+	if err := s.voidSignatures(ctx, "emergency_contacts", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "iam.emergency_contact.write", "emergency_contacts", row.ID, nil, before, row)
 }
 
 // DeleteEmergencyContact removes one row of emergency contacts.
@@ -712,17 +742,6 @@ func (s *Service) GetUser(ctx context.Context, id uuid.UUID) (db.User, error) {
 	return row, nil
 }
 
-// CreateUser adds one row to users.
-func (s *Service) CreateUser(ctx context.Context, p db.CreateUserParams) (db.User, error) {
-	var zero db.User
-	p.CreatedBy = actorID(ctx)
-	row, err := s.q(ctx).CreateUser(ctx, p)
-	if err != nil {
-		return zero, wrap(err, "create users")
-	}
-	return row, s.audit(ctx, "users.create", "users", row.ID, nil, nil, row)
-}
-
 // UpdateUser changes one row of users.
 func (s *Service) UpdateUser(ctx context.Context, p db.UpdateUserParams) (db.User, error) {
 	before, err := s.GetUser(ctx, p.ID)
@@ -737,7 +756,10 @@ func (s *Service) UpdateUser(ctx context.Context, p db.UpdateUserParams) (db.Use
 	if err != nil {
 		return before, wrap(err, "update users")
 	}
-	return row, s.audit(ctx, "users.update", "users", row.ID, nil, before, row)
+	if err := s.voidSignatures(ctx, "users", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "iam.user.write", "users", row.ID, nil, before, row)
 }
 
 // ListRole returns a page of roles.
@@ -762,7 +784,7 @@ func (s *Service) CreateRole(ctx context.Context, p db.CreateRoleParams) (db.Rol
 	if err != nil {
 		return zero, wrap(err, "create roles")
 	}
-	return row, s.audit(ctx, "roles.create", "roles", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "iam.role.write", "roles", row.ID, nil, nil, row)
 }
 
 // UpdateRole changes one row of roles.
@@ -779,19 +801,10 @@ func (s *Service) UpdateRole(ctx context.Context, p db.UpdateRoleParams) (db.Rol
 	if err != nil {
 		return before, wrap(err, "update roles")
 	}
-	return row, s.audit(ctx, "roles.update", "roles", row.ID, nil, before, row)
-}
-
-// DeleteRole removes one row of roles.
-func (s *Service) DeleteRole(ctx context.Context, id uuid.UUID) error {
-	before, err := s.GetRole(ctx, id)
-	if err != nil {
-		return err
+	if err := s.voidSignatures(ctx, "roles", row.ID); err != nil {
+		return row, err
 	}
-	if err := s.q(ctx).DeleteRole(ctx, id); err != nil {
-		return wrap(err, "delete roles")
-	}
-	return s.audit(ctx, "roles.delete", "roles", id, nil, before, nil)
+	return row, s.audit(ctx, "iam.role.write", "roles", row.ID, nil, before, row)
 }
 
 // ListRoleAssignment returns a page of role assignments.
@@ -808,17 +821,6 @@ func (s *Service) GetRoleAssignment(ctx context.Context, id uuid.UUID) (db.RoleA
 	return row, nil
 }
 
-// CreateRoleAssignment adds one row to role assignments.
-func (s *Service) CreateRoleAssignment(ctx context.Context, p db.CreateRoleAssignmentParams) (db.RoleAssignment, error) {
-	var zero db.RoleAssignment
-	p.CreatedBy = actorID(ctx)
-	row, err := s.q(ctx).CreateRoleAssignment(ctx, p)
-	if err != nil {
-		return zero, wrap(err, "create role assignments")
-	}
-	return row, s.audit(ctx, "role_assignments.create", "role_assignments", row.ID, nil, nil, row)
-}
-
 // UpdateRoleAssignment changes one row of role assignments.
 func (s *Service) UpdateRoleAssignment(ctx context.Context, p db.UpdateRoleAssignmentParams) (db.RoleAssignment, error) {
 	before, err := s.GetRoleAssignment(ctx, p.ID)
@@ -833,7 +835,10 @@ func (s *Service) UpdateRoleAssignment(ctx context.Context, p db.UpdateRoleAssig
 	if err != nil {
 		return before, wrap(err, "update role assignments")
 	}
-	return row, s.audit(ctx, "role_assignments.update", "role_assignments", row.ID, nil, before, row)
+	if err := s.voidSignatures(ctx, "role_assignments", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "iam.role_assignment.write", "role_assignments", row.ID, nil, before, row)
 }
 
 // DeleteRoleAssignment removes one row of role assignments.
@@ -870,7 +875,7 @@ func (s *Service) CreateDelegation(ctx context.Context, p db.CreateDelegationPar
 	if err != nil {
 		return zero, wrap(err, "create delegations")
 	}
-	return row, s.audit(ctx, "delegations.create", "delegations", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "iam.delegation.write", "delegations", row.ID, nil, nil, row)
 }
 
 // UpdateDelegation changes one row of delegations.
@@ -887,7 +892,50 @@ func (s *Service) UpdateDelegation(ctx context.Context, p db.UpdateDelegationPar
 	if err != nil {
 		return before, wrap(err, "update delegations")
 	}
-	return row, s.audit(ctx, "delegations.update", "delegations", row.ID, nil, before, row)
+	if err := s.voidSignatures(ctx, "delegations", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "iam.delegation.write", "delegations", row.ID, nil, before, row)
+}
+
+// SubmitDelegation is the submit for approval action on delegations.
+func (s *Service) SubmitDelegation(ctx context.Context, p db.ActSubmitDelegationParams) (db.Delegation, error) {
+	before, err := s.GetDelegation(ctx, p.ID)
+	if err != nil {
+		return before, err
+	}
+	if err := s.checkSod(ctx, "iam.delegation.submit", "delegations", p.ID); err != nil {
+		return before, err
+	}
+	p.UpdatedBy = actorID(ctx)
+	row, err := s.q(ctx).ActSubmitDelegation(ctx, p)
+	if err != nil {
+		return before, stateError(err, "submit delegations")
+	}
+	if err := s.audit(ctx, "iam.delegation.submit", "delegations", row.ID, nil, before, row); err != nil {
+		return row, err
+	}
+	return row, s.startApproval(ctx, "delegations", row.ID, nil, row)
+}
+
+// RevokeDelegation is the end the delegation early action on delegations.
+func (s *Service) RevokeDelegation(ctx context.Context, p db.ActRevokeDelegationParams) (db.Delegation, error) {
+	before, err := s.GetDelegation(ctx, p.ID)
+	if err != nil {
+		return before, err
+	}
+	if err := s.checkSod(ctx, "iam.delegation.revoke", "delegations", p.ID); err != nil {
+		return before, err
+	}
+	p.UpdatedBy = actorID(ctx)
+	row, err := s.q(ctx).ActRevokeDelegation(ctx, p)
+	if err != nil {
+		return before, stateError(err, "revoke delegations")
+	}
+	if err := s.audit(ctx, "iam.delegation.revoke", "delegations", row.ID, nil, before, row); err != nil {
+		return row, err
+	}
+	return row, nil
 }
 
 // ListSodRule returns a page of sod rules.
@@ -912,7 +960,7 @@ func (s *Service) CreateSodRule(ctx context.Context, p db.CreateSodRuleParams) (
 	if err != nil {
 		return zero, wrap(err, "create sod rules")
 	}
-	return row, s.audit(ctx, "sod_rules.create", "sod_rules", row.ID, nil, nil, row)
+	return row, s.audit(ctx, "iam.sod_rule.write", "sod_rules", row.ID, nil, nil, row)
 }
 
 // UpdateSodRule changes one row of sod rules.
@@ -929,7 +977,10 @@ func (s *Service) UpdateSodRule(ctx context.Context, p db.UpdateSodRuleParams) (
 	if err != nil {
 		return before, wrap(err, "update sod rules")
 	}
-	return row, s.audit(ctx, "sod_rules.update", "sod_rules", row.ID, nil, before, row)
+	if err := s.voidSignatures(ctx, "sod_rules", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "iam.sod_rule.write", "sod_rules", row.ID, nil, before, row)
 }
 
 // ListDevice returns a page of devices.
@@ -958,7 +1009,7 @@ func (s *Service) CreateDevice(ctx context.Context, p db.CreateDeviceParams) (db
 	if err != nil {
 		return zero, wrap(err, "create devices")
 	}
-	return row, s.audit(ctx, "devices.create", "devices", row.ID, p.SiteID, nil, row)
+	return row, s.audit(ctx, "iam.device.write", "devices", row.ID, p.SiteID, nil, row)
 }
 
 // UpdateDevice changes one row of devices.
@@ -975,7 +1026,30 @@ func (s *Service) UpdateDevice(ctx context.Context, p db.UpdateDeviceParams) (db
 	if err != nil {
 		return before, wrap(err, "update devices")
 	}
-	return row, s.audit(ctx, "devices.update", "devices", row.ID, row.SiteID, before, row)
+	if err := s.voidSignatures(ctx, "devices", row.ID); err != nil {
+		return row, err
+	}
+	return row, s.audit(ctx, "iam.device.write", "devices", row.ID, row.SiteID, before, row)
+}
+
+// RevokeDevice is the revoke the device and its offline data action on devices.
+func (s *Service) RevokeDevice(ctx context.Context, p db.ActRevokeDeviceParams) (db.Device, error) {
+	before, err := s.GetDevice(ctx, p.ID)
+	if err != nil {
+		return before, err
+	}
+	if err := s.checkSod(ctx, "iam.device.revoke", "devices", p.ID); err != nil {
+		return before, err
+	}
+	p.UpdatedBy = actorID(ctx)
+	row, err := s.q(ctx).ActRevokeDevice(ctx, p)
+	if err != nil {
+		return before, stateError(err, "revoke devices")
+	}
+	if err := s.audit(ctx, "iam.device.revoke", "devices", row.ID, row.SiteID, before, row); err != nil {
+		return row, err
+	}
+	return row, nil
 }
 
 // ListAuditEvent returns a page of audit events.

@@ -200,3 +200,52 @@ func (q *Queries) ReleaseIdempotencyKey(ctx context.Context, arg ReleaseIdempote
 	_, err := q.db.Exec(ctx, releaseIdempotencyKey, arg.ActorID, arg.Key)
 	return err
 }
+
+const sodConflicts = `-- name: SodConflicts :many
+SELECT r."key", r.name, r.enforcement FROM sod_rules r
+WHERE r.active AND r.scope = 'same_record'
+  AND (r.action_a = $1 OR r.action_b = $1)
+  AND EXISTS (
+    SELECT 1 FROM audit_events e
+    WHERE e.subject_type = $2 AND e.subject_id = $3
+      AND e.actor_user_id = $4
+      AND e.action = CASE WHEN r.action_a = $1 THEN r.action_b ELSE r.action_a END)
+`
+
+type SodConflictsParams struct {
+	Action      string     `json:"action"`
+	SubjectType *string    `json:"subject_type"`
+	SubjectID   *uuid.UUID `json:"subject_id"`
+	Actor       *uuid.UUID `json:"actor"`
+}
+
+type SodConflictsRow struct {
+	Key         string `json:"key"`
+	Name        string `json:"name"`
+	Enforcement string `json:"enforcement"`
+}
+
+func (q *Queries) SodConflicts(ctx context.Context, arg SodConflictsParams) ([]SodConflictsRow, error) {
+	rows, err := q.db.Query(ctx, sodConflicts,
+		arg.Action,
+		arg.SubjectType,
+		arg.SubjectID,
+		arg.Actor,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []SodConflictsRow{}
+	for rows.Next() {
+		var i SodConflictsRow
+		if err := rows.Scan(&i.Key, &i.Name, &i.Enforcement); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

@@ -17,6 +17,7 @@ import yaml
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from datamodel import parse  # noqa: E402
+import workflows  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 API = os.path.join(ROOT, "api")
@@ -216,8 +217,12 @@ def ddl_table(t, existing):
         L.append("UNIQUE (employee_number)")
     if t == "users":
         L.append("UNIQUE (employee_id)")
-    if t in ("roles", "sod_rules", "rule_definitions"):
+    if t in ("roles", "sod_rules", "rule_definitions", "form_templates", "kpi_definitions", "retention_classes"):
         L.append('UNIQUE ("key")')
+    if t == "workflow_activations":
+        L.append("UNIQUE (workflow_key, site_id)")
+    if t == "approval_request_steps":
+        L.append("assigned_user_id uuid")
     body = ",\n  ".join(L)
     return f"CREATE TABLE {t} (\n  {body}\n);\n"
 
@@ -401,6 +406,7 @@ def queries_for(t):
         out.append(f"-- name: Delete{name} :exec\nDELETE FROM {t} WHERE id = $1;\n")
     for ch in child_tables(t):
         out += child_queries(ch)
+    out += action_queries(t)
     return "\n".join(out)
 
 
@@ -420,6 +426,130 @@ def child_queries(ch):
     return [f"-- name: List{n} :many\nSELECT * FROM {ch} WHERE {p} = $1 ORDER BY id;\n",
             f"-- name: Insert{n} :one\nINSERT INTO {ch} ({', '.join(q(x) for x in names)})\nVALUES ({', '.join(vals)})\nRETURNING *;\n",
             f"-- name: Delete{n} :exec\nDELETE FROM {ch} WHERE {p} = $1;\n"]
+
+
+# Actions ---------------------------------------------------------------------
+
+PAST = {"submit": "submitted", "approve": "approved", "close": "closed", "complete": "completed", "verify": "verified",
+        "review": "reviewed", "acknowledge": "acknowledged", "issue": "issued", "return": "returned", "revoke": "revoked",
+        "release": "released", "cancel": "cancelled", "suspend": "suspended", "reject": "rejected", "resolve": "resolved",
+        "receive": "received", "confirm": "confirmed", "execute": "executed", "decide": "decided", "restore": "restored",
+        "seal": "sealed", "dispatch": "dispatched", "accept": "accepted", "post": "posted", "publish": "published",
+        "activate": "activated", "reimburse": "reimbursed", "retire": "retired", "lock": "locked", "disable": "disabled"}
+
+
+def actions_of(t):
+    own = RES.get(t, {}).get("get", {}).get("path")
+    if not own:
+        return []
+    out = []
+    for o in OPS:
+        if o["method"] == "post" and o["path"].startswith(own + "/") and o["path"].count("/") == own.count("/") + 1 \
+                and not o["path"].endswith("}") and not o["operationId"].startswith("create"):
+            out.append(o)
+    return out
+
+
+def action_columns(t, o):
+    """Columns a body sets directly, and server stamps for this verb."""
+    cols = {c[0]: c for c in sql_columns(t)}
+    body = [c for c in api_columns(t, o.get("req")) if c != "status"] if o.get("req") else []
+    verb = o["path"].rsplit("/", 1)[1]
+    past = PAST.get(verb, verb.replace("-", "_") + "d")
+    stamps = {}
+    for suffix, expr in ((f"{past}_at", "now()"), (f"{past}_by", "sqlc.narg(updated_by)"),
+                         (f"{past}_by_user_id", "sqlc.narg(updated_by)")):
+        if suffix in cols and suffix not in body:
+            stamps[suffix] = expr
+    return body, stamps
+
+
+def action_queries(t):
+    out = []
+    for o in actions_of(t):
+        verb = o["path"].rsplit("/", 1)[1]
+        source, target = workflows.infer(o["operationId"], verb, T[t]["status"], t)
+        body, stamps = action_columns(t, o)
+        sets = [f"{q(c)} = COALESCE(sqlc.narg({c}), {q(c)})" for c in body]
+        sets += [f"{q(c)} = {e}" for c, e in stamps.items()]
+        if target:
+            sets.append(f"status = '{target}'")
+        sets += ["updated_at = now()", "updated_by = sqlc.narg(updated_by)", "row_version = row_version + 1"]
+        where = "id = sqlc.arg(id)"
+        if source:
+            where += " AND status IN (" + ", ".join(f"'{x}'" for x in source) + ")"
+        out.append(f"-- name: Act{go_name(o['operationId'])} :one\nUPDATE {t}\nSET {', '.join(sets)}\nWHERE {where}\nRETURNING *;\n")
+    return out
+
+
+def service_actions(t, qr, hw):
+    B = []
+    n = query_name(t)
+    sc = site_col(t)
+    rt = row_type(qr, f"Get{n}")
+    for o in actions_of(t):
+        G = go_name(o["operationId"])
+        if G in hw:
+            continue
+        verb = o["path"].rsplit("/", 1)[1]
+        source, target = workflows.infer(o["operationId"], verb, T[t]["status"], t)
+        perm = o.get("x-permission") or o["operationId"]
+        sptr = "nil"
+        if sc == "id":
+            sptr = "&row.ID"
+        elif sc:
+            sptr = "&row.SiteID" if col_required(t, "site_id") else "row.SiteID"
+        B.append(f"// {G} is the {o.get('summary', verb).lower()} action on {t.replace('_', ' ')}.")
+        B.append(f"func (s *Service) {G}(ctx context.Context, p db.Act{G}Params) (db.{rt}, error) {{")
+        B.append(f"\tbefore, err := s.Get{n}(ctx, p.ID)")
+        B.append("\tif err != nil {\n\t\treturn before, err\n\t}")
+        B.append(f'\tif err := s.checkSod(ctx, "{perm}", "{t}", p.ID); err != nil {{\n\t\treturn before, err\n\t}}')
+        B.append("\tp.UpdatedBy = actorID(ctx)")
+        if verb in ("close", "complete", "approve", "verify", "accept", "post", "issue", "review"):
+            B.append(f'\tif err := s.requireSignatures(ctx, "{t}", p.ID); err != nil {{\n\t\treturn before, err\n\t}}')
+        B.append(f"\trow, err := s.q(ctx).Act{G}(ctx, p)")
+        B.append(f'\tif err != nil {{\n\t\treturn before, stateError(err, "{verb.replace("-", " ")} {t.replace("_", " ")}")\n\t}}')
+        B.append(f'\tif err := s.audit(ctx, "{perm}", "{t}", row.ID, {sptr}, before, row); err != nil {{\n\t\treturn row, err\n\t}}')
+        if target == "pending_approval":
+            B.append(f'\treturn row, s.startApproval(ctx, "{t}", row.ID, {sptr}, row)')
+        else:
+            B.append("\treturn row, nil")
+        B.append("}\n")
+    return B
+
+
+def http_actions(t, hw):
+    B = []
+    n = query_name(t)
+    schema = RES[t]["schema"]
+    for o in actions_of(t):
+        G = go_name(o["operationId"])
+        if G in hw:
+            continue
+        ids = path_ids(o)
+        own = f"req.{go_param(ids[-1])}"
+        B.append(f"// {G} implements the {o['operationId']} operation.")
+        B.append(f"func (s *Server) {G}(ctx context.Context, req apigen.{G}RequestObject) (apigen.{G}ResponseObject, error) {{")
+        body = "req.Body" if o.get("req") else "struct{}{}"
+        B.append(f'\tin, err := input[db.Act{G}Params]({body}, map[string]any{{"id": {own}}})')
+        B.append("\tif err != nil {\n\t\treturn nil, err\n\t}")
+        if o.get("req") and "pin" in props(o["req"])[0]:
+            B.append("\tif err := s.service.RequirePin(ctx, str(req.Body.Pin)); err != nil {\n\t\treturn nil, err\n\t}")
+        B.append(f"\trow, err := s.service.{G}(ctx, in)")
+        B.append("\tif err != nil {\n\t\treturn nil, err\n\t}")
+        if o["resp"] == schema:
+            B.append(f"\tbody, err := output[apigen.{schema}](row)")
+            B.append("\tif err != nil {\n\t\treturn nil, err\n\t}")
+            c = o["code"]
+            if o["etag"]:
+                B.append(f"\treturn apigen.{G}{c}JSONResponse{{Body: body, Headers: apigen.{G}{c}ResponseHeaders{{ETag: etag(row.RowVersion)}}}}, nil")
+            else:
+                B.append(f"\treturn apigen.{G}{c}JSONResponse(body), nil")
+        else:
+            B.append("\t_ = row")
+            B.append("\treturn nil, apigen.ErrNotImplemented")
+        B.append("}\n")
+    return B
 
 
 # Go --------------------------------------------------------------------------
@@ -465,7 +595,7 @@ def children_in_api(t, schema):
 
 
 def service_go(section, tables, qr, hw):
-    B = ["// Code scaffolded by api/codegen/scaffold. Do not edit: write the function in", "// another file of this package and this copy disappears on the next run.", "", "package service", "", "import (", '\t"context"', "", '\t"github.com/google/uuid"', "", '\t"foodies/api/internal/db"', ")", ""]
+    B = ["// Code scaffolded by api/codegen/scaffold. Do not edit: write the function in", "// another file of this package and this copy disappears on the next run.", "", "package service", "", "import (", '\t"context"', "", '\t"github.com/google/uuid"', "", '\t"foodies/api/internal/db"', ")", "", "var _ uuid.UUID", ""]
     used = False
     for t in tables:
         r = RES.get(t)
@@ -510,7 +640,7 @@ def service_go(section, tables, qr, hw):
             B.append("\tp.CreatedBy = actorID(ctx)")
             B.append(f"\trow, err := s.q(ctx).Create{n}(ctx, p)")
             B.append(f'\tif err != nil {{\n\t\treturn zero, wrap(err, "create {human}")\n\t}}')
-            B.append(f'\treturn row, s.audit(ctx, "{t}.create", "{t}", row.ID, {sptr or "nil"}, nil, row)')
+            B.append(f'\treturn row, s.audit(ctx, "{r["create"].get("x-permission") or t + ".create"}", "{t}", row.ID, {sptr or "nil"}, nil, row)')
             B.append("}\n")
         if "update" in r and f"Update{n}" not in hw:
             B.append(f"// Update{n} changes one row of {human}.")
@@ -521,12 +651,13 @@ def service_go(section, tables, qr, hw):
             B.append("\tp.UpdatedBy = actorID(ctx)")
             B.append(f"\trow, err := s.q(ctx).Update{n}(ctx, p)")
             B.append(f'\tif err != nil {{\n\t\treturn before, wrap(err, "update {human}")\n\t}}')
+            B.append(f'\tif err := s.voidSignatures(ctx, "{t}", row.ID); err != nil {{\n\t\treturn row, err\n\t}}')
             sptr = "nil"
             if sc == "id":
                 sptr = "&row.ID"
             elif sc:
                 sptr = "&row.SiteID" if col_required(t, "site_id") else "row.SiteID"
-            B.append(f'\treturn row, s.audit(ctx, "{t}.update", "{t}", row.ID, {sptr}, before, row)')
+            B.append(f'\treturn row, s.audit(ctx, "{r["update"].get("x-permission") or t + ".update"}", "{t}", row.ID, {sptr}, before, row)')
             B.append("}\n")
         if "delete" in r and f"Delete{n}" not in hw:
             B.append(f"// Delete{n} removes one row of {human}.")
@@ -536,7 +667,59 @@ def service_go(section, tables, qr, hw):
             B.append(f'\tif err := s.q(ctx).Delete{n}(ctx, id); err != nil {{\n\t\treturn wrap(err, "delete {human}")\n\t}}')
             B.append(f'\treturn s.audit(ctx, "{t}.delete", "{t}", id, nil, before, nil)')
             B.append("}\n")
+        B += service_actions(t, qr, hw)
+        kids = children_in_api(t, r["schema"])
+        if kids and f"{n}Children" not in hw:
+            B.append(f"// {n}Children returns the rows of a record's child tables, by API field.")
+            B.append(f"func (s *Service) {n}Children(ctx context.Context, id uuid.UUID) (map[string]any, error) {{")
+            B.append("\tout := map[string]any{}")
+            for name, ch in kids:
+                B.append(f"\t{{\n\t\trows, err := s.q(ctx).List{child_name(ch)}(ctx, id)\n\t\tif err != nil {{\n\t\t\treturn nil, wrap(err, \"list {ch}\")\n\t\t}}\n\t\tout[\"{name}\"] = childRows(rows)\n\t}}")
+            B.append("\treturn out, nil\n}\n")
+            for name, ch in kids:
+                c = child_name(ch)
+                if f"Replace{c}" in hw:
+                    continue
+                B.append(f"// Replace{c} swaps a record's {ch.replace('_', ' ')} for the given rows.")
+                B.append(f"func (s *Service) Replace{c}(ctx context.Context, id uuid.UUID, rows []db.Insert{c}Params) error {{")
+                B.append(f"\tif err := s.q(ctx).Delete{c}(ctx, id); err != nil {{\n\t\treturn wrap(err, \"clear {ch}\")\n\t}}")
+                B.append("\tfor _, row := range rows {\n\t\trow.CreatedBy = actorID(ctx)")
+                B.append(f"\t\tif _, err := s.q(ctx).Insert{c}(ctx, row); err != nil {{\n\t\t\treturn wrap(err, \"add {ch}\")\n\t\t}}\n\t}}\n\treturn nil\n}}\n")
     return "\n".join(B)
+
+
+def write_registry(tables):
+    qr = querier()
+    B = ["// Code scaffolded by api/codegen/scaffold. Do not edit.", "", "package service", "", "import (", '\t"context"', "", '\t"github.com/google/uuid"', "", '\t"foodies/api/internal/db"', ")", "",
+         "// subjects lets shared services reach any record by table name.", "var subjects = map[string]subject{"]
+    for t in tables:
+        n = query_name(t)
+        if f"Get{n}" not in qr:
+            continue
+        B.append(f'\t"{t}": {{')
+        B.append(f"\t\tget: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {{ return q.Get{n}(ctx, id) }},")
+        if T[t]["status"]:
+            vals = ", ".join(f'"{x}"' for x in T[t]["status"])
+            B.append(f"\t\tstatuses: []string{{{vals}}},")
+            B.append(f"\t\tsetStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {{")
+            B.append(f"\t\t\t_, err := q.Set{n}Status(ctx, db.Set{n}StatusParams{{ID: id, Status: status, UpdatedBy: actor}})")
+            B.append("\t\t\treturn err\n\t\t},")
+        B.append("\t},")
+    B.append("}\n")
+    open(os.path.join(API, "internal", "service", "crud_registry.go"), "w").write("\n".join(B))
+
+
+def write_search(tables):
+    parts = []
+    for t in tables:
+        if not T[t]["prefix"] or "list" not in RES.get(t, {}):
+            continue
+        title = next((c for c in ("title", "name", "description", "subject") if has_col(t, c)), "reference")
+        site = "site_id" if has_col(t, "site_id") else "NULL::uuid"
+        status = "status" if T[t]["status"] else "NULL::text"
+        parts.append(f"SELECT '{t}'::text AS type, id, reference, {q(title)}::text AS title, {site} AS site_id, {status} AS status FROM {t} WHERE reference ILIKE '%' || sqlc.arg(term)::text || '%' OR {q(title)}::text ILIKE '%' || sqlc.arg(term)::text || '%'")
+    sql = "-- name: SearchRecords :many\nSELECT * FROM (\n" + "\nUNION ALL\n".join(parts) + "\n) hits\nWHERE sqlc.arg(all_sites)::boolean OR site_id IS NULL OR site_id = ANY(sqlc.arg(site_ids)::uuid[])\nORDER BY id DESC\nLIMIT sqlc.arg(row_limit);\n"
+    open(os.path.join(API, "db", "queries", "crud_search.sql"), "w").write(sql)
 
 
 def col_required(t, name):
@@ -553,7 +736,7 @@ def go_param(p):
 
 
 def http_go(section, tables, qr, hw):
-    B = ["// Code scaffolded by api/codegen/scaffold. Do not edit: write the function in", "// another file of this package and this copy disappears on the next run.", "", "package httpapi", "", "import (", '\t"context"', "", '\t"foodies/api/internal/db"', '\t"foodies/api/internal/http/apigen"', ")", ""]
+    B = ["// Code scaffolded by api/codegen/scaffold. Do not edit: write the function in", "// another file of this package and this copy disappears on the next run.", "", "package httpapi", "", "import (", '\t"context"', "", '\t"foodies/api/internal/db"', '\t"foodies/api/internal/http/apigen"', ")", "", "var _ db.Querier", ""]
     for t in tables:
         r = RES.get(t)
         if not r:
@@ -602,7 +785,21 @@ def http_go(section, tables, qr, hw):
                     B.append("\tif in.RowVersion, err = ifMatch(req.Params.IfMatch); err != nil {\n\t\treturn nil, err\n\t}")
                 B.append(f"\trow, err := s.service.{'Create' if kind == 'create' else 'Update'}{n}(ctx, in)")
                 B.append("\tif err != nil {\n\t\treturn nil, err\n\t}")
-                B.append(f"\tbody, err := output[apigen.{schema}](row)")
+                kv = ""
+                if kids:
+                    B.append("\traw, err := toMap(req.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}")
+                    pk = None
+                    for name, ch in kids:
+                        pk = parent_fk(ch)["name"]
+                        B.append(f'\tif items, ok := raw["{name}"]; ok {{')
+                        B.append(f'\t\trows, err := childInputs[db.Insert{child_name(ch)}Params](items, "{pk}", row.ID)')
+                        B.append("\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}")
+                        B.append(f"\t\tif err := s.service.Replace{child_name(ch)}(ctx, row.ID, rows); err != nil {{\n\t\t\treturn nil, err\n\t\t}}")
+                        B.append("\t}")
+                    B.append(f"\tkids, err := s.service.{n}Children(ctx, row.ID)")
+                    B.append("\tif err != nil {\n\t\treturn nil, err\n\t}")
+                    kv = ", kids"
+                B.append(f"\tbody, err := output[apigen.{schema}](row{kv})")
                 B.append("\tif err != nil {\n\t\treturn nil, err\n\t}")
                 c = o["code"]
                 if o["etag"]:
@@ -613,6 +810,7 @@ def http_go(section, tables, qr, hw):
                 B.append(f"\tif err := s.service.Delete{n}(ctx, {own}); err != nil {{\n\t\treturn nil, err\n\t}}")
                 B.append(f"\treturn apigen.{G}204Response{{}}, nil")
             B.append("}\n")
+        B += http_actions(t, hw)
     return "\n".join(B)
 
 

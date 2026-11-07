@@ -30,3 +30,9 @@ UPDATE devices
 SET status = sqlc.arg(status), updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
 WHERE id = sqlc.arg(id)
 RETURNING *;
+
+-- name: ActRevokeDevice :one
+UPDATE devices
+SET status = 'revoked', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
+WHERE id = sqlc.arg(id) AND status IN ('active')
+RETURNING *;

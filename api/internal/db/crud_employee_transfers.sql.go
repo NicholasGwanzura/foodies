@@ -13,6 +13,42 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const actSubmitEmployeeTransfer = `-- name: ActSubmitEmployeeTransfer :one
+UPDATE employee_transfers
+SET status = 'pending_approval', updated_at = now(), updated_by = $1, row_version = row_version + 1
+WHERE id = $2 AND status IN ('draft')
+RETURNING id, employee_id, from_site_id, to_site_id, from_department_id, to_department_id, new_job_title, new_manager_employee_id, effective_date, reason, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type ActSubmitEmployeeTransferParams struct {
+	UpdatedBy *uuid.UUID `json:"updated_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) ActSubmitEmployeeTransfer(ctx context.Context, arg ActSubmitEmployeeTransferParams) (EmployeeTransfer, error) {
+	row := q.db.QueryRow(ctx, actSubmitEmployeeTransfer, arg.UpdatedBy, arg.ID)
+	var i EmployeeTransfer
+	err := row.Scan(
+		&i.ID,
+		&i.EmployeeID,
+		&i.FromSiteID,
+		&i.ToSiteID,
+		&i.FromDepartmentID,
+		&i.ToDepartmentID,
+		&i.NewJobTitle,
+		&i.NewManagerEmployeeID,
+		&i.EffectiveDate,
+		&i.Reason,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
 const createEmployeeTransfer = `-- name: CreateEmployeeTransfer :one
 INSERT INTO employee_transfers (employee_id, from_site_id, to_site_id, from_department_id, to_department_id, new_job_title, new_manager_employee_id, effective_date, "reason", created_by, updated_by)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $10)

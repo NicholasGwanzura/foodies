@@ -29,3 +29,27 @@ UPDATE users
 SET status = sqlc.arg(status), updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
 WHERE id = sqlc.arg(id)
 RETURNING *;
+
+-- name: ActLockUser :one
+UPDATE users
+SET status = 'locked', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
+WHERE id = sqlc.arg(id) AND status IN ('active')
+RETURNING *;
+
+-- name: ActUnlockUser :one
+UPDATE users
+SET status = 'active', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
+WHERE id = sqlc.arg(id) AND status IN ('locked')
+RETURNING *;
+
+-- name: ActDisableUser :one
+UPDATE users
+SET status = 'disabled', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
+WHERE id = sqlc.arg(id) AND status IN ('invited', 'active', 'locked')
+RETURNING *;
+
+-- name: ActResetCredentialsUser :one
+UPDATE users
+SET updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
+WHERE id = sqlc.arg(id) AND status IN ('invited', 'active', 'locked')
+RETURNING *;

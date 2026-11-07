@@ -13,6 +13,38 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const actRevokeDevice = `-- name: ActRevokeDevice :one
+UPDATE devices
+SET status = 'revoked', updated_at = now(), updated_by = $1, row_version = row_version + 1
+WHERE id = $2 AND status IN ('active')
+RETURNING id, label, site_id, platform, shared, last_seen_at, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type ActRevokeDeviceParams struct {
+	UpdatedBy *uuid.UUID `json:"updated_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) ActRevokeDevice(ctx context.Context, arg ActRevokeDeviceParams) (Device, error) {
+	row := q.db.QueryRow(ctx, actRevokeDevice, arg.UpdatedBy, arg.ID)
+	var i Device
+	err := row.Scan(
+		&i.ID,
+		&i.Label,
+		&i.SiteID,
+		&i.Platform,
+		&i.Shared,
+		&i.LastSeenAt,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
 const createDevice = `-- name: CreateDevice :one
 INSERT INTO devices (label, site_id, platform, shared, created_by, updated_by)
 VALUES ($1, $2, $3, COALESCE($4::boolean, false), $5, $5)

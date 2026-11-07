@@ -59,6 +59,14 @@ func run(ctx context.Context, logger *slog.Logger) error {
 	defer pool.Close()
 
 	svc := service.New(db.New(pool), pool, auth.NewSigner(jwtSecret))
+	svc.Configure(service.Config{
+		UploadDir:     os.Getenv("UPLOAD_DIR"),
+		PublicBaseURL: os.Getenv("PUBLIC_API_URL"),
+		SigningSecret: jwtSecret,
+		WhatsAppToken: os.Getenv("WHATSAPP_VERIFY_TOKEN"),
+		WhatsAppKey:   os.Getenv("WHATSAPP_APP_SECRET"),
+	})
+	go svc.RunBackground(ctx, logger)
 	if err := svc.Ping(ctx); err != nil {
 		return err
 	}

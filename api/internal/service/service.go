@@ -23,7 +23,20 @@ type Service struct {
 	queries db.Querier
 	signer  *auth.Signer
 	now     func() time.Time
+	config  Config
 }
+
+// Config holds settings that only some features need.
+type Config struct {
+	UploadDir     string
+	PublicBaseURL string
+	SigningSecret string
+	WhatsAppToken string
+	WhatsAppKey   string
+}
+
+// Configure applies settings after New.
+func (s *Service) Configure(c Config) { s.config = c }
 
 // New returns a Service backed by queries. The pool may be nil in unit tests,
 // which makes InTx run its function without a transaction.

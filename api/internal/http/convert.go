@@ -93,10 +93,38 @@ func output[T any](row any, extra ...map[string]any) (T, error) {
 	foldMoney(m)
 	for _, e := range extra {
 		for k, v := range e {
+			if rows, ok := v.([]map[string]any); ok {
+				for _, r := range rows {
+					foldMoney(r)
+				}
+			}
 			m[k] = v
 		}
 	}
 	return fromMap[T](m)
+}
+
+// childInputs converts the items of a child array in a request body.
+func childInputs[T any](items any, parentColumn string, parent uuid.UUID) ([]T, error) {
+	list, ok := items.([]any)
+	if !ok {
+		return nil, nil
+	}
+	out := make([]T, 0, len(list))
+	for _, item := range list {
+		m, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		unfoldMoney(m)
+		m[parentColumn] = parent
+		row, err := fromMap[T](m)
+		if err != nil {
+			return nil, service.Fail(http.StatusUnprocessableEntity, "validation_failed", "Validation failed", "A row is not in the expected format.")
+		}
+		out = append(out, row)
+	}
+	return out, nil
 }
 
 // outputs converts rows to a slice of an API schema.

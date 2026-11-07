@@ -10,6 +10,8 @@ import (
 	"foodies/api/internal/http/apigen"
 )
 
+var _ db.Querier
+
 // ListComplexes implements the listComplexes operation.
 func (s *Server) ListComplexes(ctx context.Context, req apigen.ListComplexesRequestObject) (apigen.ListComplexesResponseObject, error) {
 	return listPage[apigen.ListComplexes200JSONResponse](ctx, req.Params, nil, s.service.ListComplex)
@@ -747,6 +749,23 @@ func (s *Server) CreateEmployeeTransfer(ctx context.Context, req apigen.CreateEm
 	return apigen.CreateEmployeeTransfer201JSONResponse{Body: body, Headers: apigen.CreateEmployeeTransfer201ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
 }
 
+// SubmitEmployeeTransfer implements the submitEmployeeTransfer operation.
+func (s *Server) SubmitEmployeeTransfer(ctx context.Context, req apigen.SubmitEmployeeTransferRequestObject) (apigen.SubmitEmployeeTransferResponseObject, error) {
+	in, err := input[db.ActSubmitEmployeeTransferParams](struct{}{}, map[string]any{"id": req.EmployeeTransferId})
+	if err != nil {
+		return nil, err
+	}
+	row, err := s.service.SubmitEmployeeTransfer(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	body, err := output[apigen.EmployeeTransfer](row)
+	if err != nil {
+		return nil, err
+	}
+	return apigen.SubmitEmployeeTransfer200JSONResponse{Body: body, Headers: apigen.SubmitEmployeeTransfer200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
+}
+
 // ListEmployeeDocuments implements the listEmployeeDocuments operation.
 func (s *Server) ListEmployeeDocuments(ctx context.Context, req apigen.ListEmployeeDocumentsRequestObject) (apigen.ListEmployeeDocumentsResponseObject, error) {
 	return listPage[apigen.ListEmployeeDocuments200JSONResponse](ctx, req.Params, map[string]any{"employee_id": req.EmployeeId}, s.service.ListEmployeeDocument)
@@ -895,6 +914,74 @@ func (s *Server) UpdateUser(ctx context.Context, req apigen.UpdateUserRequestObj
 		return nil, err
 	}
 	return apigen.UpdateUser200JSONResponse{Body: body, Headers: apigen.UpdateUser200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
+}
+
+// LockUser implements the lockUser operation.
+func (s *Server) LockUser(ctx context.Context, req apigen.LockUserRequestObject) (apigen.LockUserResponseObject, error) {
+	in, err := input[db.ActLockUserParams](struct{}{}, map[string]any{"id": req.UserId})
+	if err != nil {
+		return nil, err
+	}
+	row, err := s.service.LockUser(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	body, err := output[apigen.User](row)
+	if err != nil {
+		return nil, err
+	}
+	return apigen.LockUser200JSONResponse{Body: body, Headers: apigen.LockUser200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
+}
+
+// UnlockUser implements the unlockUser operation.
+func (s *Server) UnlockUser(ctx context.Context, req apigen.UnlockUserRequestObject) (apigen.UnlockUserResponseObject, error) {
+	in, err := input[db.ActUnlockUserParams](struct{}{}, map[string]any{"id": req.UserId})
+	if err != nil {
+		return nil, err
+	}
+	row, err := s.service.UnlockUser(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	body, err := output[apigen.User](row)
+	if err != nil {
+		return nil, err
+	}
+	return apigen.UnlockUser200JSONResponse{Body: body, Headers: apigen.UnlockUser200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
+}
+
+// DisableUser implements the disableUser operation.
+func (s *Server) DisableUser(ctx context.Context, req apigen.DisableUserRequestObject) (apigen.DisableUserResponseObject, error) {
+	in, err := input[db.ActDisableUserParams](struct{}{}, map[string]any{"id": req.UserId})
+	if err != nil {
+		return nil, err
+	}
+	row, err := s.service.DisableUser(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	body, err := output[apigen.User](row)
+	if err != nil {
+		return nil, err
+	}
+	return apigen.DisableUser200JSONResponse{Body: body, Headers: apigen.DisableUser200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
+}
+
+// ResetCredentialsUser implements the resetCredentialsUser operation.
+func (s *Server) ResetCredentialsUser(ctx context.Context, req apigen.ResetCredentialsUserRequestObject) (apigen.ResetCredentialsUserResponseObject, error) {
+	in, err := input[db.ActResetCredentialsUserParams](struct{}{}, map[string]any{"id": req.UserId})
+	if err != nil {
+		return nil, err
+	}
+	row, err := s.service.ResetCredentialsUser(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	body, err := output[apigen.User](row)
+	if err != nil {
+		return nil, err
+	}
+	return apigen.ResetCredentialsUser200JSONResponse{Body: body, Headers: apigen.ResetCredentialsUser200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
 }
 
 // ListRoles implements the listRoles operation.
@@ -1081,6 +1168,40 @@ func (s *Server) UpdateDelegation(ctx context.Context, req apigen.UpdateDelegati
 	return apigen.UpdateDelegation200JSONResponse{Body: body, Headers: apigen.UpdateDelegation200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
 }
 
+// SubmitDelegation implements the submitDelegation operation.
+func (s *Server) SubmitDelegation(ctx context.Context, req apigen.SubmitDelegationRequestObject) (apigen.SubmitDelegationResponseObject, error) {
+	in, err := input[db.ActSubmitDelegationParams](struct{}{}, map[string]any{"id": req.DelegationId})
+	if err != nil {
+		return nil, err
+	}
+	row, err := s.service.SubmitDelegation(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	body, err := output[apigen.Delegation](row)
+	if err != nil {
+		return nil, err
+	}
+	return apigen.SubmitDelegation200JSONResponse{Body: body, Headers: apigen.SubmitDelegation200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
+}
+
+// RevokeDelegation implements the revokeDelegation operation.
+func (s *Server) RevokeDelegation(ctx context.Context, req apigen.RevokeDelegationRequestObject) (apigen.RevokeDelegationResponseObject, error) {
+	in, err := input[db.ActRevokeDelegationParams](struct{}{}, map[string]any{"id": req.DelegationId})
+	if err != nil {
+		return nil, err
+	}
+	row, err := s.service.RevokeDelegation(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	body, err := output[apigen.Delegation](row)
+	if err != nil {
+		return nil, err
+	}
+	return apigen.RevokeDelegation200JSONResponse{Body: body, Headers: apigen.RevokeDelegation200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
+}
+
 // ListSodRules implements the listSodRules operation.
 func (s *Server) ListSodRules(ctx context.Context, req apigen.ListSodRulesRequestObject) (apigen.ListSodRulesResponseObject, error) {
 	return listPage[apigen.ListSodRules200JSONResponse](ctx, req.Params, nil, s.service.ListSodRule)
@@ -1191,6 +1312,23 @@ func (s *Server) UpdateDevice(ctx context.Context, req apigen.UpdateDeviceReques
 		return nil, err
 	}
 	return apigen.UpdateDevice200JSONResponse{Body: body, Headers: apigen.UpdateDevice200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
+}
+
+// RevokeDevice implements the revokeDevice operation.
+func (s *Server) RevokeDevice(ctx context.Context, req apigen.RevokeDeviceRequestObject) (apigen.RevokeDeviceResponseObject, error) {
+	in, err := input[db.ActRevokeDeviceParams](struct{}{}, map[string]any{"id": req.DeviceId})
+	if err != nil {
+		return nil, err
+	}
+	row, err := s.service.RevokeDevice(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	body, err := output[apigen.Device](row)
+	if err != nil {
+		return nil, err
+	}
+	return apigen.RevokeDevice200JSONResponse{Body: body, Headers: apigen.RevokeDevice200ResponseHeaders{ETag: etag(row.RowVersion)}}, nil
 }
 
 // ListAuditEvents implements the listAuditEvents operation.

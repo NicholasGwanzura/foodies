@@ -21,3 +21,9 @@ UPDATE employee_transfers
 SET status = sqlc.arg(status), updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
 WHERE id = sqlc.arg(id)
 RETURNING *;
+
+-- name: ActSubmitEmployeeTransfer :one
+UPDATE employee_transfers
+SET status = 'pending_approval', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
+WHERE id = sqlc.arg(id) AND status IN ('draft')
+RETURNING *;

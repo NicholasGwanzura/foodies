@@ -19,6 +19,8 @@ type Server struct {
 
 	service *service.Service
 	logger  *slog.Logger
+	// routes is the API behind the sync replay, which re-enters it per item.
+	routes http.Handler
 }
 
 // NewHandler returns the API with its middleware applied.
@@ -33,6 +35,8 @@ func NewHandler(svc *service.Service, logger *slog.Logger) http.Handler {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", notFound)
+	mux.HandleFunc("PUT /files/{id}", server.serveFile)
+	mux.HandleFunc("GET /files/{id}", server.serveFile)
 
 	routes := apigen.HandlerWithOptions(strict, apigen.StdHTTPServerOptions{
 		BaseURL:          basePath,
@@ -40,5 +44,6 @@ func NewHandler(svc *service.Service, logger *slog.Logger) http.Handler {
 		ErrorHandlerFunc: requestError,
 	})
 
-	return requestID(recoverPanics(logger)(server.idempotent(routes)))
+	server.routes = requestID(recoverPanics(logger)(server.idempotent(webhookBody(routes))))
+	return server.routes
 }

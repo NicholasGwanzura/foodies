@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sort"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -39,17 +38,10 @@ func run(ctx context.Context, demo bool) error {
 	}
 	defer pool.Close()
 
-	entries, err := seeds.ReadDir("sql")
-	if err != nil {
-		return fmt.Errorf("list seeds: %w", err)
+	names := []string{"reference.sql", "rules.sql"}
+	if demo {
+		names = append(names, "demo.sql")
 	}
-	names := make([]string, 0, len(entries))
-	for _, e := range entries {
-		if demo || e.Name()[0] == 'r' {
-			names = append(names, e.Name())
-		}
-	}
-	sort.Slice(names, func(i, j int) bool { return names[i] > names[j] }) // reference, then demo
 	conn, err := pool.Acquire(ctx)
 	if err != nil {
 		return fmt.Errorf("acquire connection: %w", err)

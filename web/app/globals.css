@@ -238,3 +238,34 @@ table.data td.money, table.data th.money { text-align: right; font-variant-numer
 .auth-page .tagline { color: #fff; font-weight: 700; margin-top: 2px; text-shadow: 0 1px 0 rgb(120 50 0 / 35%); }
 .auth-card { width: min(420px, calc(100% - 24px)); margin: -64px auto 32px; align-self: start; }
 .auth-card h1 { font-size: 22px; font-weight: 900; }
+
+.action-details > summary { list-style: none; }
+.action-details > summary::-webkit-details-marker { display: none; }
+
+/* Inbox rows: thumb-sized, one action per line. */
+.list { list-style: none; padding: 0; display: grid; }
+.list li + li { border-top: 1px solid var(--line); }
+.list a, .list .item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 2px; min-height: 56px; text-decoration: none; }
+.list a:hover { background: var(--bg); }
+.list strong { display: block; font-weight: 800; line-height: 1.25; }
+.list small { display: block; font-size: 13px; }
+.late { color: var(--bad); font-weight: 800; }
+.unread strong::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); margin-right: 8px; vertical-align: 2px; }
+
+/* Checklist answers: large targets for one-handed use. */
+.choice { display: flex; gap: 8px; flex-wrap: wrap; }
+.choice label { flex: 1 1 88px; }
+.choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.choice span { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 8px 12px; border: 1.5px solid var(--line-strong); border-radius: 12px; font-weight: 800; cursor: pointer; }
+.choice input:focus-visible + span { outline: 3px solid var(--orange); outline-offset: 2px; }
+.choice input:checked + span { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+.choice input[value="fail"]:checked + span, .choice input[value="nok"]:checked + span { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+.question { display: grid; gap: 6px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.question:last-child { border-bottom: 0; }
+.question .q { font-weight: 800; }
+.sticky-foot { position: sticky; bottom: calc(var(--nav-h) + 8px); background: var(--surface); padding: 10px; border-radius: 14px; box-shadow: var(--shadow); display: flex; gap: 8px; justify-content: flex-end; }
+@media (min-width: 1000px) { .sticky-foot { bottom: 8px; } }
+
+/* Readiness grid */
+.matrix th, .matrix td { text-align: center; }
+.matrix th:first-child, .matrix td:first-child { text-align: left; }

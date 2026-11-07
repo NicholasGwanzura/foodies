@@ -12,6 +12,123 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type Action struct {
+	ID                  uuid.UUID   `json:"id"`
+	Reference           string      `json:"reference"`
+	SourceType          *string     `json:"source_type"`
+	SourceID            *uuid.UUID  `json:"source_id"`
+	Kind                string      `json:"kind"`
+	Description         string      `json:"description"`
+	RootCause           *string     `json:"root_cause"`
+	OwnerEmployeeID     uuid.UUID   `json:"owner_employee_id"`
+	SiteID              *uuid.UUID  `json:"site_id"`
+	DueDate             pgtype.Date `json:"due_date"`
+	Priority            *string     `json:"priority"`
+	PercentComplete     *int32      `json:"percent_complete"`
+	EffectivenessResult *string     `json:"effectiveness_result"`
+	VerifiedBy          *uuid.UUID  `json:"verified_by"`
+	ClosedAt            *time.Time  `json:"closed_at"`
+	Status              string      `json:"status"`
+	CreatedAt           time.Time   `json:"created_at"`
+	UpdatedAt           time.Time   `json:"updated_at"`
+	CreatedBy           *uuid.UUID  `json:"created_by"`
+	UpdatedBy           *uuid.UUID  `json:"updated_by"`
+	RowVersion          int32       `json:"row_version"`
+}
+
+type ApprovalPolicy struct {
+	ID               uuid.UUID  `json:"id"`
+	WorkflowKey      string     `json:"workflow_key"`
+	Name             string     `json:"name"`
+	Version          *int32     `json:"version"`
+	EffectiveFrom    *time.Time `json:"effective_from"`
+	SourceDocumentID *uuid.UUID `json:"source_document_id"`
+	Status           string     `json:"status"`
+	CreatedAt        time.Time  `json:"created_at"`
+	UpdatedAt        time.Time  `json:"updated_at"`
+	CreatedBy        *uuid.UUID `json:"created_by"`
+	UpdatedBy        *uuid.UUID `json:"updated_by"`
+	RowVersion       int32      `json:"row_version"`
+}
+
+type ApprovalPolicyStep struct {
+	ID               uuid.UUID       `json:"id"`
+	ApprovalPolicyID uuid.UUID       `json:"approval_policy_id"`
+	Sequence         int32           `json:"sequence"`
+	RoleID           uuid.UUID       `json:"role_id"`
+	Mode             string          `json:"mode"`
+	Condition        json.RawMessage `json:"condition"`
+	SlaMinutes       *int32          `json:"sla_minutes"`
+	EscalateToRoleID *uuid.UUID      `json:"escalate_to_role_id"`
+	CreatedAt        time.Time       `json:"created_at"`
+	UpdatedAt        time.Time       `json:"updated_at"`
+	CreatedBy        *uuid.UUID      `json:"created_by"`
+	UpdatedBy        *uuid.UUID      `json:"updated_by"`
+	RowVersion       int32           `json:"row_version"`
+}
+
+type ApprovalRequest struct {
+	ID             uuid.UUID  `json:"id"`
+	SubjectType    *string    `json:"subject_type"`
+	SubjectID      *uuid.UUID `json:"subject_id"`
+	WorkflowKey    *string    `json:"workflow_key"`
+	PolicyID       *uuid.UUID `json:"policy_id"`
+	SiteID         *uuid.UUID `json:"site_id"`
+	AmountAmount   *string    `json:"amount_amount"`
+	AmountCurrency *string    `json:"amount_currency"`
+	CurrentStep    *int32     `json:"current_step"`
+	Summary        *string    `json:"summary"`
+	DecidedAt      *time.Time `json:"decided_at"`
+	Status         string     `json:"status"`
+	CreatedAt      time.Time  `json:"created_at"`
+	UpdatedAt      time.Time  `json:"updated_at"`
+	CreatedBy      *uuid.UUID `json:"created_by"`
+	UpdatedBy      *uuid.UUID `json:"updated_by"`
+	RowVersion     int32      `json:"row_version"`
+}
+
+type ApprovalRequestStep struct {
+	ID                uuid.UUID  `json:"id"`
+	ApprovalRequestID uuid.UUID  `json:"approval_request_id"`
+	Sequence          *int32     `json:"sequence"`
+	RoleID            *uuid.UUID `json:"role_id"`
+	DecidedBy         *uuid.UUID `json:"decided_by"`
+	Decision          *string    `json:"decision"`
+	DecidedAt         *time.Time `json:"decided_at"`
+	Channel           *string    `json:"channel"`
+	Comment           *string    `json:"comment"`
+	SignatureID       *uuid.UUID `json:"signature_id"`
+	DueAt             *time.Time `json:"due_at"`
+	CreatedAt         time.Time  `json:"created_at"`
+	UpdatedAt         time.Time  `json:"updated_at"`
+	CreatedBy         *uuid.UUID `json:"created_by"`
+	UpdatedBy         *uuid.UUID `json:"updated_by"`
+	RowVersion        int32      `json:"row_version"`
+	AssignedUserID    *uuid.UUID `json:"assigned_user_id"`
+}
+
+type Attachment struct {
+	ID                    uuid.UUID  `json:"id"`
+	Filename              string     `json:"filename"`
+	ContentType           string     `json:"content_type"`
+	SizeBytes             int32      `json:"size_bytes"`
+	Sha256                string     `json:"sha256"`
+	SubjectType           *string    `json:"subject_type"`
+	SubjectID             *uuid.UUID `json:"subject_id"`
+	Classification        *string    `json:"classification"`
+	Kind                  *string    `json:"kind"`
+	PaperOriginalLocation *string    `json:"paper_original_location"`
+	CapturedAt            *time.Time `json:"captured_at"`
+	UploadUrl             *string    `json:"upload_url"`
+	DownloadUrl           *string    `json:"download_url"`
+	Status                string     `json:"status"`
+	CreatedAt             time.Time  `json:"created_at"`
+	UpdatedAt             time.Time  `json:"updated_at"`
+	CreatedBy             *uuid.UUID `json:"created_by"`
+	UpdatedBy             *uuid.UUID `json:"updated_by"`
+	RowVersion            int32      `json:"row_version"`
+}
+
 type AuditEvent struct {
 	ID          uuid.UUID       `json:"id"`
 	OccurredAt  *time.Time      `json:"occurred_at"`
@@ -45,6 +162,18 @@ type AuthSession struct {
 	CreatedAt  time.Time  `json:"created_at"`
 	LastSeenAt time.Time  `json:"last_seen_at"`
 	RevokedAt  *time.Time `json:"revoked_at"`
+}
+
+type Comment struct {
+	ID          uuid.UUID  `json:"id"`
+	SubjectType string     `json:"subject_type"`
+	SubjectID   uuid.UUID  `json:"subject_id"`
+	Body        string     `json:"body"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	CreatedBy   *uuid.UUID `json:"created_by"`
+	UpdatedBy   *uuid.UUID `json:"updated_by"`
+	RowVersion  int32      `json:"row_version"`
 }
 
 type Complex struct {
@@ -88,6 +217,23 @@ type Currency struct {
 	CreatedBy     *uuid.UUID `json:"created_by"`
 	UpdatedBy     *uuid.UUID `json:"updated_by"`
 	RowVersion    int32      `json:"row_version"`
+}
+
+type DataImport struct {
+	ID                      uuid.UUID   `json:"id"`
+	Kind                    string      `json:"kind"`
+	AttachmentID            uuid.UUID   `json:"attachment_id"`
+	SiteID                  *uuid.UUID  `json:"site_id"`
+	BusinessDate            pgtype.Date `json:"business_date"`
+	RowsOk                  *int32      `json:"rows_ok"`
+	RowsFailed              *int32      `json:"rows_failed"`
+	ErrorReportAttachmentID *uuid.UUID  `json:"error_report_attachment_id"`
+	Status                  string      `json:"status"`
+	CreatedAt               time.Time   `json:"created_at"`
+	UpdatedAt               time.Time   `json:"updated_at"`
+	CreatedBy               *uuid.UUID  `json:"created_by"`
+	UpdatedBy               *uuid.UUID  `json:"updated_by"`
+	RowVersion              int32       `json:"row_version"`
 }
 
 type Delegation struct {
@@ -134,6 +280,20 @@ type Device struct {
 	CreatedBy  *uuid.UUID `json:"created_by"`
 	UpdatedBy  *uuid.UUID `json:"updated_by"`
 	RowVersion int32      `json:"row_version"`
+}
+
+type DispositionBatch struct {
+	ID               uuid.UUID   `json:"id"`
+	RetentionClassID uuid.UUID   `json:"retention_class_id"`
+	CutoffDate       pgtype.Date `json:"cutoff_date"`
+	RecordCount      *int32      `json:"record_count"`
+	CompletedAt      *time.Time  `json:"completed_at"`
+	Status           string      `json:"status"`
+	CreatedAt        time.Time   `json:"created_at"`
+	UpdatedAt        time.Time   `json:"updated_at"`
+	CreatedBy        *uuid.UUID  `json:"created_by"`
+	UpdatedBy        *uuid.UUID  `json:"updated_by"`
+	RowVersion       int32       `json:"row_version"`
 }
 
 type EmergencyContact struct {
@@ -224,6 +384,141 @@ type EmployeeTransfer struct {
 	RowVersion           int32       `json:"row_version"`
 }
 
+type Escalation struct {
+	ID            uuid.UUID  `json:"id"`
+	SubjectType   *string    `json:"subject_type"`
+	SubjectID     *uuid.UUID `json:"subject_id"`
+	Domain        *string    `json:"domain"`
+	SeverityLevel *int32     `json:"severity_level"`
+	SiteID        *uuid.UUID `json:"site_id"`
+	CurrentStep   *int32     `json:"current_step"`
+	TriggeredAt   *time.Time `json:"triggered_at"`
+	ClosedAt      *time.Time `json:"closed_at"`
+	Status        string     `json:"status"`
+	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at"`
+	CreatedBy     *uuid.UUID `json:"created_by"`
+	UpdatedBy     *uuid.UUID `json:"updated_by"`
+	RowVersion    int32      `json:"row_version"`
+}
+
+type EscalationPolicy struct {
+	ID            uuid.UUID  `json:"id"`
+	Domain        string     `json:"domain"`
+	SeverityLevel int32      `json:"severity_level"`
+	Label         string     `json:"label"`
+	AfterHours    bool       `json:"after_hours"`
+	Status        string     `json:"status"`
+	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at"`
+	CreatedBy     *uuid.UUID `json:"created_by"`
+	UpdatedBy     *uuid.UUID `json:"updated_by"`
+	RowVersion    int32      `json:"row_version"`
+}
+
+type EscalationPolicyStep struct {
+	ID                 uuid.UUID  `json:"id"`
+	EscalationPolicyID uuid.UUID  `json:"escalation_policy_id"`
+	Sequence           int32      `json:"sequence"`
+	NotifyRoleID       uuid.UUID  `json:"notify_role_id"`
+	Channels           []string   `json:"channels"`
+	AckWithinMinutes   *int32     `json:"ack_within_minutes"`
+	NextOnTimeout      bool       `json:"next_on_timeout"`
+	CreatedAt          time.Time  `json:"created_at"`
+	UpdatedAt          time.Time  `json:"updated_at"`
+	CreatedBy          *uuid.UUID `json:"created_by"`
+	UpdatedBy          *uuid.UUID `json:"updated_by"`
+	RowVersion         int32      `json:"row_version"`
+}
+
+type EscalationRecipient struct {
+	ID             uuid.UUID  `json:"id"`
+	EscalationID   uuid.UUID  `json:"escalation_id"`
+	Step           *int32     `json:"step"`
+	UserID         *uuid.UUID `json:"user_id"`
+	Channel        *string    `json:"channel"`
+	NotifiedAt     *time.Time `json:"notified_at"`
+	AcknowledgedAt *time.Time `json:"acknowledged_at"`
+	CreatedAt      time.Time  `json:"created_at"`
+	UpdatedAt      time.Time  `json:"updated_at"`
+	CreatedBy      *uuid.UUID `json:"created_by"`
+	UpdatedBy      *uuid.UUID `json:"updated_by"`
+	RowVersion     int32      `json:"row_version"`
+}
+
+type ExportJob struct {
+	ID               uuid.UUID       `json:"id"`
+	Kind             string          `json:"kind"`
+	Source           string          `json:"source"`
+	Filters          json.RawMessage `json:"filters"`
+	FileAttachmentID *uuid.UUID      `json:"file_attachment_id"`
+	FinishedAt       *time.Time      `json:"finished_at"`
+	Status           string          `json:"status"`
+	CreatedAt        time.Time       `json:"created_at"`
+	UpdatedAt        time.Time       `json:"updated_at"`
+	CreatedBy        *uuid.UUID      `json:"created_by"`
+	UpdatedBy        *uuid.UUID      `json:"updated_by"`
+	RowVersion       int32           `json:"row_version"`
+}
+
+type FormSubmission struct {
+	ID                uuid.UUID       `json:"id"`
+	Reference         string          `json:"reference"`
+	TemplateVersionID uuid.UUID       `json:"template_version_id"`
+	SiteID            uuid.UUID       `json:"site_id"`
+	BusinessDate      pgtype.Date     `json:"business_date"`
+	Shift             *string         `json:"shift"`
+	TaskID            *uuid.UUID      `json:"task_id"`
+	Answers           json.RawMessage `json:"answers"`
+	Result            *string         `json:"result"`
+	CapturedAt        time.Time       `json:"captured_at"`
+	Channel           *string         `json:"channel"`
+	ClientRecordID    *uuid.UUID      `json:"client_record_id"`
+	Status            string          `json:"status"`
+	CreatedAt         time.Time       `json:"created_at"`
+	UpdatedAt         time.Time       `json:"updated_at"`
+	CreatedBy         *uuid.UUID      `json:"created_by"`
+	UpdatedBy         *uuid.UUID      `json:"updated_by"`
+	RowVersion        int32           `json:"row_version"`
+}
+
+type FormTemplate struct {
+	ID               uuid.UUID  `json:"id"`
+	Key              string     `json:"key"`
+	Title            string     `json:"title"`
+	Kind             string     `json:"kind"`
+	Module           string     `json:"module"`
+	Area             *string    `json:"area"`
+	SourceSop        *string    `json:"source_sop"`
+	OwnerRoleID      *uuid.UUID `json:"owner_role_id"`
+	CurrentVersionID *uuid.UUID `json:"current_version_id"`
+	Status           string     `json:"status"`
+	CreatedAt        time.Time  `json:"created_at"`
+	UpdatedAt        time.Time  `json:"updated_at"`
+	CreatedBy        *uuid.UUID `json:"created_by"`
+	UpdatedBy        *uuid.UUID `json:"updated_by"`
+	RowVersion       int32      `json:"row_version"`
+}
+
+type FormTemplateVersion struct {
+	ID               uuid.UUID       `json:"id"`
+	FormTemplateID   uuid.UUID       `json:"form_template_id"`
+	Version          *int32          `json:"version"`
+	Definition       json.RawMessage `json:"definition"`
+	OfflineAllowed   bool            `json:"offline_allowed"`
+	Channels         string          `json:"channels"`
+	WhatsappFlowID   *string         `json:"whatsapp_flow_id"`
+	RetentionClassID *uuid.UUID      `json:"retention_class_id"`
+	RequiredRuleKeys []string        `json:"required_rule_keys"`
+	EffectiveFrom    *time.Time      `json:"effective_from"`
+	Status           string          `json:"status"`
+	CreatedAt        time.Time       `json:"created_at"`
+	UpdatedAt        time.Time       `json:"updated_at"`
+	CreatedBy        *uuid.UUID      `json:"created_by"`
+	UpdatedBy        *uuid.UUID      `json:"updated_by"`
+	RowVersion       int32           `json:"row_version"`
+}
+
 type FxRate struct {
 	ID           uuid.UUID   `json:"id"`
 	FromCurrency string      `json:"from_currency"`
@@ -249,6 +544,52 @@ type IdempotencyKey struct {
 	CreatedAt   time.Time       `json:"created_at"`
 }
 
+type Integration struct {
+	ID            uuid.UUID       `json:"id"`
+	System        string          `json:"system"`
+	Mode          string          `json:"mode"`
+	Config        json.RawMessage `json:"config"`
+	LastSuccessAt *time.Time      `json:"last_success_at"`
+	LastError     *string         `json:"last_error"`
+	Status        string          `json:"status"`
+	CreatedAt     time.Time       `json:"created_at"`
+	UpdatedAt     time.Time       `json:"updated_at"`
+	CreatedBy     *uuid.UUID      `json:"created_by"`
+	UpdatedBy     *uuid.UUID      `json:"updated_by"`
+	RowVersion    int32           `json:"row_version"`
+}
+
+type KpiDefinition struct {
+	ID            uuid.UUID  `json:"id"`
+	Key           string     `json:"key"`
+	Name          string     `json:"name"`
+	Module        string     `json:"module"`
+	Formula       *string    `json:"formula"`
+	TargetRuleKey *string    `json:"target_rule_key"`
+	Unit          string     `json:"unit"`
+	Drilldown     *string    `json:"drilldown"`
+	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at"`
+	CreatedBy     *uuid.UUID `json:"created_by"`
+	UpdatedBy     *uuid.UUID `json:"updated_by"`
+	RowVersion    int32      `json:"row_version"`
+}
+
+type LegalHold struct {
+	ID          uuid.UUID  `json:"id"`
+	SubjectType string     `json:"subject_type"`
+	SubjectID   uuid.UUID  `json:"subject_id"`
+	Reason      string     `json:"reason"`
+	OwnerUserID *uuid.UUID `json:"owner_user_id"`
+	ReleasedAt  *time.Time `json:"released_at"`
+	Status      string     `json:"status"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	CreatedBy   *uuid.UUID `json:"created_by"`
+	UpdatedBy   *uuid.UUID `json:"updated_by"`
+	RowVersion  int32      `json:"row_version"`
+}
+
 type MfaChallenge struct {
 	ID             uuid.UUID  `json:"id"`
 	UserID         uuid.UUID  `json:"user_id"`
@@ -257,6 +598,75 @@ type MfaChallenge struct {
 	ExpiresAt      time.Time  `json:"expires_at"`
 	FailedAttempts int32      `json:"failed_attempts"`
 	ConsumedAt     *time.Time `json:"consumed_at"`
+}
+
+type Notification struct {
+	ID              uuid.UUID  `json:"id"`
+	RecipientUserID *uuid.UUID `json:"recipient_user_id"`
+	Category        *string    `json:"category"`
+	Title           *string    `json:"title"`
+	Body            *string    `json:"body"`
+	Channel         *string    `json:"channel"`
+	SubjectType     *string    `json:"subject_type"`
+	SubjectID       *uuid.UUID `json:"subject_id"`
+	SentAt          *time.Time `json:"sent_at"`
+	DeliveredAt     *time.Time `json:"delivered_at"`
+	ReadAt          *time.Time `json:"read_at"`
+	FailureReason   *string    `json:"failure_reason"`
+	Status          string     `json:"status"`
+	CreatedAt       time.Time  `json:"created_at"`
+	UpdatedAt       time.Time  `json:"updated_at"`
+	CreatedBy       *uuid.UUID `json:"created_by"`
+	UpdatedBy       *uuid.UUID `json:"updated_by"`
+	RowVersion      int32      `json:"row_version"`
+}
+
+type NotificationPreference struct {
+	UserID     uuid.UUID       `json:"user_id"`
+	Categories json.RawMessage `json:"categories"`
+	UpdatedAt  time.Time       `json:"updated_at"`
+}
+
+type PosSalesSummary struct {
+	ID                uuid.UUID   `json:"id"`
+	SiteID            *uuid.UUID  `json:"site_id"`
+	TillID            *uuid.UUID  `json:"till_id"`
+	BusinessDate      pgtype.Date `json:"business_date"`
+	Shift             *string     `json:"shift"`
+	CashierEmployeeID *uuid.UUID  `json:"cashier_employee_id"`
+	Currency          *string     `json:"currency"`
+	Tender            *string     `json:"tender"`
+	Gross             *string     `json:"gross"`
+	Voids             *string     `json:"voids"`
+	Refunds           *string     `json:"refunds"`
+	Net               *string     `json:"net"`
+	TransactionCount  *int32      `json:"transaction_count"`
+	SourceRunID       *uuid.UUID  `json:"source_run_id"`
+	CreatedAt         time.Time   `json:"created_at"`
+	UpdatedAt         time.Time   `json:"updated_at"`
+	CreatedBy         *uuid.UUID  `json:"created_by"`
+	UpdatedBy         *uuid.UUID  `json:"updated_by"`
+	RowVersion        int32       `json:"row_version"`
+}
+
+type Posting struct {
+	ID           uuid.UUID       `json:"id"`
+	TargetSystem *string         `json:"target_system"`
+	PostingType  *string         `json:"posting_type"`
+	SubjectType  *string         `json:"subject_type"`
+	SubjectID    *uuid.UUID      `json:"subject_id"`
+	SiteID       *uuid.UUID      `json:"site_id"`
+	Payload      json.RawMessage `json:"payload"`
+	ExternalRef  *string         `json:"external_ref"`
+	Attempts     *int32          `json:"attempts"`
+	LastError    *string         `json:"last_error"`
+	PostedAt     *time.Time      `json:"posted_at"`
+	Status       string          `json:"status"`
+	CreatedAt    time.Time       `json:"created_at"`
+	UpdatedAt    time.Time       `json:"updated_at"`
+	CreatedBy    *uuid.UUID      `json:"created_by"`
+	UpdatedBy    *uuid.UUID      `json:"updated_by"`
+	RowVersion   int32           `json:"row_version"`
 }
 
 type ProductionLine struct {
@@ -284,6 +694,20 @@ type PublicHoliday struct {
 	RowVersion      int32       `json:"row_version"`
 }
 
+type RecordLink struct {
+	ID         uuid.UUID  `json:"id"`
+	FromType   string     `json:"from_type"`
+	FromID     uuid.UUID  `json:"from_id"`
+	ToType     string     `json:"to_type"`
+	ToID       uuid.UUID  `json:"to_id"`
+	Relation   string     `json:"relation"`
+	CreatedAt  time.Time  `json:"created_at"`
+	UpdatedAt  time.Time  `json:"updated_at"`
+	CreatedBy  *uuid.UUID `json:"created_by"`
+	UpdatedBy  *uuid.UUID `json:"updated_by"`
+	RowVersion int32      `json:"row_version"`
+}
+
 type ReferenceSequence struct {
 	Prefix    string `json:"prefix"`
 	SiteCode  string `json:"site_code"`
@@ -297,6 +721,24 @@ type RefreshToken struct {
 	TokenHash string     `json:"token_hash"`
 	ExpiresAt time.Time  `json:"expires_at"`
 	UsedAt    *time.Time `json:"used_at"`
+}
+
+type RetentionClass struct {
+	ID           uuid.UUID  `json:"id"`
+	Key          string     `json:"key"`
+	Name         string     `json:"name"`
+	PeriodValue  *int32     `json:"period_value"`
+	PeriodUnit   *string    `json:"period_unit"`
+	Trigger      string     `json:"trigger"`
+	SourceClause *string    `json:"source_clause"`
+	DecisionID   *string    `json:"decision_id"`
+	Disposition  *string    `json:"disposition"`
+	Status       string     `json:"status"`
+	CreatedAt    time.Time  `json:"created_at"`
+	UpdatedAt    time.Time  `json:"updated_at"`
+	CreatedBy    *uuid.UUID `json:"created_by"`
+	UpdatedBy    *uuid.UUID `json:"updated_by"`
+	RowVersion   int32      `json:"row_version"`
 }
 
 type Role struct {
@@ -329,6 +771,42 @@ type RoleAssignment struct {
 	RowVersion    int32       `json:"row_version"`
 }
 
+type RuleDefinition struct {
+	ID           uuid.UUID  `json:"id"`
+	Key          string     `json:"key"`
+	Name         string     `json:"name"`
+	Module       string     `json:"module"`
+	ValueType    string     `json:"value_type"`
+	ScopeLevel   string     `json:"scope_level"`
+	OwnerRoleID  *uuid.UUID `json:"owner_role_id"`
+	SourceClause *string    `json:"source_clause"`
+	DecisionID   *string    `json:"decision_id"`
+	Blocking     bool       `json:"blocking"`
+	CreatedAt    time.Time  `json:"created_at"`
+	UpdatedAt    time.Time  `json:"updated_at"`
+	CreatedBy    *uuid.UUID `json:"created_by"`
+	UpdatedBy    *uuid.UUID `json:"updated_by"`
+	RowVersion   int32      `json:"row_version"`
+}
+
+type RuleVersion struct {
+	ID               uuid.UUID       `json:"id"`
+	RuleDefinitionID uuid.UUID       `json:"rule_definition_id"`
+	ScopeType        string          `json:"scope_type"`
+	ScopeID          *uuid.UUID      `json:"scope_id"`
+	Value            json.RawMessage `json:"value"`
+	EffectiveFrom    time.Time       `json:"effective_from"`
+	EffectiveTo      *time.Time      `json:"effective_to"`
+	SourceDocumentID *uuid.UUID      `json:"source_document_id"`
+	ChangeReason     string          `json:"change_reason"`
+	Status           string          `json:"status"`
+	CreatedAt        time.Time       `json:"created_at"`
+	UpdatedAt        time.Time       `json:"updated_at"`
+	CreatedBy        *uuid.UUID      `json:"created_by"`
+	UpdatedBy        *uuid.UUID      `json:"updated_by"`
+	RowVersion       int32           `json:"row_version"`
+}
+
 type Safe struct {
 	ID         uuid.UUID  `json:"id"`
 	SiteID     uuid.UUID  `json:"site_id"`
@@ -341,6 +819,51 @@ type Safe struct {
 	CreatedBy  *uuid.UUID `json:"created_by"`
 	UpdatedBy  *uuid.UUID `json:"updated_by"`
 	RowVersion int32      `json:"row_version"`
+}
+
+type Schedule struct {
+	ID                   uuid.UUID   `json:"id"`
+	Title                string      `json:"title"`
+	WorkflowKey          *string     `json:"workflow_key"`
+	FormTemplateID       *uuid.UUID  `json:"form_template_id"`
+	FrequencyRuleKey     *string     `json:"frequency_rule_key"`
+	SiteIds              []uuid.UUID `json:"site_ids"`
+	AssigneeRoleID       uuid.UUID   `json:"assignee_role_id"`
+	DueOffsetMinutes     *int32      `json:"due_offset_minutes"`
+	ReminderMinutes      *int32      `json:"reminder_minutes"`
+	EscalateAfterMinutes *int32      `json:"escalate_after_minutes"`
+	EscalateToRoleID     *uuid.UUID  `json:"escalate_to_role_id"`
+	Status               string      `json:"status"`
+	CreatedAt            time.Time   `json:"created_at"`
+	UpdatedAt            time.Time   `json:"updated_at"`
+	CreatedBy            *uuid.UUID  `json:"created_by"`
+	UpdatedBy            *uuid.UUID  `json:"updated_by"`
+	RowVersion           int32       `json:"row_version"`
+}
+
+type SignatureRequest struct {
+	ID                   uuid.UUID  `json:"id"`
+	SubjectType          string     `json:"subject_type"`
+	SubjectID            uuid.UUID  `json:"subject_id"`
+	Meaning              string     `json:"meaning"`
+	SignerKind           string     `json:"signer_kind"`
+	SignerEmployeeID     *uuid.UUID `json:"signer_employee_id"`
+	SignerRoleID         *uuid.UUID `json:"signer_role_id"`
+	ExternalName         *string    `json:"external_name"`
+	ExternalOrganisation *string    `json:"external_organisation"`
+	ExternalIDRef        *string    `json:"external_id_ref"`
+	ContentHash          *string    `json:"content_hash"`
+	SignedAt             *time.Time `json:"signed_at"`
+	SignedChannel        *string    `json:"signed_channel"`
+	DeviceID             *uuid.UUID `json:"device_id"`
+	AttestedBy           *uuid.UUID `json:"attested_by"`
+	ProofAttachmentID    *uuid.UUID `json:"proof_attachment_id"`
+	Status               string     `json:"status"`
+	CreatedAt            time.Time  `json:"created_at"`
+	UpdatedAt            time.Time  `json:"updated_at"`
+	CreatedBy            *uuid.UUID `json:"created_by"`
+	UpdatedBy            *uuid.UUID `json:"updated_by"`
+	RowVersion           int32      `json:"row_version"`
 }
 
 type Site struct {
@@ -394,6 +917,67 @@ type StorageLocation struct {
 	RowVersion          int32      `json:"row_version"`
 }
 
+type SyncConflict struct {
+	ID             uuid.UUID       `json:"id"`
+	BatchID        *string         `json:"batch_id"`
+	DeviceID       *uuid.UUID      `json:"device_id"`
+	SiteID         *uuid.UUID      `json:"site_id"`
+	ClientRecordID *uuid.UUID      `json:"client_record_id"`
+	SubjectType    *string         `json:"subject_type"`
+	SubjectID      *uuid.UUID      `json:"subject_id"`
+	Reason         *string         `json:"reason"`
+	ClientPayload  json.RawMessage `json:"client_payload"`
+	ResolvedAt     *time.Time      `json:"resolved_at"`
+	Status         string          `json:"status"`
+	CreatedAt      time.Time       `json:"created_at"`
+	UpdatedAt      time.Time       `json:"updated_at"`
+	CreatedBy      *uuid.UUID      `json:"created_by"`
+	UpdatedBy      *uuid.UUID      `json:"updated_by"`
+	RowVersion     int32           `json:"row_version"`
+}
+
+type SyncRun struct {
+	ID            uuid.UUID  `json:"id"`
+	IntegrationID uuid.UUID  `json:"integration_id"`
+	Direction     *string    `json:"direction"`
+	StartedAt     *time.Time `json:"started_at"`
+	FinishedAt    *time.Time `json:"finished_at"`
+	RecordsOk     *int32     `json:"records_ok"`
+	RecordsFailed *int32     `json:"records_failed"`
+	ErrorSummary  *string    `json:"error_summary"`
+	Status        string     `json:"status"`
+	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at"`
+	CreatedBy     *uuid.UUID `json:"created_by"`
+	UpdatedBy     *uuid.UUID `json:"updated_by"`
+	RowVersion    int32      `json:"row_version"`
+}
+
+type Task struct {
+	ID             uuid.UUID   `json:"id"`
+	Title          string      `json:"title"`
+	ScheduleID     *uuid.UUID  `json:"schedule_id"`
+	SubjectType    *string     `json:"subject_type"`
+	SubjectID      *uuid.UUID  `json:"subject_id"`
+	SiteID         uuid.UUID   `json:"site_id"`
+	BusinessDate   pgtype.Date `json:"business_date"`
+	Shift          *string     `json:"shift"`
+	AssigneeUserID *uuid.UUID  `json:"assignee_user_id"`
+	AssigneeRoleID *uuid.UUID  `json:"assignee_role_id"`
+	DueAt          *time.Time  `json:"due_at"`
+	Priority       *string     `json:"priority"`
+	Overdue        bool        `json:"overdue"`
+	CompletedAt    *time.Time  `json:"completed_at"`
+	SkipReason     *string     `json:"skip_reason"`
+	Status         string      `json:"status"`
+	CreatedAt      time.Time   `json:"created_at"`
+	UpdatedAt      time.Time   `json:"updated_at"`
+	CreatedBy      *uuid.UUID  `json:"created_by"`
+	UpdatedBy      *uuid.UUID  `json:"updated_by"`
+	RowVersion     int32       `json:"row_version"`
+	RemindedAt     *time.Time  `json:"reminded_at"`
+}
+
 type Till struct {
 	ID             uuid.UUID  `json:"id"`
 	SiteID         uuid.UUID  `json:"site_id"`
@@ -432,4 +1016,90 @@ type UserCredential struct {
 	FailedPins      int32      `json:"failed_pins"`
 	PinLockedAt     *time.Time `json:"pin_locked_at"`
 	UpdatedAt       time.Time  `json:"updated_at"`
+}
+
+type WhatsappIdentity struct {
+	ID           uuid.UUID  `json:"id"`
+	EmployeeID   uuid.UUID  `json:"employee_id"`
+	PhoneE164    string     `json:"phone_e164"`
+	VerifiedAt   *time.Time `json:"verified_at"`
+	PinSetAt     *time.Time `json:"pin_set_at"`
+	LastActiveAt *time.Time `json:"last_active_at"`
+	Status       string     `json:"status"`
+	CreatedAt    time.Time  `json:"created_at"`
+	UpdatedAt    time.Time  `json:"updated_at"`
+	CreatedBy    *uuid.UUID `json:"created_by"`
+	UpdatedBy    *uuid.UUID `json:"updated_by"`
+	RowVersion   int32      `json:"row_version"`
+}
+
+type WhatsappMessage struct {
+	ID                uuid.UUID  `json:"id"`
+	Direction         *string    `json:"direction"`
+	IdentityID        *uuid.UUID `json:"identity_id"`
+	ProviderMessageID *string    `json:"provider_message_id"`
+	MessageType       *string    `json:"message_type"`
+	Summary           *string    `json:"summary"`
+	SubjectType       *string    `json:"subject_type"`
+	SubjectID         *uuid.UUID `json:"subject_id"`
+	SentAt            *time.Time `json:"sent_at"`
+	DeliveryStatus    *string    `json:"delivery_status"`
+	CostCategory      *string    `json:"cost_category"`
+	CreatedAt         time.Time  `json:"created_at"`
+	UpdatedAt         time.Time  `json:"updated_at"`
+	CreatedBy         *uuid.UUID `json:"created_by"`
+	UpdatedBy         *uuid.UUID `json:"updated_by"`
+	RowVersion        int32      `json:"row_version"`
+}
+
+type WhatsappTemplate struct {
+	ID             uuid.UUID  `json:"id"`
+	Name           string     `json:"name"`
+	Language       string     `json:"language"`
+	Category       string     `json:"category"`
+	Body           string     `json:"body"`
+	ProviderStatus *string    `json:"provider_status"`
+	CreatedAt      time.Time  `json:"created_at"`
+	UpdatedAt      time.Time  `json:"updated_at"`
+	CreatedBy      *uuid.UUID `json:"created_by"`
+	UpdatedBy      *uuid.UUID `json:"updated_by"`
+	RowVersion     int32      `json:"row_version"`
+}
+
+type WorkflowActivation struct {
+	ID              uuid.UUID  `json:"id"`
+	WorkflowKey     string     `json:"workflow_key"`
+	SiteID          uuid.UUID  `json:"site_id"`
+	MissingRuleKeys []string   `json:"missing_rule_keys"`
+	ActivatedAt     *time.Time `json:"activated_at"`
+	ActivatedBy     *uuid.UUID `json:"activated_by"`
+	Status          string     `json:"status"`
+	CreatedAt       time.Time  `json:"created_at"`
+	UpdatedAt       time.Time  `json:"updated_at"`
+	CreatedBy       *uuid.UUID `json:"created_by"`
+	UpdatedBy       *uuid.UUID `json:"updated_by"`
+	RowVersion      int32      `json:"row_version"`
+}
+
+type WorkflowRequirement struct {
+	WorkflowKey string `json:"workflow_key"`
+	RuleKey     string `json:"rule_key"`
+}
+
+type ZReport struct {
+	ID            uuid.UUID   `json:"id"`
+	SiteID        uuid.UUID   `json:"site_id"`
+	TillID        uuid.UUID   `json:"till_id"`
+	BusinessDate  pgtype.Date `json:"business_date"`
+	ReportType    string      `json:"report_type"`
+	ReportTime    time.Time   `json:"report_time"`
+	TotalAmount   string      `json:"total_amount"`
+	TotalCurrency string      `json:"total_currency"`
+	FiscalStatus  *string     `json:"fiscal_status"`
+	AttachmentID  *uuid.UUID  `json:"attachment_id"`
+	CreatedAt     time.Time   `json:"created_at"`
+	UpdatedAt     time.Time   `json:"updated_at"`
+	CreatedBy     *uuid.UUID  `json:"created_by"`
+	UpdatedBy     *uuid.UUID  `json:"updated_by"`
+	RowVersion    int32       `json:"row_version"`
 }

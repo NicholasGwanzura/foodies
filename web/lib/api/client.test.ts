@@ -116,12 +116,12 @@ export const typeChecks = async () => {
 describe("api writes", () => {
   afterEach(() => mock.restoreAll());
 
-  it("repeats array query values", async () => {
+  it("sends array query values comma-separated", async () => {
     const fetchMock = stubFetch(json(200, {}));
     await api.request("get", "/tasks", { query: { status: ["open", "done"] } });
     assert.equal(
       String(fetchMock.mock.calls[0].arguments[0]),
-      "http://localhost:8080/api/v1/tasks?status=open&status=done",
+      "http://localhost:8080/api/v1/tasks?status=open%2Cdone",
     );
   });
 

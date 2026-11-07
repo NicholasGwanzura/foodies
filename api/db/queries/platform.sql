@@ -39,3 +39,13 @@ DELETE FROM idempotency_keys WHERE actor_id = $1 AND key = $2;
 
 -- name: PurgeIdempotencyKeys :exec
 DELETE FROM idempotency_keys WHERE created_at < now() - interval '72 hours';
+
+-- name: SodConflicts :many
+SELECT r."key", r.name, r.enforcement FROM sod_rules r
+WHERE r.active AND r.scope = 'same_record'
+  AND (r.action_a = sqlc.arg(action) OR r.action_b = sqlc.arg(action))
+  AND EXISTS (
+    SELECT 1 FROM audit_events e
+    WHERE e.subject_type = sqlc.arg(subject_type) AND e.subject_id = sqlc.arg(subject_id)
+      AND e.actor_user_id = sqlc.arg(actor)
+      AND e.action = CASE WHEN r.action_a = sqlc.arg(action) THEN r.action_b ELSE r.action_a END);

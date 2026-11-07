@@ -13,6 +13,74 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const actRevokeDelegation = `-- name: ActRevokeDelegation :one
+UPDATE delegations
+SET status = 'revoked', updated_at = now(), updated_by = $1, row_version = row_version + 1
+WHERE id = $2 AND status IN ('draft', 'pending_approval', 'active')
+RETURNING id, from_user_id, to_user_id, role_id, workflow_keys, valid_from, valid_to, reason, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type ActRevokeDelegationParams struct {
+	UpdatedBy *uuid.UUID `json:"updated_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) ActRevokeDelegation(ctx context.Context, arg ActRevokeDelegationParams) (Delegation, error) {
+	row := q.db.QueryRow(ctx, actRevokeDelegation, arg.UpdatedBy, arg.ID)
+	var i Delegation
+	err := row.Scan(
+		&i.ID,
+		&i.FromUserID,
+		&i.ToUserID,
+		&i.RoleID,
+		&i.WorkflowKeys,
+		&i.ValidFrom,
+		&i.ValidTo,
+		&i.Reason,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const actSubmitDelegation = `-- name: ActSubmitDelegation :one
+UPDATE delegations
+SET status = 'pending_approval', updated_at = now(), updated_by = $1, row_version = row_version + 1
+WHERE id = $2 AND status IN ('draft')
+RETURNING id, from_user_id, to_user_id, role_id, workflow_keys, valid_from, valid_to, reason, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type ActSubmitDelegationParams struct {
+	UpdatedBy *uuid.UUID `json:"updated_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) ActSubmitDelegation(ctx context.Context, arg ActSubmitDelegationParams) (Delegation, error) {
+	row := q.db.QueryRow(ctx, actSubmitDelegation, arg.UpdatedBy, arg.ID)
+	var i Delegation
+	err := row.Scan(
+		&i.ID,
+		&i.FromUserID,
+		&i.ToUserID,
+		&i.RoleID,
+		&i.WorkflowKeys,
+		&i.ValidFrom,
+		&i.ValidTo,
+		&i.Reason,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
 const createDelegation = `-- name: CreateDelegation :one
 INSERT INTO delegations (from_user_id, to_user_id, role_id, workflow_keys, valid_from, valid_to, "reason", created_by, updated_by)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8)
