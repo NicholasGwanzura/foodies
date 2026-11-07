@@ -30,12 +30,18 @@ func (s *Service) GetSchedule(ctx context.Context, id uuid.UUID) (db.Schedule, e
 // CreateSchedule adds one row to schedules.
 func (s *Service) CreateSchedule(ctx context.Context, p db.CreateScheduleParams) (db.Schedule, error) {
 	var zero db.Schedule
+	if err := s.guard(ctx, "CreateSchedule", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateSchedule(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create schedules")
 	}
-	return row, s.audit(ctx, "tasks.schedule.write", "schedules", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "tasks.schedule.write", "schedules", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateSchedule", row)
 }
 
 // UpdateSchedule changes one row of schedules.
@@ -67,6 +73,9 @@ func (s *Service) PauseSchedule(ctx context.Context, p db.ActPauseScheduleParams
 	if err := s.checkSod(ctx, "tasks.schedule.pause", "schedules", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "PauseSchedule", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActPauseSchedule(ctx, p)
 	if err != nil {
@@ -75,7 +84,7 @@ func (s *Service) PauseSchedule(ctx context.Context, p db.ActPauseScheduleParams
 	if err := s.audit(ctx, "tasks.schedule.pause", "schedules", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "PauseSchedule", row)
 }
 
 // ResumeSchedule is the resume generation action on schedules.
@@ -87,6 +96,9 @@ func (s *Service) ResumeSchedule(ctx context.Context, p db.ActResumeSchedulePara
 	if err := s.checkSod(ctx, "tasks.schedule.resume", "schedules", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ResumeSchedule", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActResumeSchedule(ctx, p)
 	if err != nil {
@@ -95,7 +107,7 @@ func (s *Service) ResumeSchedule(ctx context.Context, p db.ActResumeSchedulePara
 	if err := s.audit(ctx, "tasks.schedule.resume", "schedules", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ResumeSchedule", row)
 }
 
 // ListTask returns a page of tasks.
@@ -150,12 +162,18 @@ func (s *Service) GetFormTemplate(ctx context.Context, id uuid.UUID) (db.FormTem
 // CreateFormTemplate adds one row to form templates.
 func (s *Service) CreateFormTemplate(ctx context.Context, p db.CreateFormTemplateParams) (db.FormTemplate, error) {
 	var zero db.FormTemplate
+	if err := s.guard(ctx, "CreateFormTemplate", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateFormTemplate(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create form templates")
 	}
-	return row, s.audit(ctx, "forms.form_template.write", "form_templates", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "forms.form_template.write", "form_templates", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateFormTemplate", row)
 }
 
 // UpdateFormTemplate changes one row of form templates.
@@ -221,6 +239,9 @@ func (s *Service) SubmitFormTemplateVersion(ctx context.Context, p db.ActSubmitF
 	if err := s.checkSod(ctx, "forms.form_template_version.submit", "form_template_versions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitFormTemplateVersion", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitFormTemplateVersion(ctx, p)
 	if err != nil {
@@ -229,7 +250,10 @@ func (s *Service) SubmitFormTemplateVersion(ctx context.Context, p db.ActSubmitF
 	if err := s.audit(ctx, "forms.form_template_version.submit", "form_template_versions", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "form_template_versions", row.ID, nil, row)
+	if err := s.startApproval(ctx, "form_template_versions", row.ID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitFormTemplateVersion", row)
 }
 
 // RetireFormTemplateVersion is the retire action on form template versions.
@@ -241,6 +265,9 @@ func (s *Service) RetireFormTemplateVersion(ctx context.Context, p db.ActRetireF
 	if err := s.checkSod(ctx, "forms.form_template_version.retire", "form_template_versions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "RetireFormTemplateVersion", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActRetireFormTemplateVersion(ctx, p)
 	if err != nil {
@@ -249,7 +276,7 @@ func (s *Service) RetireFormTemplateVersion(ctx context.Context, p db.ActRetireF
 	if err := s.audit(ctx, "forms.form_template_version.retire", "form_template_versions", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "RetireFormTemplateVersion", row)
 }
 
 // ListFormSubmission returns a page of form submissions.
@@ -273,6 +300,9 @@ func (s *Service) CreateFormSubmission(ctx context.Context, p db.CreateFormSubmi
 	if err := canWrite(ctx, &p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreateFormSubmission", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "FRM", &p.SiteID)
 	if err != nil {
 		return zero, err
@@ -283,7 +313,10 @@ func (s *Service) CreateFormSubmission(ctx context.Context, p db.CreateFormSubmi
 	if err != nil {
 		return zero, wrap(err, "create form submissions")
 	}
-	return row, s.audit(ctx, "forms.form_submission.write", "form_submissions", row.ID, &p.SiteID, nil, row)
+	if err := s.audit(ctx, "forms.form_submission.write", "form_submissions", row.ID, &p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateFormSubmission", row)
 }
 
 // UpdateFormSubmission changes one row of form submissions.
@@ -315,6 +348,9 @@ func (s *Service) ReturnFormSubmission(ctx context.Context, p db.ActReturnFormSu
 	if err := s.checkSod(ctx, "forms.form_submission.return", "form_submissions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ReturnFormSubmission", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActReturnFormSubmission(ctx, p)
 	if err != nil {
@@ -323,7 +359,7 @@ func (s *Service) ReturnFormSubmission(ctx context.Context, p db.ActReturnFormSu
 	if err := s.audit(ctx, "forms.form_submission.return", "form_submissions", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReturnFormSubmission", row)
 }
 
 // ListEscalationPolicy returns a page of escalation policies.
@@ -343,12 +379,18 @@ func (s *Service) GetEscalationPolicy(ctx context.Context, id uuid.UUID) (db.Esc
 // CreateEscalationPolicy adds one row to escalation policies.
 func (s *Service) CreateEscalationPolicy(ctx context.Context, p db.CreateEscalationPolicyParams) (db.EscalationPolicy, error) {
 	var zero db.EscalationPolicy
+	if err := s.guard(ctx, "CreateEscalationPolicy", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateEscalationPolicy(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create escalation policies")
 	}
-	return row, s.audit(ctx, "exceptions.escalation_policy.write", "escalation_policies", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "exceptions.escalation_policy.write", "escalation_policies", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateEscalationPolicy", row)
 }
 
 // UpdateEscalationPolicy changes one row of escalation policies.
@@ -461,6 +503,9 @@ func (s *Service) CreateAction(ctx context.Context, p db.CreateActionParams) (db
 	if err := canWrite(ctx, p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreateAction", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "ACT", p.SiteID)
 	if err != nil {
 		return zero, err
@@ -471,7 +516,10 @@ func (s *Service) CreateAction(ctx context.Context, p db.CreateActionParams) (db
 	if err != nil {
 		return zero, wrap(err, "create actions")
 	}
-	return row, s.audit(ctx, "exceptions.action.write", "actions", row.ID, p.SiteID, nil, row)
+	if err := s.audit(ctx, "exceptions.action.write", "actions", row.ID, p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateAction", row)
 }
 
 // UpdateAction changes one row of actions.
@@ -503,6 +551,9 @@ func (s *Service) CompleteAction(ctx context.Context, p db.ActCompleteActionPara
 	if err := s.checkSod(ctx, "exceptions.action.complete", "actions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "CompleteAction", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	if err := s.requireSignatures(ctx, "actions", p.ID); err != nil {
 		return before, err
@@ -514,7 +565,7 @@ func (s *Service) CompleteAction(ctx context.Context, p db.ActCompleteActionPara
 	if err := s.audit(ctx, "exceptions.action.complete", "actions", row.ID, row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "CompleteAction", row)
 }
 
 // ReopenAction is the reopen action on actions.
@@ -526,6 +577,9 @@ func (s *Service) ReopenAction(ctx context.Context, p db.ActReopenActionParams) 
 	if err := s.checkSod(ctx, "exceptions.action.reopen", "actions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ReopenAction", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActReopenAction(ctx, p)
 	if err != nil {
@@ -534,7 +588,7 @@ func (s *Service) ReopenAction(ctx context.Context, p db.ActReopenActionParams) 
 	if err := s.audit(ctx, "exceptions.action.reopen", "actions", row.ID, row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReopenAction", row)
 }
 
 // ListNotification returns a page of notifications.

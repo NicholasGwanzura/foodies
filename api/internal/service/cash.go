@@ -7,6 +7,7 @@ import (
 	"math/big"
 	"net/http"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 
@@ -503,7 +504,9 @@ func (s *Service) citDiscrepancy(ctx context.Context, t db.CitTransit) error {
 	}
 	hours := int64(2)
 	if v, err := s.RuleValue(ctx, "cash.cit_incident_report_hours", &t.SiteID); err == nil {
-		fmt.Sscan(string(v.Value), &hours) //nolint:errcheck // the default stands
+		if n, err := strconv.ParseInt(string(v.Value), 10, 64); err == nil {
+			hours = n
+		}
 	}
 	role, err := s.q(ctx).RoleByKey(ctx, "finance_manager")
 	if err != nil {

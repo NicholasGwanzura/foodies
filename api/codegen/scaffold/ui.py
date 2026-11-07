@@ -55,7 +55,7 @@ def fk_of(t, name):
     return None
 
 
-def field(t, name, p, required, built):
+def field(t, name, p, required, built, depth=0):
     p = dict(p)
     r = sc.ref(p)
     for part in p.get("allOf", []) or []:
@@ -93,11 +93,11 @@ def field(t, name, p, required, built):
     elif ty == "array":
         items = p.get("items", {})
         ir = sc.ref(items)
-        if ir and ir in sc.SCH:
+        if ir and ir in sc.SCH and depth == 0:
             sub, rq = sc.props(ir)
             f["kind"] = "rows"
             ct = sc.table_for(ir)
-            f["fields"] = [field(ct, k, v, k in rq, built) for k, v in sub.items()
+            f["fields"] = [field(ct, k, v, k in rq, built, 1) for k, v in sub.items()
                            if k not in sc.AUDIT_COLS and k != "links" and not v.get("readOnly")
                            and not (ct and sc.parent_fk(ct) and k == sc.parent_fk(ct)["name"])]
         elif items.get("format") == "uuid":

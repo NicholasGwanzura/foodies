@@ -124,7 +124,12 @@ SLICES = [
     (4, "tasks_forms_escalations", "work", ["Tasks & Schedules", "Forms", "Escalations & Actions", "Notifications"], WORK_UP, "DROP TABLE IF EXISTS notification_preferences;", WORK_POST),
     (5, "integrations_reporting", "ops", ["Sync", "WhatsApp", "Integrations", "Reporting", "Retention"], "", "", ""),
     (6, "cash", "cash", ["Cash"], "", "", "CREATE UNIQUE INDEX cit_bags_seal_unique ON cit_bags (seal_number);\n"),
-    (7, "procurement_budgets", "procurement", ["Procurement & AP", "Budgets"], "", "", ""),
+    (7, "procurement_budgets", "procurement", ["Procurement & AP", "Budgets"], "", "", "CREATE UNIQUE INDEX supplier_invoice_unique ON supplier_invoices (supplier_id, invoice_number);\n"),
+    (8, "stock_production", "stock", ["Products & NPD", "Stock", "Central Kitchen & Production"], "", "", ""),
+    (9, "exceptions", "exceptions", ["Quality", "Incidents", "Customer Service", "Payment Exceptions", "Maintenance"], "", "", ""),
+    (10, "deadlines", "deadlines", ["Management Reporting", "Compliance Calendar"], "", "", ""),
+    (11, "registers", "registers", ["Assets", "Keys", "Visitors & Contractors", "Lost Property", "Documents", "Training", "HR"], "", "", ""),
+    (12, "remaining", "remaining", ["Store Operations", "Security", "CCTV", "External Visits"], "", "", ""),
 ]
 
 

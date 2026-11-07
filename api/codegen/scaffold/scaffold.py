@@ -504,6 +504,7 @@ def service_actions(t, qr, hw):
         B.append(f"\tbefore, err := s.Get{n}(ctx, p.ID)")
         B.append("\tif err != nil {\n\t\treturn before, err\n\t}")
         B.append(f'\tif err := s.checkSod(ctx, "{perm}", "{t}", p.ID); err != nil {{\n\t\treturn before, err\n\t}}')
+        B.append(f'\tif err := s.guard(ctx, "{G}", before); err != nil {{\n\t\treturn before, err\n\t}}')
         B.append("\tp.UpdatedBy = actorID(ctx)")
         if verb in ("close", "complete", "approve", "verify", "accept", "post", "issue", "review"):
             B.append(f'\tif err := s.requireSignatures(ctx, "{t}", p.ID); err != nil {{\n\t\treturn before, err\n\t}}')
@@ -511,9 +512,8 @@ def service_actions(t, qr, hw):
         B.append(f'\tif err != nil {{\n\t\treturn before, stateError(err, "{verb.replace("-", " ")} {t.replace("_", " ")}")\n\t}}')
         B.append(f'\tif err := s.audit(ctx, "{perm}", "{t}", row.ID, {sptr}, before, row); err != nil {{\n\t\treturn row, err\n\t}}')
         if target == "pending_approval":
-            B.append(f'\treturn row, s.startApproval(ctx, "{t}", row.ID, {sptr}, row)')
-        else:
-            B.append("\treturn row, nil")
+            B.append(f'\tif err := s.startApproval(ctx, "{t}", row.ID, {sptr}, row); err != nil {{\n\t\treturn row, err\n\t}}')
+        B.append(f'\treturn row, s.effect(ctx, "{G}", row)')
         B.append("}\n")
     return B
 
@@ -535,6 +535,10 @@ def http_actions(t, hw):
         B.append("\tif err != nil {\n\t\treturn nil, err\n\t}")
         if o.get("req") and "pin" in props(o["req"])[0]:
             B.append("\tif err := s.service.RequirePin(ctx, str(req.Body.Pin)); err != nil {\n\t\treturn nil, err\n\t}")
+        if o.get("req") and "signature_id" in props(o["req"])[0]:
+            sig = "req.Body.SignatureId"
+            required = "signature_id" in props(o["req"])[1]
+            B.append(f'\tif err := s.service.RequireSigned(ctx, "{t}", {own}, {"&" if required else ""}{sig}); err != nil {{\n\t\treturn nil, err\n\t}}')
         B.append(f"\trow, err := s.service.{G}(ctx, in)")
         B.append("\tif err != nil {\n\t\treturn nil, err\n\t}")
         if o["resp"] == schema:
@@ -634,13 +638,15 @@ def service_go(section, tables, qr, hw):
             if sc == "site_id":
                 sptr = "&p.SiteID" if col_required(t, "site_id") else "p.SiteID"
                 B.append(f"\tif err := canWrite(ctx, {sptr}); err != nil {{\n\t\treturn zero, err\n\t}}")
+            B.append(f'\tif err := s.guard(ctx, "Create{n}", &p); err != nil {{\n\t\treturn zero, err\n\t}}')
             if prefix:
                 B.append(f'\tref, err := s.nextReference(ctx, "{prefix}", {sptr or "nil"})')
                 B.append("\tif err != nil {\n\t\treturn zero, err\n\t}\n\tp.Reference = ref")
             B.append("\tp.CreatedBy = actorID(ctx)")
             B.append(f"\trow, err := s.q(ctx).Create{n}(ctx, p)")
             B.append(f'\tif err != nil {{\n\t\treturn zero, wrap(err, "create {human}")\n\t}}')
-            B.append(f'\treturn row, s.audit(ctx, "{r["create"].get("x-permission") or t + ".create"}", "{t}", row.ID, {sptr or "nil"}, nil, row)')
+            B.append(f'\tif err := s.audit(ctx, "{r["create"].get("x-permission") or t + ".create"}", "{t}", row.ID, {sptr or "nil"}, nil, row); err != nil {{\n\t\treturn row, err\n\t}}')
+            B.append(f'\treturn row, s.effect(ctx, "Create{n}", row)')
             B.append("}\n")
         if "update" in r and f"Update{n}" not in hw:
             B.append(f"// Update{n} changes one row of {human}.")

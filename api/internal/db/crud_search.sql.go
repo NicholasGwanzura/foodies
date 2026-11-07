@@ -70,6 +70,108 @@ UNION ALL
 SELECT 'budgets'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM budgets WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
 UNION ALL
 SELECT 'budget_reallocations'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM budget_reallocations WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'stock_requisitions'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM stock_requisitions WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'stock_transfers'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM stock_transfers WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'stock_returns'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM stock_returns WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'stocktakes'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM stocktakes WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'stock_variances'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM stock_variances WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'stock_adjustments'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM stock_adjustments WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'waste_records'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM waste_records WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'disposals'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM disposals WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'kitchen_orders'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM kitchen_orders WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'production_plans'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM production_plans WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'dispatch_notes'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM dispatch_notes WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'product_changes'::text AS type, id, reference, description::text AS title, NULL::uuid AS site_id, status AS status FROM product_changes WHERE reference ILIKE '%' || $1::text || '%' OR description::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'cost_sheets'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM cost_sheets WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'npd_projects'::text AS type, id, reference, "name"::text AS title, NULL::uuid AS site_id, status AS status FROM npd_projects WHERE reference ILIKE '%' || $1::text || '%' OR "name"::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'ncrs'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM ncrs WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'holds'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM holds WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'dispositions'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM dispositions WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'recalls'::text AS type, id, reference, description::text AS title, site_id AS site_id, status AS status FROM recalls WHERE reference ILIKE '%' || $1::text || '%' OR description::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'incidents'::text AS type, id, reference, description::text AS title, site_id AS site_id, status AS status FROM incidents WHERE reference ILIKE '%' || $1::text || '%' OR description::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'complaints'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM complaints WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'service_recoveries'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM service_recoveries WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'payment_incidents'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM payment_incidents WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'pos_outages'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM pos_outages WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'equipment_faults'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM equipment_faults WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'work_orders'::text AS type, id, reference, description::text AS title, site_id AS site_id, status AS status FROM work_orders WHERE reference ILIKE '%' || $1::text || '%' OR description::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'reports'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM reports WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'management_meetings'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM management_meetings WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'compliance_obligations'::text AS type, id, reference, title::text AS title, site_id AS site_id, status AS status FROM compliance_obligations WHERE reference ILIKE '%' || $1::text || '%' OR title::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'capex_requests'::text AS type, id, reference, description::text AS title, site_id AS site_id, status AS status FROM capex_requests WHERE reference ILIKE '%' || $1::text || '%' OR description::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'asset_transfers'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM asset_transfers WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'asset_verifications'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM asset_verifications WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'asset_disposals'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM asset_disposals WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'key_duplication_requests'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM key_duplication_requests WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'key_audits'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM key_audits WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'lost_property_items'::text AS type, id, reference, description::text AS title, site_id AS site_id, status AS status FROM lost_property_items WHERE reference ILIKE '%' || $1::text || '%' OR description::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'document_requests'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM document_requests WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'training_sessions'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM training_sessions WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'training_requests'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM training_requests WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'leave_requests'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM leave_requests WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'exit_clearances'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM exit_clearances WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'rosters'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM rosters WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'uniform_issues'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM uniform_issues WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'recruitment_requisitions'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM recruitment_requisitions WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'disciplinary_cases'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM disciplinary_cases WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'grievances'::text AS type, id, reference, subject::text AS title, NULL::uuid AS site_id, status AS status FROM grievances WHERE reference ILIKE '%' || $1::text || '%' OR subject::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'store_openings'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM store_openings WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'occurrence_entries'::text AS type, id, reference, description::text AS title, site_id AS site_id, NULL::text AS status FROM occurrence_entries WHERE reference ILIKE '%' || $1::text || '%' OR description::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'patrol_rounds'::text AS type, id, reference, reference::text AS title, NULL::uuid AS site_id, status AS status FROM patrol_rounds WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'cctv_outages'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM cctv_outages WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'footage_requests'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM footage_requests WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
+UNION ALL
+SELECT 'external_visits'::text AS type, id, reference, reference::text AS title, site_id AS site_id, status AS status FROM external_visits WHERE reference ILIKE '%' || $1::text || '%' OR reference::text ILIKE '%' || $1::text || '%'
 ) hits
 WHERE $2::boolean OR site_id IS NULL OR site_id = ANY($3::uuid[])
 ORDER BY id DESC

@@ -37,6 +37,9 @@ func (s *Service) ResolveSyncConflict(ctx context.Context, p db.ActResolveSyncCo
 	if err := s.checkSod(ctx, "sync.sync_conflict.resolve", "sync_conflicts", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ResolveSyncConflict", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActResolveSyncConflict(ctx, p)
 	if err != nil {
@@ -45,7 +48,7 @@ func (s *Service) ResolveSyncConflict(ctx context.Context, p db.ActResolveSyncCo
 	if err := s.audit(ctx, "sync.sync_conflict.resolve", "sync_conflicts", row.ID, row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ResolveSyncConflict", row)
 }
 
 // ListWhatsappIdentity returns a page of whatsapp identities.
@@ -65,12 +68,18 @@ func (s *Service) GetWhatsappIdentity(ctx context.Context, id uuid.UUID) (db.Wha
 // CreateWhatsappIdentity adds one row to whatsapp identities.
 func (s *Service) CreateWhatsappIdentity(ctx context.Context, p db.CreateWhatsappIdentityParams) (db.WhatsappIdentity, error) {
 	var zero db.WhatsappIdentity
+	if err := s.guard(ctx, "CreateWhatsappIdentity", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateWhatsappIdentity(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create whatsapp identities")
 	}
-	return row, s.audit(ctx, "whatsapp.whatsapp_identity.write", "whatsapp_identities", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "whatsapp.whatsapp_identity.write", "whatsapp_identities", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateWhatsappIdentity", row)
 }
 
 // RevokeWhatsappIdentity is the unbind the number now action on whatsapp identities.
@@ -82,6 +91,9 @@ func (s *Service) RevokeWhatsappIdentity(ctx context.Context, p db.ActRevokeWhat
 	if err := s.checkSod(ctx, "whatsapp.whatsapp_identity.revoke", "whatsapp_identities", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "RevokeWhatsappIdentity", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActRevokeWhatsappIdentity(ctx, p)
 	if err != nil {
@@ -90,7 +102,7 @@ func (s *Service) RevokeWhatsappIdentity(ctx context.Context, p db.ActRevokeWhat
 	if err := s.audit(ctx, "whatsapp.whatsapp_identity.revoke", "whatsapp_identities", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "RevokeWhatsappIdentity", row)
 }
 
 // RebindWhatsappIdentity is the move to a new number action on whatsapp identities.
@@ -102,6 +114,9 @@ func (s *Service) RebindWhatsappIdentity(ctx context.Context, p db.ActRebindWhat
 	if err := s.checkSod(ctx, "whatsapp.whatsapp_identity.rebind", "whatsapp_identities", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "RebindWhatsappIdentity", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActRebindWhatsappIdentity(ctx, p)
 	if err != nil {
@@ -110,7 +125,7 @@ func (s *Service) RebindWhatsappIdentity(ctx context.Context, p db.ActRebindWhat
 	if err := s.audit(ctx, "whatsapp.whatsapp_identity.rebind", "whatsapp_identities", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "RebindWhatsappIdentity", row)
 }
 
 // ListWhatsappTemplate returns a page of whatsapp templates.
@@ -130,12 +145,18 @@ func (s *Service) GetWhatsappTemplate(ctx context.Context, id uuid.UUID) (db.Wha
 // CreateWhatsappTemplate adds one row to whatsapp templates.
 func (s *Service) CreateWhatsappTemplate(ctx context.Context, p db.CreateWhatsappTemplateParams) (db.WhatsappTemplate, error) {
 	var zero db.WhatsappTemplate
+	if err := s.guard(ctx, "CreateWhatsappTemplate", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateWhatsappTemplate(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create whatsapp templates")
 	}
-	return row, s.audit(ctx, "whatsapp.whatsapp_template.write", "whatsapp_templates", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "whatsapp.whatsapp_template.write", "whatsapp_templates", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateWhatsappTemplate", row)
 }
 
 // UpdateWhatsappTemplate changes one row of whatsapp templates.
@@ -189,12 +210,18 @@ func (s *Service) GetIntegration(ctx context.Context, id uuid.UUID) (db.Integrat
 // CreateIntegration adds one row to integrations.
 func (s *Service) CreateIntegration(ctx context.Context, p db.CreateIntegrationParams) (db.Integration, error) {
 	var zero db.Integration
+	if err := s.guard(ctx, "CreateIntegration", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateIntegration(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create integrations")
 	}
-	return row, s.audit(ctx, "integrations.integration.write", "integrations", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "integrations.integration.write", "integrations", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateIntegration", row)
 }
 
 // UpdateIntegration changes one row of integrations.
@@ -234,12 +261,18 @@ func (s *Service) GetSyncRun(ctx context.Context, id uuid.UUID) (db.SyncRun, err
 // CreateSyncRun adds one row to sync runs.
 func (s *Service) CreateSyncRun(ctx context.Context, p db.CreateSyncRunParams) (db.SyncRun, error) {
 	var zero db.SyncRun
+	if err := s.guard(ctx, "CreateSyncRun", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateSyncRun(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create sync runs")
 	}
-	return row, s.audit(ctx, "integrations.sync_run.write", "sync_runs", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "integrations.sync_run.write", "sync_runs", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateSyncRun", row)
 }
 
 // ListDataImport returns a page of data imports.
@@ -263,12 +296,18 @@ func (s *Service) CreateDataImport(ctx context.Context, p db.CreateDataImportPar
 	if err := canWrite(ctx, p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreateDataImport", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateDataImport(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create data imports")
 	}
-	return row, s.audit(ctx, "integrations.data_import.write", "data_imports", row.ID, p.SiteID, nil, row)
+	if err := s.audit(ctx, "integrations.data_import.write", "data_imports", row.ID, p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateDataImport", row)
 }
 
 // ListPosting returns a page of postings.
@@ -295,6 +334,9 @@ func (s *Service) MarkPostedPosting(ctx context.Context, p db.ActMarkPostedPosti
 	if err := s.checkSod(ctx, "integrations.posting.mark_posted", "postings", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "MarkPostedPosting", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActMarkPostedPosting(ctx, p)
 	if err != nil {
@@ -303,7 +345,7 @@ func (s *Service) MarkPostedPosting(ctx context.Context, p db.ActMarkPostedPosti
 	if err := s.audit(ctx, "integrations.posting.mark_posted", "postings", row.ID, row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "MarkPostedPosting", row)
 }
 
 // ListPosSalesSummary returns a page of pos sales summaries.
@@ -342,12 +384,18 @@ func (s *Service) CreateZReport(ctx context.Context, p db.CreateZReportParams) (
 	if err := canWrite(ctx, &p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreateZReport", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateZReport(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create z reports")
 	}
-	return row, s.audit(ctx, "integrations.z_report.write", "z_reports", row.ID, &p.SiteID, nil, row)
+	if err := s.audit(ctx, "integrations.z_report.write", "z_reports", row.ID, &p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateZReport", row)
 }
 
 // ListKpiDefinition returns a page of kpi definitions.
@@ -367,12 +415,18 @@ func (s *Service) GetKpiDefinition(ctx context.Context, id uuid.UUID) (db.KpiDef
 // CreateKpiDefinition adds one row to kpi definitions.
 func (s *Service) CreateKpiDefinition(ctx context.Context, p db.CreateKpiDefinitionParams) (db.KpiDefinition, error) {
 	var zero db.KpiDefinition
+	if err := s.guard(ctx, "CreateKpiDefinition", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateKpiDefinition(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create kpi definitions")
 	}
-	return row, s.audit(ctx, "reporting.kpi_definition.write", "kpi_definitions", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "reporting.kpi_definition.write", "kpi_definitions", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateKpiDefinition", row)
 }
 
 // UpdateKpiDefinition changes one row of kpi definitions.
@@ -412,12 +466,18 @@ func (s *Service) GetExportJob(ctx context.Context, id uuid.UUID) (db.ExportJob,
 // CreateExportJob adds one row to export jobs.
 func (s *Service) CreateExportJob(ctx context.Context, p db.CreateExportJobParams) (db.ExportJob, error) {
 	var zero db.ExportJob
+	if err := s.guard(ctx, "CreateExportJob", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateExportJob(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create export jobs")
 	}
-	return row, s.audit(ctx, "reporting.export_job.write", "export_jobs", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "reporting.export_job.write", "export_jobs", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateExportJob", row)
 }
 
 // ListRetentionClass returns a page of retention classes.
@@ -437,12 +497,18 @@ func (s *Service) GetRetentionClass(ctx context.Context, id uuid.UUID) (db.Reten
 // CreateRetentionClass adds one row to retention classes.
 func (s *Service) CreateRetentionClass(ctx context.Context, p db.CreateRetentionClassParams) (db.RetentionClass, error) {
 	var zero db.RetentionClass
+	if err := s.guard(ctx, "CreateRetentionClass", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateRetentionClass(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create retention classes")
 	}
-	return row, s.audit(ctx, "retention.retention_class.write", "retention_classes", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "retention.retention_class.write", "retention_classes", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateRetentionClass", row)
 }
 
 // UpdateRetentionClass changes one row of retention classes.
@@ -482,12 +548,18 @@ func (s *Service) GetLegalHold(ctx context.Context, id uuid.UUID) (db.LegalHold,
 // CreateLegalHold adds one row to legal holds.
 func (s *Service) CreateLegalHold(ctx context.Context, p db.CreateLegalHoldParams) (db.LegalHold, error) {
 	var zero db.LegalHold
+	if err := s.guard(ctx, "CreateLegalHold", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateLegalHold(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create legal holds")
 	}
-	return row, s.audit(ctx, "retention.legal_hold.write", "legal_holds", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "retention.legal_hold.write", "legal_holds", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateLegalHold", row)
 }
 
 // ReleaseLegalHold is the release the hold action on legal holds.
@@ -499,6 +571,9 @@ func (s *Service) ReleaseLegalHold(ctx context.Context, p db.ActReleaseLegalHold
 	if err := s.checkSod(ctx, "retention.legal_hold.release", "legal_holds", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ReleaseLegalHold", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActReleaseLegalHold(ctx, p)
 	if err != nil {
@@ -507,7 +582,7 @@ func (s *Service) ReleaseLegalHold(ctx context.Context, p db.ActReleaseLegalHold
 	if err := s.audit(ctx, "retention.legal_hold.release", "legal_holds", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReleaseLegalHold", row)
 }
 
 // ListDispositionBatch returns a page of disposition batches.
@@ -527,12 +602,18 @@ func (s *Service) GetDispositionBatch(ctx context.Context, id uuid.UUID) (db.Dis
 // CreateDispositionBatch adds one row to disposition batches.
 func (s *Service) CreateDispositionBatch(ctx context.Context, p db.CreateDispositionBatchParams) (db.DispositionBatch, error) {
 	var zero db.DispositionBatch
+	if err := s.guard(ctx, "CreateDispositionBatch", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateDispositionBatch(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create disposition batches")
 	}
-	return row, s.audit(ctx, "retention.disposition_batch.write", "disposition_batches", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "retention.disposition_batch.write", "disposition_batches", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateDispositionBatch", row)
 }
 
 // SubmitDispositionBatch is the submit for approval action on disposition batches.
@@ -544,6 +625,9 @@ func (s *Service) SubmitDispositionBatch(ctx context.Context, p db.ActSubmitDisp
 	if err := s.checkSod(ctx, "retention.disposition_batch.submit", "disposition_batches", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitDispositionBatch", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitDispositionBatch(ctx, p)
 	if err != nil {
@@ -552,7 +636,10 @@ func (s *Service) SubmitDispositionBatch(ctx context.Context, p db.ActSubmitDisp
 	if err := s.audit(ctx, "retention.disposition_batch.submit", "disposition_batches", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "disposition_batches", row.ID, nil, row)
+	if err := s.startApproval(ctx, "disposition_batches", row.ID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitDispositionBatch", row)
 }
 
 // CompleteDispositionBatch is the record completion action on disposition batches.
@@ -562,6 +649,9 @@ func (s *Service) CompleteDispositionBatch(ctx context.Context, p db.ActComplete
 		return before, err
 	}
 	if err := s.checkSod(ctx, "retention.disposition_batch.complete", "disposition_batches", p.ID); err != nil {
+		return before, err
+	}
+	if err := s.guard(ctx, "CompleteDispositionBatch", before); err != nil {
 		return before, err
 	}
 	p.UpdatedBy = actorID(ctx)
@@ -575,5 +665,5 @@ func (s *Service) CompleteDispositionBatch(ctx context.Context, p db.ActComplete
 	if err := s.audit(ctx, "retention.disposition_batch.complete", "disposition_batches", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "CompleteDispositionBatch", row)
 }

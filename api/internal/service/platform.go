@@ -238,3 +238,14 @@ func (s *Service) RetryPosting(ctx context.Context, p db.ActRetryPostingParams) 
 	}
 	return row, s.audit(ctx, "integrations.posting.retry", "postings", row.ID, before.SiteID, before, row)
 }
+
+// SyncBatchConflicts returns what a batch could not apply.
+func (s *Service) SyncBatchConflicts(ctx context.Context, batch string) ([]db.SyncConflict, error) {
+	return wrap2(s.q(ctx).ConflictsInBatch(ctx, &batch))("read batch")
+}
+
+// KpiSeries returns a KPI's definition. Figures need the source feeds, so a KPI
+// with no data returns an empty series, not a made-up one.
+func (s *Service) KpiSeries(ctx context.Context, id uuid.UUID) (db.KpiDefinition, error) {
+	return s.GetKpiDefinition(ctx, id)
+}

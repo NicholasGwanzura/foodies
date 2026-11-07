@@ -637,4 +637,654 @@ var subjects = map[string]subject{
 			return err
 		},
 	},
+	"items": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetItem(ctx, id) },
+	},
+	"stock_balances": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetStockBalance(ctx, id) },
+	},
+	"stock_requisitions": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetStockRequisition(ctx, id)
+		},
+		statuses: []string{"draft", "submitted", "approved", "issued", "acknowledged", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetStockRequisitionStatus(ctx, db.SetStockRequisitionStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"stock_transfers": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetStockTransfer(ctx, id) },
+		statuses: []string{"requested", "accepted", "rejected", "dispatched", "received", "discrepancy", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetStockTransferStatus(ctx, db.SetStockTransferStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"stock_returns": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetStockReturn(ctx, id) },
+		statuses: []string{"open", "followed_up", "credited", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetStockReturnStatus(ctx, db.SetStockReturnStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"stocktakes": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetStocktake(ctx, id) },
+		statuses: []string{"planned", "counting", "submitted", "reviewed", "approved", "posted", "skipped"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetStocktakeStatus(ctx, db.SetStocktakeStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"stock_variances": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetStockVariance(ctx, id) },
+		statuses: []string{"open", "investigating", "resolved", "escalated", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetStockVarianceStatus(ctx, db.SetStockVarianceStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"stock_adjustments": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetStockAdjustment(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "posted", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetStockAdjustmentStatus(ctx, db.SetStockAdjustmentStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"waste_records": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetWasteRecord(ctx, id) },
+		statuses: []string{"recorded", "reviewed", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetWasteRecordStatus(ctx, db.SetWasteRecordStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"disposals": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetDisposal(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "disposed", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetDisposalStatus(ctx, db.SetDisposalStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"recipes": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetRecipe(ctx, id) },
+	},
+	"recipe_versions": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetRecipeVersion(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "active", "superseded"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetRecipeVersionStatus(ctx, db.SetRecipeVersionStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"kitchen_orders": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetKitchenOrder(ctx, id) },
+		statuses: []string{"draft", "submitted", "late_pending", "confirmed", "planned", "dispatched", "received", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetKitchenOrderStatus(ctx, db.SetKitchenOrderStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"production_plans": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetProductionPlan(ctx, id)
+		},
+		statuses: []string{"draft", "confirmed", "in_progress", "completed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetProductionPlanStatus(ctx, db.SetProductionPlanStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"batches": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetBatch(ctx, id) },
+		statuses: []string{"in_progress", "completed", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetBatchStatus(ctx, db.SetBatchStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"dispatch_notes": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetDispatchNote(ctx, id) },
+		statuses: []string{"draft", "picked", "verified", "security_cleared", "in_transit", "delivered", "discrepancy", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetDispatchNoteStatus(ctx, db.SetDispatchNoteStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"products": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetProduct(ctx, id) },
+	},
+	"product_changes": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetProductChange(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "effective", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetProductChangeStatus(ctx, db.SetProductChangeStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"cost_sheets": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCostSheet(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "superseded"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetCostSheetStatus(ctx, db.SetCostSheetStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"npd_projects": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetNpdProject(ctx, id) },
+		statuses: []string{"active", "on_hold", "launched", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetNpdProjectStatus(ctx, db.SetNpdProjectStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"ncrs": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetNcr(ctx, id) },
+		statuses: []string{"open", "contained", "investigating", "action_pending", "pending_verification", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetNcrStatus(ctx, db.SetNcrStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"holds": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetHold(ctx, id) },
+		statuses: []string{"on_hold", "pending_disposition", "released", "rework", "rejected", "disposed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetHoldStatus(ctx, db.SetHoldStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"dispositions": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetDisposition(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "executed", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetDispositionStatus(ctx, db.SetDispositionStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"recalls": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetRecall(ctx, id) },
+		statuses: []string{"initiated", "held", "assessed", "decided", "retrieving", "reconciling", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetRecallStatus(ctx, db.SetRecallStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"recall_communications": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetRecallCommunication(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "sent", "acknowledged"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetRecallCommunicationStatus(ctx, db.SetRecallCommunicationStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"recall_retrievals": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetRecallRetrieval(ctx, id)
+		},
+		statuses: []string{"open", "returned", "no_stock", "unaccounted"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetRecallRetrievalStatus(ctx, db.SetRecallRetrievalStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"recall_reconciliations": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetRecallReconciliation(ctx, id)
+		},
+		statuses: []string{"draft", "reviewed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetRecallReconciliationStatus(ctx, db.SetRecallReconciliationStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"incidents": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetIncident(ctx, id) },
+		statuses: []string{"reported", "acknowledged", "investigating", "action_pending", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetIncidentStatus(ctx, db.SetIncidentStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"complaints": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetComplaint(ctx, id) },
+		statuses: []string{"new", "triaged", "investigating", "awaiting_customer", "resolved", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetComplaintStatus(ctx, db.SetComplaintStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"service_recoveries": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetServiceRecovery(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "executed", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetServiceRecoveryStatus(ctx, db.SetServiceRecoveryStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"payment_incidents": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetPaymentIncident(ctx, id)
+		},
+		statuses: []string{"open", "verified", "correction_pending", "correction_approved", "reconciling", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPaymentIncidentStatus(ctx, db.SetPaymentIncidentStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"pos_outages": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetPosOutage(ctx, id) },
+		statuses: []string{"declared", "pending_authorisation", "authorised", "restored", "reconciled", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPosOutageStatus(ctx, db.SetPosOutageStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"receipt_books": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetReceiptBook(ctx, id) },
+		statuses: []string{"in_storage", "issued", "returned", "missing"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetReceiptBookStatus(ctx, db.SetReceiptBookStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"manual_receipts": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetManualReceipt(ctx, id) },
+		statuses: []string{"issued", "cancelled", "missing", "back_captured"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetManualReceiptStatus(ctx, db.SetManualReceiptStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"equipment_faults": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetEquipmentFault(ctx, id)
+		},
+		statuses: []string{"reported", "assigned", "resolved", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetEquipmentFaultStatus(ctx, db.SetEquipmentFaultStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"work_orders": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetWorkOrder(ctx, id) },
+		statuses: []string{"open", "assigned", "in_progress", "pending_clearance", "closed", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetWorkOrderStatus(ctx, db.SetWorkOrderStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"maintenance_plans": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetMaintenancePlan(ctx, id)
+		},
+		statuses: []string{"active", "paused"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetMaintenancePlanStatus(ctx, db.SetMaintenancePlanStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"report_definitions": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetReportDefinition(ctx, id)
+		},
+	},
+	"reports": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetReport(ctx, id) },
+		statuses: []string{"pending", "draft", "submitted", "reviewed", "late", "missing"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetReportStatus(ctx, db.SetReportStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"report_deadline_notices": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetReportDeadlineNotice(ctx, id)
+		},
+	},
+	"management_meetings": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetManagementMeeting(ctx, id)
+		},
+		statuses: []string{"planned", "held"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetManagementMeetingStatus(ctx, db.SetManagementMeetingStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"compliance_obligations": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetComplianceObligation(ctx, id)
+		},
+		statuses: []string{"upcoming", "due", "overdue", "completed", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetComplianceObligationStatus(ctx, db.SetComplianceObligationStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"asset_classes": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetAssetClass(ctx, id) },
+	},
+	"assets": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetAsset(ctx, id) },
+		statuses: []string{"wip", "active", "out_of_service", "disposed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetAssetStatus(ctx, db.SetAssetStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"capex_requests": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCapexRequest(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "rejected", "ordered", "capitalised"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetCapexRequestStatus(ctx, db.SetCapexRequestStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"asset_transfers": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetAssetTransfer(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "received", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetAssetTransferStatus(ctx, db.SetAssetTransferStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"asset_verifications": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetAssetVerification(ctx, id)
+		},
+		statuses: []string{"planned", "in_progress", "submitted", "reviewed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetAssetVerificationStatus(ctx, db.SetAssetVerificationStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"asset_disposals": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetAssetDisposal(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "removed", "completed", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetAssetDisposalStatus(ctx, db.SetAssetDisposalStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"key_items": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetKeyItem(ctx, id) },
+		statuses: []string{"active", "in_use", "lost", "faulty", "retired"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetKeyItemStatus(ctx, db.SetKeyItemStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"key_movements": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetKeyMovement(ctx, id) },
+		statuses: []string{"out", "returned", "overdue"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetKeyMovementStatus(ctx, db.SetKeyMovementStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"key_duplication_requests": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetKeyDuplicationRequest(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "cut", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetKeyDuplicationRequestStatus(ctx, db.SetKeyDuplicationRequestStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"key_audits": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetKeyAudit(ctx, id) },
+		statuses: []string{"planned", "in_progress", "completed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetKeyAuditStatus(ctx, db.SetKeyAuditStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"visitor_entries": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetVisitorEntry(ctx, id) },
+		statuses: []string{"on_site", "departed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetVisitorEntryStatus(ctx, db.SetVisitorEntryStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"lost_property_items": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetLostPropertyItem(ctx, id)
+		},
+		statuses: []string{"in_custody", "returned", "disposed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetLostPropertyItemStatus(ctx, db.SetLostPropertyItemStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"documents": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetDocument(ctx, id) },
+		statuses: []string{"draft", "in_review", "approved", "issued", "obsolete"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetDocumentStatus(ctx, db.SetDocumentStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"document_revisions": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetDocumentRevision(ctx, id)
+		},
+		statuses: []string{"draft", "in_review", "qms_review", "pending_approval", "approved", "issued", "withdrawn"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetDocumentRevisionStatus(ctx, db.SetDocumentRevisionStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"document_requests": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetDocumentRequest(ctx, id)
+		},
+		statuses: []string{"raised", "classified", "drafting", "in_review", "approved", "closed", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetDocumentRequestStatus(ctx, db.SetDocumentRequestStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"document_acknowledgements": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetDocumentAcknowledgement(ctx, id)
+		},
+		statuses: []string{"pending", "acknowledged", "overdue"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetDocumentAcknowledgementStatus(ctx, db.SetDocumentAcknowledgementStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"courses": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCourse(ctx, id) },
+	},
+	"training_requirements": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetTrainingRequirement(ctx, id)
+		},
+	},
+	"training_sessions": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetTrainingSession(ctx, id)
+		},
+		statuses: []string{"planned", "held", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetTrainingSessionStatus(ctx, db.SetTrainingSessionStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"training_assessments": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetTrainingAssessment(ctx, id)
+		},
+	},
+	"competencies": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCompetency(ctx, id) },
+	},
+	"certificates": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCertificate(ctx, id) },
+	},
+	"training_requests": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetTrainingRequest(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "scheduled", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetTrainingRequestStatus(ctx, db.SetTrainingRequestStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"leave_types": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetLeaveType(ctx, id) },
+	},
+	"leave_balances": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetLeaveBalance(ctx, id) },
+	},
+	"leave_requests": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetLeaveRequest(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "rejected", "cancelled", "taken"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetLeaveRequestStatus(ctx, db.SetLeaveRequestStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"exit_clearances": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetExitClearance(ctx, id) },
+		statuses: []string{"initiated", "in_clearance", "cleared", "completed", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetExitClearanceStatus(ctx, db.SetExitClearanceStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"rosters": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetRoster(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "published"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetRosterStatus(ctx, db.SetRosterStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"attendance_records": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetAttendanceRecord(ctx, id)
+		},
+	},
+	"uniform_issues": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetUniformIssue(ctx, id) },
+		statuses: []string{"issued", "returned", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetUniformIssueStatus(ctx, db.SetUniformIssueStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"recruitment_requisitions": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetRecruitmentRequisition(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "open", "filled", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetRecruitmentRequisitionStatus(ctx, db.SetRecruitmentRequisitionStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"candidates": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCandidate(ctx, id) },
+		statuses: []string{"applied", "shortlisted", "interviewed", "offered", "hired", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetCandidateStatus(ctx, db.SetCandidateStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"performance_reviews": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetPerformanceReview(ctx, id)
+		},
+		statuses: []string{"draft", "in_review", "completed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPerformanceReviewStatus(ctx, db.SetPerformanceReviewStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"disciplinary_cases": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetDisciplinaryCase(ctx, id)
+		},
+		statuses: []string{"registered", "investigating", "hearing", "decided", "appeal", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetDisciplinaryCaseStatus(ctx, db.SetDisciplinaryCaseStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"grievances": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetGrievance(ctx, id) },
+		statuses: []string{"received", "investigating", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetGrievanceStatus(ctx, db.SetGrievanceStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"store_openings": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetStoreOpening(ctx, id) },
+		statuses: []string{"in_progress", "no_go", "management_decision", "go", "opened"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetStoreOpeningStatus(ctx, db.SetStoreOpeningStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"occurrence_entries": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetOccurrenceEntry(ctx, id)
+		},
+	},
+	"patrol_routes": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetPatrolRoute(ctx, id) },
+	},
+	"patrol_rounds": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetPatrolRound(ctx, id) },
+		statuses: []string{"in_progress", "completed", "incomplete"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPatrolRoundStatus(ctx, db.SetPatrolRoundStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"cameras": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCamera(ctx, id) },
+	},
+	"cctv_outages": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCctvOutage(ctx, id) },
+		statuses: []string{"open", "restored", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetCctvOutageStatus(ctx, db.SetCctvOutageStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"footage_requests": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetFootageRequest(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "preserved", "exported", "closed", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetFootageRequestStatus(ctx, db.SetFootageRequestStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"external_visits": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetExternalVisit(ctx, id) },
+		statuses: []string{"requested", "screening", "pending_approval", "approved", "held", "cancelled", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetExternalVisitStatus(ctx, db.SetExternalVisitStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
 }

@@ -37,6 +37,9 @@ func (s *Service) SubmitFloatCertificate(ctx context.Context, p db.ActSubmitFloa
 	if err := s.checkSod(ctx, "cash.float_certificate.submit", "float_certificates", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitFloatCertificate", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitFloatCertificate(ctx, p)
 	if err != nil {
@@ -45,7 +48,10 @@ func (s *Service) SubmitFloatCertificate(ctx context.Context, p db.ActSubmitFloa
 	if err := s.audit(ctx, "cash.float_certificate.submit", "float_certificates", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "float_certificates", row.ID, &row.SiteID, row)
+	if err := s.startApproval(ctx, "float_certificates", row.ID, &row.SiteID, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitFloatCertificate", row)
 }
 
 // ListFloatIssue returns a page of float issues.
@@ -69,6 +75,9 @@ func (s *Service) CreateFloatIssue(ctx context.Context, p db.CreateFloatIssuePar
 	if err := canWrite(ctx, &p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreateFloatIssue", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "FLI", &p.SiteID)
 	if err != nil {
 		return zero, err
@@ -79,7 +88,10 @@ func (s *Service) CreateFloatIssue(ctx context.Context, p db.CreateFloatIssuePar
 	if err != nil {
 		return zero, wrap(err, "create float issues")
 	}
-	return row, s.audit(ctx, "cash.float_issue.write", "float_issues", row.ID, &p.SiteID, nil, row)
+	if err := s.audit(ctx, "cash.float_issue.write", "float_issues", row.ID, &p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateFloatIssue", row)
 }
 
 // AcknowledgeFloatIssue is the cashier acknowledges the float action on float issues.
@@ -91,6 +103,9 @@ func (s *Service) AcknowledgeFloatIssue(ctx context.Context, p db.ActAcknowledge
 	if err := s.checkSod(ctx, "cash.float_issue.acknowledge", "float_issues", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "AcknowledgeFloatIssue", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActAcknowledgeFloatIssue(ctx, p)
 	if err != nil {
@@ -99,7 +114,7 @@ func (s *Service) AcknowledgeFloatIssue(ctx context.Context, p db.ActAcknowledge
 	if err := s.audit(ctx, "cash.float_issue.acknowledge", "float_issues", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "AcknowledgeFloatIssue", row)
 }
 
 // ReturnFloatIssue is the record float returned action on float issues.
@@ -111,6 +126,9 @@ func (s *Service) ReturnFloatIssue(ctx context.Context, p db.ActReturnFloatIssue
 	if err := s.checkSod(ctx, "cash.float_issue.return", "float_issues", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ReturnFloatIssue", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActReturnFloatIssue(ctx, p)
 	if err != nil {
@@ -119,7 +137,7 @@ func (s *Service) ReturnFloatIssue(ctx context.Context, p db.ActReturnFloatIssue
 	if err := s.audit(ctx, "cash.float_issue.return", "float_issues", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReturnFloatIssue", row)
 }
 
 // ListFloatException returns a page of float exceptions.
@@ -146,6 +164,9 @@ func (s *Service) SubmitFloatException(ctx context.Context, p db.ActSubmitFloatE
 	if err := s.checkSod(ctx, "cash.float_exception.submit", "float_exceptions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitFloatException", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitFloatException(ctx, p)
 	if err != nil {
@@ -154,7 +175,10 @@ func (s *Service) SubmitFloatException(ctx context.Context, p db.ActSubmitFloatE
 	if err := s.audit(ctx, "cash.float_exception.submit", "float_exceptions", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "float_exceptions", row.ID, &row.SiteID, row)
+	if err := s.startApproval(ctx, "float_exceptions", row.ID, &row.SiteID, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitFloatException", row)
 }
 
 // ReimburseFloatException is the record full reimbursement action on float exceptions.
@@ -166,6 +190,9 @@ func (s *Service) ReimburseFloatException(ctx context.Context, p db.ActReimburse
 	if err := s.checkSod(ctx, "cash.float_exception.reimburse", "float_exceptions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ReimburseFloatException", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActReimburseFloatException(ctx, p)
 	if err != nil {
@@ -174,7 +201,7 @@ func (s *Service) ReimburseFloatException(ctx context.Context, p db.ActReimburse
 	if err := s.audit(ctx, "cash.float_exception.reimburse", "float_exceptions", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReimburseFloatException", row)
 }
 
 // ListTillFlush returns a page of till flushes.
@@ -256,6 +283,9 @@ func (s *Service) ReturnCashUp(ctx context.Context, p db.ActReturnCashUpParams) 
 	if err := s.checkSod(ctx, "cash.cash_up.return", "cash_ups", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ReturnCashUp", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActReturnCashUp(ctx, p)
 	if err != nil {
@@ -264,7 +294,7 @@ func (s *Service) ReturnCashUp(ctx context.Context, p db.ActReturnCashUpParams) 
 	if err := s.audit(ctx, "cash.cash_up.return", "cash_ups", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReturnCashUp", row)
 }
 
 // CashUpChildren returns the rows of a record's child tables, by API field.
@@ -324,6 +354,9 @@ func (s *Service) RecordRecoveryCashVariance(ctx context.Context, p db.ActRecord
 	if err := s.checkSod(ctx, "cash.cash_variance.record_recovery", "cash_variances", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "RecordRecoveryCashVariance", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActRecordRecoveryCashVariance(ctx, p)
 	if err != nil {
@@ -332,7 +365,7 @@ func (s *Service) RecordRecoveryCashVariance(ctx context.Context, p db.ActRecord
 	if err := s.audit(ctx, "cash.cash_variance.record_recovery", "cash_variances", row.ID, row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "RecordRecoveryCashVariance", row)
 }
 
 // ReferHrCashVariance is the refer to hr for the applicable process action on cash variances.
@@ -344,6 +377,9 @@ func (s *Service) ReferHrCashVariance(ctx context.Context, p db.ActReferHrCashVa
 	if err := s.checkSod(ctx, "cash.cash_variance.refer_hr", "cash_variances", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ReferHrCashVariance", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActReferHrCashVariance(ctx, p)
 	if err != nil {
@@ -352,7 +388,7 @@ func (s *Service) ReferHrCashVariance(ctx context.Context, p db.ActReferHrCashVa
 	if err := s.audit(ctx, "cash.cash_variance.refer_hr", "cash_variances", row.ID, row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReferHrCashVariance", row)
 }
 
 // CloseCashVariance is the close action on cash variances.
@@ -362,6 +398,9 @@ func (s *Service) CloseCashVariance(ctx context.Context, p db.ActCloseCashVarian
 		return before, err
 	}
 	if err := s.checkSod(ctx, "cash.cash_variance.close", "cash_variances", p.ID); err != nil {
+		return before, err
+	}
+	if err := s.guard(ctx, "CloseCashVariance", before); err != nil {
 		return before, err
 	}
 	p.UpdatedBy = actorID(ctx)
@@ -375,7 +414,7 @@ func (s *Service) CloseCashVariance(ctx context.Context, p db.ActCloseCashVarian
 	if err := s.audit(ctx, "cash.cash_variance.close", "cash_variances", row.ID, row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "CloseCashVariance", row)
 }
 
 // ListCitProvider returns a page of cit providers.
@@ -395,12 +434,18 @@ func (s *Service) GetCitProvider(ctx context.Context, id uuid.UUID) (db.CitProvi
 // CreateCitProvider adds one row to cit providers.
 func (s *Service) CreateCitProvider(ctx context.Context, p db.CreateCitProviderParams) (db.CitProvider, error) {
 	var zero db.CitProvider
+	if err := s.guard(ctx, "CreateCitProvider", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateCitProvider(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create cit providers")
 	}
-	return row, s.audit(ctx, "cash.cit_provider.write", "cit_providers", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "cash.cit_provider.write", "cit_providers", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateCitProvider", row)
 }
 
 // UpdateCitProvider changes one row of cit providers.
@@ -440,12 +485,18 @@ func (s *Service) GetCitPerson(ctx context.Context, id uuid.UUID) (db.CitPersonn
 // CreateCitPerson adds one row to cit personnel.
 func (s *Service) CreateCitPerson(ctx context.Context, p db.CreateCitPersonParams) (db.CitPersonnel, error) {
 	var zero db.CitPersonnel
+	if err := s.guard(ctx, "CreateCitPerson", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateCitPerson(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create cit personnel")
 	}
-	return row, s.audit(ctx, "cash.cit_person.write", "cit_personnel", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "cash.cit_person.write", "cit_personnel", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateCitPerson", row)
 }
 
 // UpdateCitPerson changes one row of cit personnel.
@@ -574,6 +625,9 @@ func (s *Service) VerifyBankDeposit(ctx context.Context, p db.ActVerifyBankDepos
 	if err := s.checkSod(ctx, "cash.bank_deposit.verify", "bank_deposits", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "VerifyBankDeposit", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	if err := s.requireSignatures(ctx, "bank_deposits", p.ID); err != nil {
 		return before, err
@@ -585,7 +639,7 @@ func (s *Service) VerifyBankDeposit(ctx context.Context, p db.ActVerifyBankDepos
 	if err := s.audit(ctx, "cash.bank_deposit.verify", "bank_deposits", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "VerifyBankDeposit", row)
 }
 
 // ListCitReconciliation returns a page of cit reconciliations.
@@ -632,6 +686,9 @@ func (s *Service) CompleteCitReconciliation(ctx context.Context, p db.ActComplet
 	if err := s.checkSod(ctx, "cash.cit_reconciliation.complete", "cit_reconciliations", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "CompleteCitReconciliation", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	if err := s.requireSignatures(ctx, "cit_reconciliations", p.ID); err != nil {
 		return before, err
@@ -643,7 +700,7 @@ func (s *Service) CompleteCitReconciliation(ctx context.Context, p db.ActComplet
 	if err := s.audit(ctx, "cash.cit_reconciliation.complete", "cit_reconciliations", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "CompleteCitReconciliation", row)
 }
 
 // ListSurpriseCount returns a page of surprise counts.
@@ -690,6 +747,9 @@ func (s *Service) CompleteSurpriseCount(ctx context.Context, p db.ActCompleteSur
 	if err := s.checkSod(ctx, "cash.surprise_count.complete", "surprise_counts", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "CompleteSurpriseCount", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	if err := s.requireSignatures(ctx, "surprise_counts", p.ID); err != nil {
 		return before, err
@@ -701,7 +761,7 @@ func (s *Service) CompleteSurpriseCount(ctx context.Context, p db.ActCompleteSur
 	if err := s.audit(ctx, "cash.surprise_count.complete", "surprise_counts", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "CompleteSurpriseCount", row)
 }
 
 // ListPettyCashAccount returns a page of petty cash accounts.
@@ -725,12 +785,18 @@ func (s *Service) CreatePettyCashAccount(ctx context.Context, p db.CreatePettyCa
 	if err := canWrite(ctx, &p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreatePettyCashAccount", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreatePettyCashAccount(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create petty cash accounts")
 	}
-	return row, s.audit(ctx, "cash.petty_cash_account.write", "petty_cash_accounts", row.ID, &p.SiteID, nil, row)
+	if err := s.audit(ctx, "cash.petty_cash_account.write", "petty_cash_accounts", row.ID, &p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreatePettyCashAccount", row)
 }
 
 // UpdatePettyCashAccount changes one row of petty cash accounts.
@@ -797,6 +863,9 @@ func (s *Service) SubmitPettyCashVoucher(ctx context.Context, p db.ActSubmitPett
 	if err := s.checkSod(ctx, "cash.petty_cash_voucher.submit", "petty_cash_vouchers", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitPettyCashVoucher", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitPettyCashVoucher(ctx, p)
 	if err != nil {
@@ -805,7 +874,10 @@ func (s *Service) SubmitPettyCashVoucher(ctx context.Context, p db.ActSubmitPett
 	if err := s.audit(ctx, "cash.petty_cash_voucher.submit", "petty_cash_vouchers", row.ID, row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "petty_cash_vouchers", row.ID, row.SiteID, row)
+	if err := s.startApproval(ctx, "petty_cash_vouchers", row.ID, row.SiteID, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitPettyCashVoucher", row)
 }
 
 // AttachReceiptPettyCashVoucher is the attach proof of purchase action on petty cash vouchers.
@@ -817,6 +889,9 @@ func (s *Service) AttachReceiptPettyCashVoucher(ctx context.Context, p db.ActAtt
 	if err := s.checkSod(ctx, "cash.petty_cash_voucher.attach_receipt", "petty_cash_vouchers", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "AttachReceiptPettyCashVoucher", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActAttachReceiptPettyCashVoucher(ctx, p)
 	if err != nil {
@@ -825,7 +900,7 @@ func (s *Service) AttachReceiptPettyCashVoucher(ctx context.Context, p db.ActAtt
 	if err := s.audit(ctx, "cash.petty_cash_voucher.attach_receipt", "petty_cash_vouchers", row.ID, row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "AttachReceiptPettyCashVoucher", row)
 }
 
 // ListPettyCashHandover returns a page of petty cash handovers.
@@ -851,6 +926,9 @@ func (s *Service) SubmitPettyCashHandover(ctx context.Context, p db.ActSubmitPet
 	if err := s.checkSod(ctx, "cash.petty_cash_handover.submit", "petty_cash_handovers", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitPettyCashHandover", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitPettyCashHandover(ctx, p)
 	if err != nil {
@@ -859,7 +937,7 @@ func (s *Service) SubmitPettyCashHandover(ctx context.Context, p db.ActSubmitPet
 	if err := s.audit(ctx, "cash.petty_cash_handover.submit", "petty_cash_handovers", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "SubmitPettyCashHandover", row)
 }
 
 // ListPettyCashReconciliation returns a page of petty cash reconciliations.
@@ -885,6 +963,9 @@ func (s *Service) SubmitPettyCashReconciliation(ctx context.Context, p db.ActSub
 	if err := s.checkSod(ctx, "cash.petty_cash_reconciliation.submit", "petty_cash_reconciliations", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitPettyCashReconciliation", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitPettyCashReconciliation(ctx, p)
 	if err != nil {
@@ -893,7 +974,7 @@ func (s *Service) SubmitPettyCashReconciliation(ctx context.Context, p db.ActSub
 	if err := s.audit(ctx, "cash.petty_cash_reconciliation.submit", "petty_cash_reconciliations", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "SubmitPettyCashReconciliation", row)
 }
 
 // ReviewPettyCashReconciliation is the review action on petty cash reconciliations.
@@ -903,6 +984,9 @@ func (s *Service) ReviewPettyCashReconciliation(ctx context.Context, p db.ActRev
 		return before, err
 	}
 	if err := s.checkSod(ctx, "cash.petty_cash_reconciliation.review", "petty_cash_reconciliations", p.ID); err != nil {
+		return before, err
+	}
+	if err := s.guard(ctx, "ReviewPettyCashReconciliation", before); err != nil {
 		return before, err
 	}
 	p.UpdatedBy = actorID(ctx)
@@ -916,7 +1000,7 @@ func (s *Service) ReviewPettyCashReconciliation(ctx context.Context, p db.ActRev
 	if err := s.audit(ctx, "cash.petty_cash_reconciliation.review", "petty_cash_reconciliations", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReviewPettyCashReconciliation", row)
 }
 
 // ListPettyCashReimbursement returns a page of petty cash reimbursements.
@@ -942,6 +1026,9 @@ func (s *Service) SubmitPettyCashReimbursement(ctx context.Context, p db.ActSubm
 	if err := s.checkSod(ctx, "cash.petty_cash_reimbursement.submit", "petty_cash_reimbursements", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitPettyCashReimbursement", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitPettyCashReimbursement(ctx, p)
 	if err != nil {
@@ -950,5 +1037,5 @@ func (s *Service) SubmitPettyCashReimbursement(ctx context.Context, p db.ActSubm
 	if err := s.audit(ctx, "cash.petty_cash_reimbursement.submit", "petty_cash_reimbursements", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "SubmitPettyCashReimbursement", row)
 }

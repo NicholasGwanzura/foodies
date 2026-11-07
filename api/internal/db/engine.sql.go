@@ -65,6 +65,22 @@ func (q *Queries) AckEscalationRow(ctx context.Context, arg AckEscalationRowPara
 	return i, err
 }
 
+const actionsFrom = `-- name: ActionsFrom :one
+SELECT count(*) FROM actions WHERE source_type = $1 AND source_id = $2
+`
+
+type ActionsFromParams struct {
+	SourceType *string    `json:"source_type"`
+	SourceID   *uuid.UUID `json:"source_id"`
+}
+
+func (q *Queries) ActionsFrom(ctx context.Context, arg ActionsFromParams) (int64, error) {
+	row := q.db.QueryRow(ctx, actionsFrom, arg.SourceType, arg.SourceID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const activeEscalationPolicy = `-- name: ActiveEscalationPolicy :one
 SELECT id, domain, severity_level, label, after_hours, status, created_at, updated_at, created_by, updated_by, row_version FROM escalation_policies WHERE domain = $1 AND severity_level = $2 AND status = 'active' ORDER BY id DESC LIMIT 1
 `
@@ -91,6 +107,34 @@ func (q *Queries) ActiveEscalationPolicy(ctx context.Context, arg ActiveEscalati
 		&i.RowVersion,
 	)
 	return i, err
+}
+
+const activeHolds = `-- name: ActiveHolds :one
+SELECT count(*) FROM holds
+WHERE status IN ('on_hold', 'pending_disposition')
+  AND ($1::uuid IS NULL OR site_id = $1)
+  AND (($2::uuid IS NOT NULL AND item_id = $2)
+    OR ($3::uuid IS NOT NULL AND batch_id = $3)
+    OR ($4::text IS NOT NULL AND batch_lot = $4))
+`
+
+type ActiveHoldsParams struct {
+	SiteID   *uuid.UUID `json:"site_id"`
+	ItemID   *uuid.UUID `json:"item_id"`
+	BatchID  *uuid.UUID `json:"batch_id"`
+	BatchLot *string    `json:"batch_lot"`
+}
+
+func (q *Queries) ActiveHolds(ctx context.Context, arg ActiveHoldsParams) (int64, error) {
+	row := q.db.QueryRow(ctx, activeHolds,
+		arg.SiteID,
+		arg.ItemID,
+		arg.BatchID,
+		arg.BatchLot,
+	)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
 }
 
 const activePolicyFor = `-- name: ActivePolicyFor :one
@@ -223,6 +267,22 @@ func (q *Queries) AddEscalationRecipient(ctx context.Context, arg AddEscalationR
 	return i, err
 }
 
+const addReceivedQuantity = `-- name: AddReceivedQuantity :exec
+UPDATE purchase_order_lines SET received_quantity = COALESCE(received_quantity, 0) + $1::numeric
+WHERE purchase_order_id = $2 AND item_id = $3
+`
+
+type AddReceivedQuantityParams struct {
+	Quantity        string     `json:"quantity"`
+	PurchaseOrderID uuid.UUID  `json:"purchase_order_id"`
+	ItemID          *uuid.UUID `json:"item_id"`
+}
+
+func (q *Queries) AddReceivedQuantity(ctx context.Context, arg AddReceivedQuantityParams) error {
+	_, err := q.db.Exec(ctx, addReceivedQuantity, arg.Quantity, arg.PurchaseOrderID, arg.ItemID)
+	return err
+}
+
 const advanceApproval = `-- name: AdvanceApproval :one
 UPDATE approval_requests SET current_step = $2, updated_at = now(), row_version = row_version + 1 WHERE id = $1 RETURNING id, subject_type, subject_id, workflow_key, policy_id, site_id, amount_amount, amount_currency, current_step, summary, decided_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
@@ -342,6 +402,17 @@ func (q *Queries) ApprovalInbox(ctx context.Context, arg ApprovalInboxParams) ([
 	return items, nil
 }
 
+const approvedDispositions = `-- name: ApprovedDispositions :one
+SELECT count(*) FROM dispositions WHERE hold_id = $1 AND status IN ('approved', 'executed')
+`
+
+func (q *Queries) ApprovedDispositions(ctx context.Context, holdID uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, approvedDispositions, holdID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const claimTaskRow = `-- name: ClaimTaskRow :one
 UPDATE tasks SET status = 'in_progress', assignee_user_id = $2, updated_at = now(), updated_by = $2, row_version = row_version + 1
 WHERE id = $1 AND status = 'open' RETURNING id, title, schedule_id, subject_type, subject_id, site_id, business_date, shift, assignee_user_id, assignee_role_id, due_at, priority, overdue, completed_at, skip_reason, status, created_at, updated_at, created_by, updated_by, row_version, reminded_at
@@ -430,6 +501,85 @@ func (q *Queries) CompleteTaskRow(ctx context.Context, arg CompleteTaskRowParams
 		&i.RemindedAt,
 	)
 	return i, err
+}
+
+const conflictsInBatch = `-- name: ConflictsInBatch :many
+SELECT id, batch_id, device_id, site_id, client_record_id, subject_type, subject_id, reason, client_payload, resolved_at, status, created_at, updated_at, created_by, updated_by, row_version FROM sync_conflicts WHERE batch_id = $1
+`
+
+func (q *Queries) ConflictsInBatch(ctx context.Context, batchID *string) ([]SyncConflict, error) {
+	rows, err := q.db.Query(ctx, conflictsInBatch, batchID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []SyncConflict{}
+	for rows.Next() {
+		var i SyncConflict
+		if err := rows.Scan(
+			&i.ID,
+			&i.BatchID,
+			&i.DeviceID,
+			&i.SiteID,
+			&i.ClientRecordID,
+			&i.SubjectType,
+			&i.SubjectID,
+			&i.Reason,
+			&i.ClientPayload,
+			&i.ResolvedAt,
+			&i.Status,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CreatedBy,
+			&i.UpdatedBy,
+			&i.RowVersion,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const consolidatedOrders = `-- name: ConsolidatedOrders :many
+SELECT l.product_id, l.uom, sum(COALESCE(l.confirmed_quantity, l.quantity))::numeric AS quantity
+FROM kitchen_orders o JOIN kitchen_order_lines l ON l.kitchen_order_id = o.id
+WHERE o.order_date = $1 AND o.cycle = $2 AND NOT o.late AND o.status NOT IN ('draft', 'cancelled')
+GROUP BY l.product_id, l.uom
+`
+
+type ConsolidatedOrdersParams struct {
+	OrderDate pgtype.Date `json:"order_date"`
+	Cycle     string      `json:"cycle"`
+}
+
+type ConsolidatedOrdersRow struct {
+	ProductID uuid.UUID `json:"product_id"`
+	Uom       string    `json:"uom"`
+	Quantity  string    `json:"quantity"`
+}
+
+func (q *Queries) ConsolidatedOrders(ctx context.Context, arg ConsolidatedOrdersParams) ([]ConsolidatedOrdersRow, error) {
+	rows, err := q.db.Query(ctx, consolidatedOrders, arg.OrderDate, arg.Cycle)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ConsolidatedOrdersRow{}
+	for rows.Next() {
+		var i ConsolidatedOrdersRow
+		if err := rows.Scan(&i.ProductID, &i.Uom, &i.Quantity); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const countOpenEscalations = `-- name: CountOpenEscalations :one
@@ -1039,6 +1189,51 @@ func (q *Queries) DecideApprovalStep(ctx context.Context, arg DecideApprovalStep
 	return err
 }
 
+const decideOpening = `-- name: DecideOpening :one
+UPDATE store_openings SET status = $1, rationale = COALESCE($2, rationale), decided_by = $3, decided_at = now(),
+  updated_at = now(), updated_by = $3, row_version = row_version + 1
+WHERE id = $4 RETURNING id, reference, site_id, business_date, scheduled_at, status_colour, critical_controls, amber_issue, rationale, corrective_action, decided_by, decided_at, actual_opened_at, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type DecideOpeningParams struct {
+	Status    string     `json:"status"`
+	Rationale *string    `json:"rationale"`
+	DecidedBy *uuid.UUID `json:"decided_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) DecideOpening(ctx context.Context, arg DecideOpeningParams) (StoreOpening, error) {
+	row := q.db.QueryRow(ctx, decideOpening,
+		arg.Status,
+		arg.Rationale,
+		arg.DecidedBy,
+		arg.ID,
+	)
+	var i StoreOpening
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.SiteID,
+		&i.BusinessDate,
+		&i.ScheduledAt,
+		&i.StatusColour,
+		&i.CriticalControls,
+		&i.AmberIssue,
+		&i.Rationale,
+		&i.CorrectiveAction,
+		&i.DecidedBy,
+		&i.DecidedAt,
+		&i.ActualOpenedAt,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
 const declineSignature = `-- name: DeclineSignature :one
 UPDATE signature_requests SET status = 'declined', updated_at = now(), updated_by = $2, row_version = row_version + 1
 WHERE id = $1 AND status = 'pending' RETURNING id, subject_type, subject_id, meaning, signer_kind, signer_employee_id, signer_role_id, external_name, external_organisation, external_id_ref, content_hash, signed_at, signed_channel, device_id, attested_by, proof_attachment_id, status, created_at, updated_at, created_by, updated_by, row_version
@@ -1109,6 +1304,48 @@ func (q *Queries) DelegatorsTo(ctx context.Context, toUserID uuid.UUID) ([]Deleg
 	return items, nil
 }
 
+const dispatchesOfBatch = `-- name: DispatchesOfBatch :many
+SELECT DISTINCT d.id, d.reference, d.from_site_id, d.to_site_id, d.kitchen_order_id, d.vehicle, d.driver_employee_id, d.loading_temperature_c, d.dispatched_at, d.delivery_temperature_c, d.delivered_at, d.status, d.created_at, d.updated_at, d.created_by, d.updated_by, d.row_version FROM dispatch_notes d JOIN dispatch_note_lines l ON l.dispatch_note_id = d.id WHERE l.batch_id = $1
+`
+
+func (q *Queries) DispatchesOfBatch(ctx context.Context, batchID uuid.UUID) ([]DispatchNote, error) {
+	rows, err := q.db.Query(ctx, dispatchesOfBatch, batchID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []DispatchNote{}
+	for rows.Next() {
+		var i DispatchNote
+		if err := rows.Scan(
+			&i.ID,
+			&i.Reference,
+			&i.FromSiteID,
+			&i.ToSiteID,
+			&i.KitchenOrderID,
+			&i.Vehicle,
+			&i.DriverEmployeeID,
+			&i.LoadingTemperatureC,
+			&i.DispatchedAt,
+			&i.DeliveryTemperatureC,
+			&i.DeliveredAt,
+			&i.Status,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CreatedBy,
+			&i.UpdatedBy,
+			&i.RowVersion,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const effectiveFxRate = `-- name: EffectiveFxRate :one
 SELECT id, from_currency, to_currency, rate, rate_date, source, change_reason, created_at, updated_at, created_by, updated_by, row_version FROM fx_rates WHERE from_currency = $1 AND to_currency = $2 AND rate_date <= $3 ORDER BY rate_date DESC, id DESC LIMIT 1
 `
@@ -1152,6 +1389,20 @@ type EnsureActivationParams struct {
 
 func (q *Queries) EnsureActivation(ctx context.Context, arg EnsureActivationParams) error {
 	_, err := q.db.Exec(ctx, ensureActivation, arg.WorkflowKey, arg.SiteID)
+	return err
+}
+
+const escalateBudgetVariance = `-- name: EscalateBudgetVariance :exec
+UPDATE budget_variances SET status = 'escalated', escalated_at = now(), escalation_due = $2 WHERE id = $1
+`
+
+type EscalateBudgetVarianceParams struct {
+	ID            uuid.UUID   `json:"id"`
+	EscalationDue pgtype.Date `json:"escalation_due"`
+}
+
+func (q *Queries) EscalateBudgetVariance(ctx context.Context, arg EscalateBudgetVarianceParams) error {
+	_, err := q.db.Exec(ctx, escalateBudgetVariance, arg.ID, arg.EscalationDue)
 	return err
 }
 
@@ -1226,6 +1477,51 @@ func (q *Queries) EscalationsToCheck(ctx context.Context) ([]EscalationsToCheckR
 	return items, nil
 }
 
+const fileKitchenOrder = `-- name: FileKitchenOrder :one
+UPDATE kitchen_orders SET status = $1, deadline_at = $2, submitted_at = now(), late = $3, updated_at = now(), updated_by = $4, row_version = row_version + 1
+WHERE id = $5 AND status = 'draft' RETURNING id, reference, site_id, cycle, order_date, supervisor_employee_id, deadline_at, submitted_at, late, late_reason, expected_submission_at, acknowledged_by, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type FileKitchenOrderParams struct {
+	Status     string     `json:"status"`
+	DeadlineAt *time.Time `json:"deadline_at"`
+	Late       bool       `json:"late"`
+	UpdatedBy  *uuid.UUID `json:"updated_by"`
+	ID         uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) FileKitchenOrder(ctx context.Context, arg FileKitchenOrderParams) (KitchenOrder, error) {
+	row := q.db.QueryRow(ctx, fileKitchenOrder,
+		arg.Status,
+		arg.DeadlineAt,
+		arg.Late,
+		arg.UpdatedBy,
+		arg.ID,
+	)
+	var i KitchenOrder
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.SiteID,
+		&i.Cycle,
+		&i.OrderDate,
+		&i.SupervisorEmployeeID,
+		&i.DeadlineAt,
+		&i.SubmittedAt,
+		&i.Late,
+		&i.LateReason,
+		&i.ExpectedSubmissionAt,
+		&i.AcknowledgedBy,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
 const finishApproval = `-- name: FinishApproval :one
 UPDATE approval_requests SET status = $2, decided_at = now(), updated_at = now(), row_version = row_version + 1 WHERE id = $1 RETURNING id, subject_type, subject_id, workflow_key, policy_id, site_id, amount_amount, amount_currency, current_step, summary, decided_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
@@ -1260,6 +1556,20 @@ func (q *Queries) FinishApproval(ctx context.Context, arg FinishApprovalParams) 
 	return i, err
 }
 
+const flagTransferDiscrepancy = `-- name: FlagTransferDiscrepancy :exec
+UPDATE stock_transfers SET status = 'discrepancy', tba_followup_due = $2 WHERE id = $1
+`
+
+type FlagTransferDiscrepancyParams struct {
+	ID             uuid.UUID  `json:"id"`
+	TbaFollowupDue *time.Time `json:"tba_followup_due"`
+}
+
+func (q *Queries) FlagTransferDiscrepancy(ctx context.Context, arg FlagTransferDiscrepancyParams) error {
+	_, err := q.db.Exec(ctx, flagTransferDiscrepancy, arg.ID, arg.TbaFollowupDue)
+	return err
+}
+
 const getActivation = `-- name: GetActivation :one
 SELECT id, workflow_key, site_id, missing_rule_keys, activated_at, activated_by, status, created_at, updated_at, created_by, updated_by, row_version FROM workflow_activations WHERE workflow_key = $1 AND site_id = $2
 `
@@ -1279,6 +1589,34 @@ func (q *Queries) GetActivation(ctx context.Context, arg GetActivationParams) (W
 		&i.MissingRuleKeys,
 		&i.ActivatedAt,
 		&i.ActivatedBy,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const getGoodsReceiptOfLine = `-- name: GetGoodsReceiptOfLine :one
+SELECT g.id, g.reference, g.purchase_order_id, g.supplier_id, g.site_id, g.delivery_note_number, g.supplier_invoice_number, g.received_at, g.receiver_employee_id, g.delivery_note_attachment_id, g.status, g.created_at, g.updated_at, g.created_by, g.updated_by, g.row_version FROM goods_receipts g JOIN goods_receipt_lines l ON l.goods_receipt_id = g.id WHERE l.id = $1
+`
+
+func (q *Queries) GetGoodsReceiptOfLine(ctx context.Context, id uuid.UUID) (GoodsReceipt, error) {
+	row := q.db.QueryRow(ctx, getGoodsReceiptOfLine, id)
+	var i GoodsReceipt
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.PurchaseOrderID,
+		&i.SupplierID,
+		&i.SiteID,
+		&i.DeliveryNoteNumber,
+		&i.SupplierInvoiceNumber,
+		&i.ReceivedAt,
+		&i.ReceiverEmployeeID,
+		&i.DeliveryNoteAttachmentID,
 		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -1841,6 +2179,15 @@ func (q *Queries) ListWorkflowKeys(ctx context.Context) ([]string, error) {
 	return items, nil
 }
 
+const markInvoicesPaid = `-- name: MarkInvoicesPaid :exec
+UPDATE supplier_invoices SET status = 'paid', updated_at = now(), row_version = row_version + 1 WHERE id = ANY($1::uuid[])
+`
+
+func (q *Queries) MarkInvoicesPaid(ctx context.Context, dollar_1 []uuid.UUID) error {
+	_, err := q.db.Exec(ctx, markInvoicesPaid, dollar_1)
+	return err
+}
+
 const markOverdueTasks = `-- name: MarkOverdueTasks :many
 UPDATE tasks SET overdue = true, updated_at = now(), row_version = row_version + 1
 WHERE status IN ('open', 'in_progress') AND NOT overdue AND due_at < now() RETURNING id, title, schedule_id, subject_type, subject_id, site_id, business_date, shift, assignee_user_id, assignee_role_id, due_at, priority, overdue, completed_at, skip_reason, status, created_at, updated_at, created_by, updated_by, row_version, reminded_at
@@ -2003,6 +2350,51 @@ func (q *Queries) OfflineTemplates(ctx context.Context) ([]FormTemplateVersion, 
 	return items, nil
 }
 
+const openStockVariance = `-- name: OpenStockVariance :one
+INSERT INTO stock_variances (reference, stocktake_id, item_id, variance_quantity, created_by, updated_by)
+VALUES ($1, $2, $3, $4, $5, $5) RETURNING id, reference, stocktake_id, item_id, variance_quantity, variance_value_amount, variance_value_currency, documents_checked, root_cause, classification, responsible_employee_id, recovery, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type OpenStockVarianceParams struct {
+	Reference        string     `json:"reference"`
+	StocktakeID      uuid.UUID  `json:"stocktake_id"`
+	ItemID           uuid.UUID  `json:"item_id"`
+	VarianceQuantity string     `json:"variance_quantity"`
+	CreatedBy        *uuid.UUID `json:"created_by"`
+}
+
+func (q *Queries) OpenStockVariance(ctx context.Context, arg OpenStockVarianceParams) (StockVariance, error) {
+	row := q.db.QueryRow(ctx, openStockVariance,
+		arg.Reference,
+		arg.StocktakeID,
+		arg.ItemID,
+		arg.VarianceQuantity,
+		arg.CreatedBy,
+	)
+	var i StockVariance
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.StocktakeID,
+		&i.ItemID,
+		&i.VarianceQuantity,
+		&i.VarianceValueAmount,
+		&i.VarianceValueCurrency,
+		&i.DocumentsChecked,
+		&i.RootCause,
+		&i.Classification,
+		&i.ResponsibleEmployeeID,
+		&i.Recovery,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
 const openVariances = `-- name: OpenVariances :one
 SELECT count(*) FROM cash_variances WHERE site_id = $1 AND status = 'open'
 `
@@ -2068,6 +2460,52 @@ func (q *Queries) PolicyVersionsFor(ctx context.Context, workflowKey string) (in
 	var column_1 int32
 	err := row.Scan(&column_1)
 	return column_1, err
+}
+
+const quotationsFor = `-- name: QuotationsFor :many
+SELECT id, purchase_requisition_id, supplier_id, quote_number, quote_date, valid_until, total_amount, total_currency, charges_amount, charges_currency, lead_time_days, payment_terms, specification_compliant, selected, selection_reason, attachment_id, created_at, updated_at, created_by, updated_by, row_version FROM quotations WHERE purchase_requisition_id = $1
+`
+
+func (q *Queries) QuotationsFor(ctx context.Context, purchaseRequisitionID uuid.UUID) ([]Quotation, error) {
+	rows, err := q.db.Query(ctx, quotationsFor, purchaseRequisitionID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Quotation{}
+	for rows.Next() {
+		var i Quotation
+		if err := rows.Scan(
+			&i.ID,
+			&i.PurchaseRequisitionID,
+			&i.SupplierID,
+			&i.QuoteNumber,
+			&i.QuoteDate,
+			&i.ValidUntil,
+			&i.TotalAmount,
+			&i.TotalCurrency,
+			&i.ChargesAmount,
+			&i.ChargesCurrency,
+			&i.LeadTimeDays,
+			&i.PaymentTerms,
+			&i.SpecificationCompliant,
+			&i.Selected,
+			&i.SelectionReason,
+			&i.AttachmentID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CreatedBy,
+			&i.UpdatedBy,
+			&i.RowVersion,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const readAllNotifications = `-- name: ReadAllNotifications :execrows
@@ -2225,6 +2663,19 @@ func (q *Queries) RecordSignature(ctx context.Context, arg RecordSignatureParams
 	return i, err
 }
 
+const refreshPurchaseOrderReceipt = `-- name: RefreshPurchaseOrderReceipt :exec
+UPDATE purchase_orders po SET status = CASE
+    WHEN NOT EXISTS (SELECT 1 FROM purchase_order_lines l WHERE l.purchase_order_id = po.id AND COALESCE(l.received_quantity, 0) < l.quantity) THEN 'received'
+    ELSE 'part_received' END,
+  updated_at = now(), row_version = row_version + 1
+WHERE po.id = $1 AND po.status IN ('issued', 'part_received')
+`
+
+func (q *Queries) RefreshPurchaseOrderReceipt(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, refreshPurchaseOrderReceipt, id)
+	return err
+}
+
 const requeuePosting = `-- name: RequeuePosting :one
 UPDATE postings SET status = 'pending', attempts = COALESCE(attempts, 0) + 1, updated_at = now(), row_version = row_version + 1 WHERE id = $1 RETURNING id, target_system, posting_type, subject_type, subject_id, site_id, payload, external_ref, attempts, last_error, posted_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
@@ -2267,6 +2718,35 @@ type RetireOtherVersionsParams struct {
 func (q *Queries) RetireOtherVersions(ctx context.Context, arg RetireOtherVersionsParams) error {
 	_, err := q.db.Exec(ctx, retireOtherVersions, arg.FormTemplateID, arg.ID)
 	return err
+}
+
+const reviewedRecallReconciliation = `-- name: ReviewedRecallReconciliation :one
+SELECT id, recall_id, produced_received, remaining_stock, distributed, sold, returned, disposed, variance, explanation, independent_reviewer_id, status, created_at, updated_at, created_by, updated_by, row_version FROM recall_reconciliations WHERE recall_id = $1 AND status = 'reviewed' ORDER BY id DESC LIMIT 1
+`
+
+func (q *Queries) ReviewedRecallReconciliation(ctx context.Context, recallID uuid.UUID) (RecallReconciliation, error) {
+	row := q.db.QueryRow(ctx, reviewedRecallReconciliation, recallID)
+	var i RecallReconciliation
+	err := row.Scan(
+		&i.ID,
+		&i.RecallID,
+		&i.ProducedReceived,
+		&i.RemainingStock,
+		&i.Distributed,
+		&i.Sold,
+		&i.Returned,
+		&i.Disposed,
+		&i.Variance,
+		&i.Explanation,
+		&i.IndependentReviewerID,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
 }
 
 const revokeEmployeeIdentities = `-- name: RevokeEmployeeIdentities :exec
@@ -2320,6 +2800,43 @@ type SetActivationReadinessParams struct {
 
 func (q *Queries) SetActivationReadiness(ctx context.Context, arg SetActivationReadinessParams) error {
 	_, err := q.db.Exec(ctx, setActivationReadiness, arg.WorkflowKey, arg.SiteID, arg.MissingRuleKeys)
+	return err
+}
+
+const setBatchTotal = `-- name: SetBatchTotal :exec
+UPDATE payment_batches SET total_amount = $2, total_currency = $3 WHERE id = $1
+`
+
+type SetBatchTotalParams struct {
+	ID            uuid.UUID `json:"id"`
+	TotalAmount   *string   `json:"total_amount"`
+	TotalCurrency *string   `json:"total_currency"`
+}
+
+func (q *Queries) SetBatchTotal(ctx context.Context, arg SetBatchTotalParams) error {
+	_, err := q.db.Exec(ctx, setBatchTotal, arg.ID, arg.TotalAmount, arg.TotalCurrency)
+	return err
+}
+
+const setBatchYield = `-- name: SetBatchYield :exec
+UPDATE batches SET actual_yield_percent = $1, standard_yield_percent = COALESCE($2, standard_yield_percent), yield_variance_percent = $3
+WHERE id = $4
+`
+
+type SetBatchYieldParams struct {
+	ActualYieldPercent   *string   `json:"actual_yield_percent"`
+	StandardYieldPercent *string   `json:"standard_yield_percent"`
+	YieldVariancePercent *string   `json:"yield_variance_percent"`
+	ID                   uuid.UUID `json:"id"`
+}
+
+func (q *Queries) SetBatchYield(ctx context.Context, arg SetBatchYieldParams) error {
+	_, err := q.db.Exec(ctx, setBatchYield,
+		arg.ActualYieldPercent,
+		arg.StandardYieldPercent,
+		arg.YieldVariancePercent,
+		arg.ID,
+	)
 	return err
 }
 
@@ -2670,6 +3187,71 @@ func (q *Queries) SetExceptionDue(ctx context.Context, arg SetExceptionDueParams
 	return err
 }
 
+const setInvoiceMatch = `-- name: SetInvoiceMatch :one
+UPDATE supplier_invoices SET status = $1, match_status = $2, updated_at = now(), updated_by = $3, row_version = row_version + 1
+WHERE id = $4 RETURNING id, reference, supplier_id, invoice_number, invoice_date, total_amount, total_currency, vat_amount, vat_currency, due_date, purchase_order_id, goods_receipt_ids, invoice_received_at, forwarded_to_finance_at, qr_verified, match_status, duplicate_of_id, attachment_id, paper_original_location, sap_doc_ref, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type SetInvoiceMatchParams struct {
+	Status      string     `json:"status"`
+	MatchStatus *string    `json:"match_status"`
+	UpdatedBy   *uuid.UUID `json:"updated_by"`
+	ID          uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) SetInvoiceMatch(ctx context.Context, arg SetInvoiceMatchParams) (SupplierInvoice, error) {
+	row := q.db.QueryRow(ctx, setInvoiceMatch,
+		arg.Status,
+		arg.MatchStatus,
+		arg.UpdatedBy,
+		arg.ID,
+	)
+	var i SupplierInvoice
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.SupplierID,
+		&i.InvoiceNumber,
+		&i.InvoiceDate,
+		&i.TotalAmount,
+		&i.TotalCurrency,
+		&i.VatAmount,
+		&i.VatCurrency,
+		&i.DueDate,
+		&i.PurchaseOrderID,
+		&i.GoodsReceiptIds,
+		&i.InvoiceReceivedAt,
+		&i.ForwardedToFinanceAt,
+		&i.QrVerified,
+		&i.MatchStatus,
+		&i.DuplicateOfID,
+		&i.AttachmentID,
+		&i.PaperOriginalLocation,
+		&i.SapDocRef,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const setLostPropertyDue = `-- name: SetLostPropertyDue :exec
+UPDATE lost_property_items SET disposition_due = $2 WHERE id = $1
+`
+
+type SetLostPropertyDueParams struct {
+	ID             uuid.UUID   `json:"id"`
+	DispositionDue pgtype.Date `json:"disposition_due"`
+}
+
+func (q *Queries) SetLostPropertyDue(ctx context.Context, arg SetLostPropertyDueParams) error {
+	_, err := q.db.Exec(ctx, setLostPropertyDue, arg.ID, arg.DispositionDue)
+	return err
+}
+
 const setNotificationPreferences = `-- name: SetNotificationPreferences :exec
 INSERT INTO notification_preferences (user_id, categories) VALUES ($1, $2)
 ON CONFLICT (user_id) DO UPDATE SET categories = EXCLUDED.categories, updated_at = now()
@@ -2682,6 +3264,70 @@ type SetNotificationPreferencesParams struct {
 
 func (q *Queries) SetNotificationPreferences(ctx context.Context, arg SetNotificationPreferencesParams) error {
 	_, err := q.db.Exec(ctx, setNotificationPreferences, arg.UserID, arg.Categories)
+	return err
+}
+
+const setOrderDate = `-- name: SetOrderDate :exec
+UPDATE purchase_orders SET order_date = $2 WHERE id = $1
+`
+
+type SetOrderDateParams struct {
+	ID        uuid.UUID   `json:"id"`
+	OrderDate pgtype.Date `json:"order_date"`
+}
+
+func (q *Queries) SetOrderDate(ctx context.Context, arg SetOrderDateParams) error {
+	_, err := q.db.Exec(ctx, setOrderDate, arg.ID, arg.OrderDate)
+	return err
+}
+
+const setPaymentFigures = `-- name: SetPaymentFigures :exec
+UPDATE payment_requisitions SET total_amount = $2, total_currency = $3, tax_clearance_valid = $4 WHERE id = $1
+`
+
+type SetPaymentFiguresParams struct {
+	ID                uuid.UUID `json:"id"`
+	TotalAmount       *string   `json:"total_amount"`
+	TotalCurrency     *string   `json:"total_currency"`
+	TaxClearanceValid bool      `json:"tax_clearance_valid"`
+}
+
+func (q *Queries) SetPaymentFigures(ctx context.Context, arg SetPaymentFiguresParams) error {
+	_, err := q.db.Exec(ctx, setPaymentFigures,
+		arg.ID,
+		arg.TotalAmount,
+		arg.TotalCurrency,
+		arg.TaxClearanceValid,
+	)
+	return err
+}
+
+const setPurchaseOrderTotal = `-- name: SetPurchaseOrderTotal :exec
+UPDATE purchase_orders SET total_amount = $2, total_currency = $3 WHERE id = $1
+`
+
+type SetPurchaseOrderTotalParams struct {
+	ID            uuid.UUID `json:"id"`
+	TotalAmount   *string   `json:"total_amount"`
+	TotalCurrency *string   `json:"total_currency"`
+}
+
+func (q *Queries) SetPurchaseOrderTotal(ctx context.Context, arg SetPurchaseOrderTotalParams) error {
+	_, err := q.db.Exec(ctx, setPurchaseOrderTotal, arg.ID, arg.TotalAmount, arg.TotalCurrency)
+	return err
+}
+
+const setRecallVariance = `-- name: SetRecallVariance :exec
+UPDATE recall_reconciliations SET variance = $2 WHERE id = $1
+`
+
+type SetRecallVarianceParams struct {
+	ID       uuid.UUID `json:"id"`
+	Variance *string   `json:"variance"`
+}
+
+func (q *Queries) SetRecallVariance(ctx context.Context, arg SetRecallVarianceParams) error {
+	_, err := q.db.Exec(ctx, setRecallVariance, arg.ID, arg.Variance)
 	return err
 }
 
@@ -2737,6 +3383,21 @@ func (q *Queries) SetReimbursementTotal(ctx context.Context, arg SetReimbursemen
 		&i.RowVersion,
 	)
 	return i, err
+}
+
+const setReturnClocks = `-- name: SetReturnClocks :exec
+UPDATE stock_returns SET followup_due = $2, closure_due = $3 WHERE id = $1
+`
+
+type SetReturnClocksParams struct {
+	ID          uuid.UUID  `json:"id"`
+	FollowupDue *time.Time `json:"followup_due"`
+	ClosureDue  *time.Time `json:"closure_due"`
+}
+
+func (q *Queries) SetReturnClocks(ctx context.Context, arg SetReturnClocksParams) error {
+	_, err := q.db.Exec(ctx, setReturnClocks, arg.ID, arg.FollowupDue, arg.ClosureDue)
+	return err
 }
 
 const setSubmissionOutcome = `-- name: SetSubmissionOutcome :one
@@ -2809,6 +3470,20 @@ type SetVarianceFiguresParams struct {
 
 func (q *Queries) SetVarianceFigures(ctx context.Context, arg SetVarianceFiguresParams) error {
 	_, err := q.db.Exec(ctx, setVarianceFigures, arg.ID, arg.VarianceAmount, arg.VarianceCurrency)
+	return err
+}
+
+const setVariancePercent = `-- name: SetVariancePercent :exec
+UPDATE budget_variances SET variance_percent = $2 WHERE id = $1
+`
+
+type SetVariancePercentParams struct {
+	ID              uuid.UUID `json:"id"`
+	VariancePercent *string   `json:"variance_percent"`
+}
+
+func (q *Queries) SetVariancePercent(ctx context.Context, arg SetVariancePercentParams) error {
+	_, err := q.db.Exec(ctx, setVariancePercent, arg.ID, arg.VariancePercent)
 	return err
 }
 
@@ -2935,6 +3610,15 @@ func (q *Queries) SkipTaskRow(ctx context.Context, arg SkipTaskRowParams) (Task,
 		&i.RemindedAt,
 	)
 	return i, err
+}
+
+const stampIncidentNotified = `-- name: StampIncidentNotified :exec
+UPDATE incidents SET notified_at = now() WHERE id = $1
+`
+
+func (q *Queries) StampIncidentNotified(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, stampIncidentNotified, id)
+	return err
 }
 
 const supersedePolicies = `-- name: SupersedePolicies :exec

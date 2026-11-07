@@ -446,3 +446,106 @@ UPDATE bank_deposits SET proof_received_at = now() WHERE id = $1;
 
 -- name: RoleByKey :one
 SELECT id FROM roles WHERE "key" = $1;
+
+-- name: QuotationsFor :many
+SELECT * FROM quotations WHERE purchase_requisition_id = $1;
+
+-- name: SetOrderDate :exec
+UPDATE purchase_orders SET order_date = $2 WHERE id = $1;
+
+-- name: SetPurchaseOrderTotal :exec
+UPDATE purchase_orders SET total_amount = $2, total_currency = $3 WHERE id = $1;
+
+-- name: AddReceivedQuantity :exec
+UPDATE purchase_order_lines SET received_quantity = COALESCE(received_quantity, 0) + sqlc.arg(quantity)::numeric
+WHERE purchase_order_id = sqlc.arg(purchase_order_id) AND item_id = sqlc.narg(item_id);
+
+-- name: RefreshPurchaseOrderReceipt :exec
+UPDATE purchase_orders po SET status = CASE
+    WHEN NOT EXISTS (SELECT 1 FROM purchase_order_lines l WHERE l.purchase_order_id = po.id AND COALESCE(l.received_quantity, 0) < l.quantity) THEN 'received'
+    ELSE 'part_received' END,
+  updated_at = now(), row_version = row_version + 1
+WHERE po.id = $1 AND po.status IN ('issued', 'part_received');
+
+-- name: SetInvoiceMatch :one
+UPDATE supplier_invoices SET status = @status, match_status = @match_status, updated_at = now(), updated_by = @updated_by, row_version = row_version + 1
+WHERE id = @id RETURNING *;
+
+-- name: SetPaymentFigures :exec
+UPDATE payment_requisitions SET total_amount = $2, total_currency = $3, tax_clearance_valid = $4 WHERE id = $1;
+
+-- name: SetBatchTotal :exec
+UPDATE payment_batches SET total_amount = $2, total_currency = $3 WHERE id = $1;
+
+-- name: MarkInvoicesPaid :exec
+UPDATE supplier_invoices SET status = 'paid', updated_at = now(), row_version = row_version + 1 WHERE id = ANY($1::uuid[]);
+
+-- name: SetVariancePercent :exec
+UPDATE budget_variances SET variance_percent = $2 WHERE id = $1;
+
+-- name: EscalateBudgetVariance :exec
+UPDATE budget_variances SET status = 'escalated', escalated_at = now(), escalation_due = $2 WHERE id = $1;
+
+-- name: ActiveHolds :one
+SELECT count(*) FROM holds
+WHERE status IN ('on_hold', 'pending_disposition')
+  AND (sqlc.narg(site_id)::uuid IS NULL OR site_id = sqlc.narg(site_id))
+  AND ((sqlc.narg(item_id)::uuid IS NOT NULL AND item_id = sqlc.narg(item_id))
+    OR (sqlc.narg(batch_id)::uuid IS NOT NULL AND batch_id = sqlc.narg(batch_id))
+    OR (sqlc.narg(batch_lot)::text IS NOT NULL AND batch_lot = sqlc.narg(batch_lot)));
+
+-- name: FlagTransferDiscrepancy :exec
+UPDATE stock_transfers SET status = 'discrepancy', tba_followup_due = $2 WHERE id = $1;
+
+-- name: SetReturnClocks :exec
+UPDATE stock_returns SET followup_due = $2, closure_due = $3 WHERE id = $1;
+
+-- name: ApprovedDispositions :one
+SELECT count(*) FROM dispositions WHERE hold_id = $1 AND status IN ('approved', 'executed');
+
+-- name: SetBatchYield :exec
+UPDATE batches SET actual_yield_percent = @actual_yield_percent, standard_yield_percent = COALESCE(sqlc.narg(standard_yield_percent), standard_yield_percent), yield_variance_percent = @yield_variance_percent
+WHERE id = @id;
+
+-- name: FileKitchenOrder :one
+UPDATE kitchen_orders SET status = @status, deadline_at = @deadline_at, submitted_at = now(), late = @late, updated_at = now(), updated_by = @updated_by, row_version = row_version + 1
+WHERE id = @id AND status = 'draft' RETURNING *;
+
+-- name: SetRecallVariance :exec
+UPDATE recall_reconciliations SET variance = $2 WHERE id = $1;
+
+-- name: ReviewedRecallReconciliation :one
+SELECT * FROM recall_reconciliations WHERE recall_id = $1 AND status = 'reviewed' ORDER BY id DESC LIMIT 1;
+
+-- name: ActionsFrom :one
+SELECT count(*) FROM actions WHERE source_type = $1 AND source_id = $2;
+
+-- name: StampIncidentNotified :exec
+UPDATE incidents SET notified_at = now() WHERE id = $1;
+
+-- name: SetLostPropertyDue :exec
+UPDATE lost_property_items SET disposition_due = $2 WHERE id = $1;
+
+-- name: DecideOpening :one
+UPDATE store_openings SET status = @status, rationale = COALESCE(sqlc.narg(rationale), rationale), decided_by = @decided_by, decided_at = now(),
+  updated_at = now(), updated_by = @decided_by, row_version = row_version + 1
+WHERE id = @id RETURNING *;
+
+-- name: GetGoodsReceiptOfLine :one
+SELECT g.* FROM goods_receipts g JOIN goods_receipt_lines l ON l.goods_receipt_id = g.id WHERE l.id = $1;
+
+-- name: DispatchesOfBatch :many
+SELECT DISTINCT d.* FROM dispatch_notes d JOIN dispatch_note_lines l ON l.dispatch_note_id = d.id WHERE l.batch_id = $1;
+
+-- name: ConsolidatedOrders :many
+SELECT l.product_id, l.uom, sum(COALESCE(l.confirmed_quantity, l.quantity))::numeric AS quantity
+FROM kitchen_orders o JOIN kitchen_order_lines l ON l.kitchen_order_id = o.id
+WHERE o.order_date = @order_date AND o.cycle = @cycle AND NOT o.late AND o.status NOT IN ('draft', 'cancelled')
+GROUP BY l.product_id, l.uom;
+
+-- name: ConflictsInBatch :many
+SELECT * FROM sync_conflicts WHERE batch_id = $1;
+
+-- name: OpenStockVariance :one
+INSERT INTO stock_variances (reference, stocktake_id, item_id, variance_quantity, created_by, updated_by)
+VALUES (@reference, @stocktake_id, @item_id, @variance_quantity, @created_by, @created_by) RETURNING *;

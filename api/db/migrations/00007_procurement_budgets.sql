@@ -474,6 +474,7 @@ ALTER TABLE unauthorized_purchases ADD FOREIGN KEY (amount_currency) REFERENCES 
 ALTER TABLE unauthorized_purchases ADD FOREIGN KEY (corrective_action_id) REFERENCES actions (id);
 ALTER TABLE unauthorized_purchases ADD FOREIGN KEY (originator_employee_id) REFERENCES employees (id);
 ALTER TABLE unauthorized_purchases ADD FOREIGN KEY (site_id) REFERENCES sites (id);
+CREATE UNIQUE INDEX supplier_invoice_unique ON supplier_invoices (supplier_id, invoice_number);
 
 -- +goose Down
 

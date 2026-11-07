@@ -474,6 +474,11 @@ type rawBodyKey struct{}
 // webhookBody keeps the raw body, which the signature covers.
 func webhookBody(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasPrefix(r.URL.Path, basePath+"/integrations/inbound/") {
+			ctx := context.WithValue(r.Context(), integrationKey{}, r.Header.Get("X-Integration-Key"))
+			next.ServeHTTP(w, r.WithContext(ctx))
+			return
+		}
 		if !strings.HasPrefix(r.URL.Path, basePath+"/webhooks/") {
 			next.ServeHTTP(w, r)
 			return

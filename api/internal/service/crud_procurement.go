@@ -30,6 +30,9 @@ func (s *Service) GetSupplier(ctx context.Context, id uuid.UUID) (db.Supplier, e
 // CreateSupplier adds one row to suppliers.
 func (s *Service) CreateSupplier(ctx context.Context, p db.CreateSupplierParams) (db.Supplier, error) {
 	var zero db.Supplier
+	if err := s.guard(ctx, "CreateSupplier", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "SUP", nil)
 	if err != nil {
 		return zero, err
@@ -40,7 +43,10 @@ func (s *Service) CreateSupplier(ctx context.Context, p db.CreateSupplierParams)
 	if err != nil {
 		return zero, wrap(err, "create suppliers")
 	}
-	return row, s.audit(ctx, "procurement.supplier.write", "suppliers", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "procurement.supplier.write", "suppliers", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateSupplier", row)
 }
 
 // UpdateSupplier changes one row of suppliers.
@@ -72,6 +78,9 @@ func (s *Service) SubmitSupplier(ctx context.Context, p db.ActSubmitSupplierPara
 	if err := s.checkSod(ctx, "procurement.supplier.submit", "suppliers", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitSupplier", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitSupplier(ctx, p)
 	if err != nil {
@@ -80,7 +89,7 @@ func (s *Service) SubmitSupplier(ctx context.Context, p db.ActSubmitSupplierPara
 	if err := s.audit(ctx, "procurement.supplier.submit", "suppliers", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "SubmitSupplier", row)
 }
 
 // SuspendSupplier is the suspend action on suppliers.
@@ -92,6 +101,9 @@ func (s *Service) SuspendSupplier(ctx context.Context, p db.ActSuspendSupplierPa
 	if err := s.checkSod(ctx, "procurement.supplier.suspend", "suppliers", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SuspendSupplier", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSuspendSupplier(ctx, p)
 	if err != nil {
@@ -100,7 +112,7 @@ func (s *Service) SuspendSupplier(ctx context.Context, p db.ActSuspendSupplierPa
 	if err := s.audit(ctx, "procurement.supplier.suspend", "suppliers", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "SuspendSupplier", row)
 }
 
 // ReinstateSupplier is the reinstate action on suppliers.
@@ -112,6 +124,9 @@ func (s *Service) ReinstateSupplier(ctx context.Context, p db.ActReinstateSuppli
 	if err := s.checkSod(ctx, "procurement.supplier.reinstate", "suppliers", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ReinstateSupplier", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActReinstateSupplier(ctx, p)
 	if err != nil {
@@ -120,7 +135,7 @@ func (s *Service) ReinstateSupplier(ctx context.Context, p db.ActReinstateSuppli
 	if err := s.audit(ctx, "procurement.supplier.reinstate", "suppliers", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReinstateSupplier", row)
 }
 
 // ListSupplierAmendment returns a page of supplier amendments.
@@ -140,12 +155,18 @@ func (s *Service) GetSupplierAmendment(ctx context.Context, id uuid.UUID) (db.Su
 // CreateSupplierAmendment adds one row to supplier amendments.
 func (s *Service) CreateSupplierAmendment(ctx context.Context, p db.CreateSupplierAmendmentParams) (db.SupplierAmendment, error) {
 	var zero db.SupplierAmendment
+	if err := s.guard(ctx, "CreateSupplierAmendment", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateSupplierAmendment(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create supplier amendments")
 	}
-	return row, s.audit(ctx, "procurement.supplier_amendment.write", "supplier_amendments", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "procurement.supplier_amendment.write", "supplier_amendments", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateSupplierAmendment", row)
 }
 
 // SubmitSupplierAmendment is the submit action on supplier amendments.
@@ -157,6 +178,9 @@ func (s *Service) SubmitSupplierAmendment(ctx context.Context, p db.ActSubmitSup
 	if err := s.checkSod(ctx, "procurement.supplier_amendment.submit", "supplier_amendments", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitSupplierAmendment", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitSupplierAmendment(ctx, p)
 	if err != nil {
@@ -165,7 +189,10 @@ func (s *Service) SubmitSupplierAmendment(ctx context.Context, p db.ActSubmitSup
 	if err := s.audit(ctx, "procurement.supplier_amendment.submit", "supplier_amendments", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "supplier_amendments", row.ID, nil, row)
+	if err := s.startApproval(ctx, "supplier_amendments", row.ID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitSupplierAmendment", row)
 }
 
 // ListPurchaseRequisition returns a page of purchase requisitions.
@@ -189,6 +216,9 @@ func (s *Service) CreatePurchaseRequisition(ctx context.Context, p db.CreatePurc
 	if err := canWrite(ctx, &p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreatePurchaseRequisition", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "PR", &p.SiteID)
 	if err != nil {
 		return zero, err
@@ -199,7 +229,10 @@ func (s *Service) CreatePurchaseRequisition(ctx context.Context, p db.CreatePurc
 	if err != nil {
 		return zero, wrap(err, "create purchase requisitions")
 	}
-	return row, s.audit(ctx, "procurement.purchase_requisition.write", "purchase_requisitions", row.ID, &p.SiteID, nil, row)
+	if err := s.audit(ctx, "procurement.purchase_requisition.write", "purchase_requisitions", row.ID, &p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreatePurchaseRequisition", row)
 }
 
 // UpdatePurchaseRequisition changes one row of purchase requisitions.
@@ -231,6 +264,9 @@ func (s *Service) SubmitPurchaseRequisition(ctx context.Context, p db.ActSubmitP
 	if err := s.checkSod(ctx, "procurement.purchase_requisition.submit", "purchase_requisitions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitPurchaseRequisition", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitPurchaseRequisition(ctx, p)
 	if err != nil {
@@ -239,7 +275,10 @@ func (s *Service) SubmitPurchaseRequisition(ctx context.Context, p db.ActSubmitP
 	if err := s.audit(ctx, "procurement.purchase_requisition.submit", "purchase_requisitions", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "purchase_requisitions", row.ID, &row.SiteID, row)
+	if err := s.startApproval(ctx, "purchase_requisitions", row.ID, &row.SiteID, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitPurchaseRequisition", row)
 }
 
 // ValidatePurchaseRequisition is the procurement validates completeness action on purchase requisitions.
@@ -251,6 +290,9 @@ func (s *Service) ValidatePurchaseRequisition(ctx context.Context, p db.ActValid
 	if err := s.checkSod(ctx, "procurement.purchase_requisition.validate", "purchase_requisitions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ValidatePurchaseRequisition", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActValidatePurchaseRequisition(ctx, p)
 	if err != nil {
@@ -259,7 +301,7 @@ func (s *Service) ValidatePurchaseRequisition(ctx context.Context, p db.ActValid
 	if err := s.audit(ctx, "procurement.purchase_requisition.validate", "purchase_requisitions", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ValidatePurchaseRequisition", row)
 }
 
 // ReturnPurchaseRequisition is the return as incomplete action on purchase requisitions.
@@ -271,6 +313,9 @@ func (s *Service) ReturnPurchaseRequisition(ctx context.Context, p db.ActReturnP
 	if err := s.checkSod(ctx, "procurement.purchase_requisition.return", "purchase_requisitions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ReturnPurchaseRequisition", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActReturnPurchaseRequisition(ctx, p)
 	if err != nil {
@@ -279,7 +324,7 @@ func (s *Service) ReturnPurchaseRequisition(ctx context.Context, p db.ActReturnP
 	if err := s.audit(ctx, "procurement.purchase_requisition.return", "purchase_requisitions", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReturnPurchaseRequisition", row)
 }
 
 // PurchaseRequisitionChildren returns the rows of a record's child tables, by API field.
@@ -326,12 +371,18 @@ func (s *Service) GetQuotation(ctx context.Context, id uuid.UUID) (db.Quotation,
 // CreateQuotation adds one row to quotations.
 func (s *Service) CreateQuotation(ctx context.Context, p db.CreateQuotationParams) (db.Quotation, error) {
 	var zero db.Quotation
+	if err := s.guard(ctx, "CreateQuotation", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateQuotation(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create quotations")
 	}
-	return row, s.audit(ctx, "procurement.quotation.write", "quotations", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "procurement.quotation.write", "quotations", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateQuotation", row)
 }
 
 // UpdateQuotation changes one row of quotations.
@@ -383,6 +434,9 @@ func (s *Service) GetPurchaseOrder(ctx context.Context, id uuid.UUID) (db.Purcha
 // CreatePurchaseOrder adds one row to purchase orders.
 func (s *Service) CreatePurchaseOrder(ctx context.Context, p db.CreatePurchaseOrderParams) (db.PurchaseOrder, error) {
 	var zero db.PurchaseOrder
+	if err := s.guard(ctx, "CreatePurchaseOrder", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "PO", nil)
 	if err != nil {
 		return zero, err
@@ -393,7 +447,10 @@ func (s *Service) CreatePurchaseOrder(ctx context.Context, p db.CreatePurchaseOr
 	if err != nil {
 		return zero, wrap(err, "create purchase orders")
 	}
-	return row, s.audit(ctx, "procurement.purchase_order.write", "purchase_orders", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "procurement.purchase_order.write", "purchase_orders", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreatePurchaseOrder", row)
 }
 
 // UpdatePurchaseOrder changes one row of purchase orders.
@@ -425,6 +482,9 @@ func (s *Service) SubmitPurchaseOrder(ctx context.Context, p db.ActSubmitPurchas
 	if err := s.checkSod(ctx, "procurement.purchase_order.submit", "purchase_orders", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitPurchaseOrder", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitPurchaseOrder(ctx, p)
 	if err != nil {
@@ -433,7 +493,10 @@ func (s *Service) SubmitPurchaseOrder(ctx context.Context, p db.ActSubmitPurchas
 	if err := s.audit(ctx, "procurement.purchase_order.submit", "purchase_orders", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "purchase_orders", row.ID, nil, row)
+	if err := s.startApproval(ctx, "purchase_orders", row.ID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitPurchaseOrder", row)
 }
 
 // IssuePurchaseOrder is the issue to supplier action on purchase orders.
@@ -443,6 +506,9 @@ func (s *Service) IssuePurchaseOrder(ctx context.Context, p db.ActIssuePurchaseO
 		return before, err
 	}
 	if err := s.checkSod(ctx, "procurement.purchase_order.issue", "purchase_orders", p.ID); err != nil {
+		return before, err
+	}
+	if err := s.guard(ctx, "IssuePurchaseOrder", before); err != nil {
 		return before, err
 	}
 	p.UpdatedBy = actorID(ctx)
@@ -456,7 +522,7 @@ func (s *Service) IssuePurchaseOrder(ctx context.Context, p db.ActIssuePurchaseO
 	if err := s.audit(ctx, "procurement.purchase_order.issue", "purchase_orders", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "IssuePurchaseOrder", row)
 }
 
 // CancelPurchaseOrder is the cancel action on purchase orders.
@@ -468,6 +534,9 @@ func (s *Service) CancelPurchaseOrder(ctx context.Context, p db.ActCancelPurchas
 	if err := s.checkSod(ctx, "procurement.purchase_order.cancel", "purchase_orders", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "CancelPurchaseOrder", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActCancelPurchaseOrder(ctx, p)
 	if err != nil {
@@ -476,7 +545,7 @@ func (s *Service) CancelPurchaseOrder(ctx context.Context, p db.ActCancelPurchas
 	if err := s.audit(ctx, "procurement.purchase_order.cancel", "purchase_orders", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "CancelPurchaseOrder", row)
 }
 
 // PurchaseOrderChildren returns the rows of a record's child tables, by API field.
@@ -490,20 +559,6 @@ func (s *Service) PurchaseOrderChildren(ctx context.Context, id uuid.UUID) (map[
 		out["lines"] = childRows(rows)
 	}
 	return out, nil
-}
-
-// ReplacePurchaseOrderLines swaps a record's purchase order lines for the given rows.
-func (s *Service) ReplacePurchaseOrderLines(ctx context.Context, id uuid.UUID, rows []db.InsertPurchaseOrderLinesParams) error {
-	if err := s.q(ctx).DeletePurchaseOrderLines(ctx, id); err != nil {
-		return wrap(err, "clear purchase_order_lines")
-	}
-	for _, row := range rows {
-		row.CreatedBy = actorID(ctx)
-		if _, err := s.q(ctx).InsertPurchaseOrderLines(ctx, row); err != nil {
-			return wrap(err, "add purchase_order_lines")
-		}
-	}
-	return nil
 }
 
 // ListGoodsReceipt returns a page of goods receipts.
@@ -527,6 +582,9 @@ func (s *Service) CreateGoodsReceipt(ctx context.Context, p db.CreateGoodsReceip
 	if err := canWrite(ctx, &p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreateGoodsReceipt", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "GRV", &p.SiteID)
 	if err != nil {
 		return zero, err
@@ -537,7 +595,10 @@ func (s *Service) CreateGoodsReceipt(ctx context.Context, p db.CreateGoodsReceip
 	if err != nil {
 		return zero, wrap(err, "create goods receipts")
 	}
-	return row, s.audit(ctx, "procurement.goods_receipt.write", "goods_receipts", row.ID, &p.SiteID, nil, row)
+	if err := s.audit(ctx, "procurement.goods_receipt.write", "goods_receipts", row.ID, &p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateGoodsReceipt", row)
 }
 
 // UpdateGoodsReceipt changes one row of goods receipts.
@@ -569,6 +630,9 @@ func (s *Service) SubmitGoodsReceipt(ctx context.Context, p db.ActSubmitGoodsRec
 	if err := s.checkSod(ctx, "procurement.goods_receipt.submit", "goods_receipts", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitGoodsReceipt", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitGoodsReceipt(ctx, p)
 	if err != nil {
@@ -577,7 +641,7 @@ func (s *Service) SubmitGoodsReceipt(ctx context.Context, p db.ActSubmitGoodsRec
 	if err := s.audit(ctx, "procurement.goods_receipt.submit", "goods_receipts", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "SubmitGoodsReceipt", row)
 }
 
 // GoodsReceiptChildren returns the rows of a record's child tables, by API field.
@@ -624,6 +688,9 @@ func (s *Service) GetDeliveryDiscrepancy(ctx context.Context, id uuid.UUID) (db.
 // CreateDeliveryDiscrepancy adds one row to delivery discrepancies.
 func (s *Service) CreateDeliveryDiscrepancy(ctx context.Context, p db.CreateDeliveryDiscrepancyParams) (db.DeliveryDiscrepancy, error) {
 	var zero db.DeliveryDiscrepancy
+	if err := s.guard(ctx, "CreateDeliveryDiscrepancy", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "DD", nil)
 	if err != nil {
 		return zero, err
@@ -634,7 +701,10 @@ func (s *Service) CreateDeliveryDiscrepancy(ctx context.Context, p db.CreateDeli
 	if err != nil {
 		return zero, wrap(err, "create delivery discrepancies")
 	}
-	return row, s.audit(ctx, "procurement.delivery_discrepancy.write", "delivery_discrepancies", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "procurement.delivery_discrepancy.write", "delivery_discrepancies", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateDeliveryDiscrepancy", row)
 }
 
 // UpdateDeliveryDiscrepancy changes one row of delivery discrepancies.
@@ -666,6 +736,9 @@ func (s *Service) CloseDeliveryDiscrepancy(ctx context.Context, p db.ActCloseDel
 	if err := s.checkSod(ctx, "procurement.delivery_discrepancy.close", "delivery_discrepancies", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "CloseDeliveryDiscrepancy", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	if err := s.requireSignatures(ctx, "delivery_discrepancies", p.ID); err != nil {
 		return before, err
@@ -677,7 +750,7 @@ func (s *Service) CloseDeliveryDiscrepancy(ctx context.Context, p db.ActCloseDel
 	if err := s.audit(ctx, "procurement.delivery_discrepancy.close", "delivery_discrepancies", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "CloseDeliveryDiscrepancy", row)
 }
 
 // ListSupplierInvoice returns a page of supplier invoices.
@@ -697,6 +770,9 @@ func (s *Service) GetSupplierInvoice(ctx context.Context, id uuid.UUID) (db.Supp
 // CreateSupplierInvoice adds one row to supplier invoices.
 func (s *Service) CreateSupplierInvoice(ctx context.Context, p db.CreateSupplierInvoiceParams) (db.SupplierInvoice, error) {
 	var zero db.SupplierInvoice
+	if err := s.guard(ctx, "CreateSupplierInvoice", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "INV", nil)
 	if err != nil {
 		return zero, err
@@ -707,7 +783,10 @@ func (s *Service) CreateSupplierInvoice(ctx context.Context, p db.CreateSupplier
 	if err != nil {
 		return zero, wrap(err, "create supplier invoices")
 	}
-	return row, s.audit(ctx, "procurement.supplier_invoice.write", "supplier_invoices", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "procurement.supplier_invoice.write", "supplier_invoices", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateSupplierInvoice", row)
 }
 
 // UpdateSupplierInvoice changes one row of supplier invoices.
@@ -730,26 +809,6 @@ func (s *Service) UpdateSupplierInvoice(ctx context.Context, p db.UpdateSupplier
 	return row, s.audit(ctx, "procurement.supplier_invoice.write", "supplier_invoices", row.ID, nil, before, row)
 }
 
-// MatchSupplierInvoice is the run three-way match action on supplier invoices.
-func (s *Service) MatchSupplierInvoice(ctx context.Context, p db.ActMatchSupplierInvoiceParams) (db.SupplierInvoice, error) {
-	before, err := s.GetSupplierInvoice(ctx, p.ID)
-	if err != nil {
-		return before, err
-	}
-	if err := s.checkSod(ctx, "procurement.supplier_invoice.match", "supplier_invoices", p.ID); err != nil {
-		return before, err
-	}
-	p.UpdatedBy = actorID(ctx)
-	row, err := s.q(ctx).ActMatchSupplierInvoice(ctx, p)
-	if err != nil {
-		return before, stateError(err, "match supplier invoices")
-	}
-	if err := s.audit(ctx, "procurement.supplier_invoice.match", "supplier_invoices", row.ID, nil, before, row); err != nil {
-		return row, err
-	}
-	return row, nil
-}
-
 // HoldSupplierInvoice is the place on hold action on supplier invoices.
 func (s *Service) HoldSupplierInvoice(ctx context.Context, p db.ActHoldSupplierInvoiceParams) (db.SupplierInvoice, error) {
 	before, err := s.GetSupplierInvoice(ctx, p.ID)
@@ -757,6 +816,9 @@ func (s *Service) HoldSupplierInvoice(ctx context.Context, p db.ActHoldSupplierI
 		return before, err
 	}
 	if err := s.checkSod(ctx, "procurement.supplier_invoice.hold", "supplier_invoices", p.ID); err != nil {
+		return before, err
+	}
+	if err := s.guard(ctx, "HoldSupplierInvoice", before); err != nil {
 		return before, err
 	}
 	p.UpdatedBy = actorID(ctx)
@@ -767,7 +829,7 @@ func (s *Service) HoldSupplierInvoice(ctx context.Context, p db.ActHoldSupplierI
 	if err := s.audit(ctx, "procurement.supplier_invoice.hold", "supplier_invoices", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "HoldSupplierInvoice", row)
 }
 
 // ApproveExceptionSupplierInvoice is the record an authorised exception action on supplier invoices.
@@ -779,6 +841,9 @@ func (s *Service) ApproveExceptionSupplierInvoice(ctx context.Context, p db.ActA
 	if err := s.checkSod(ctx, "procurement.supplier_invoice.approve_exception", "supplier_invoices", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "ApproveExceptionSupplierInvoice", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActApproveExceptionSupplierInvoice(ctx, p)
 	if err != nil {
@@ -787,7 +852,7 @@ func (s *Service) ApproveExceptionSupplierInvoice(ctx context.Context, p db.ActA
 	if err := s.audit(ctx, "procurement.supplier_invoice.approve_exception", "supplier_invoices", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ApproveExceptionSupplierInvoice", row)
 }
 
 // PostSupplierInvoice is the post to sap business one action on supplier invoices.
@@ -797,6 +862,9 @@ func (s *Service) PostSupplierInvoice(ctx context.Context, p db.ActPostSupplierI
 		return before, err
 	}
 	if err := s.checkSod(ctx, "procurement.supplier_invoice.post", "supplier_invoices", p.ID); err != nil {
+		return before, err
+	}
+	if err := s.guard(ctx, "PostSupplierInvoice", before); err != nil {
 		return before, err
 	}
 	p.UpdatedBy = actorID(ctx)
@@ -810,7 +878,7 @@ func (s *Service) PostSupplierInvoice(ctx context.Context, p db.ActPostSupplierI
 	if err := s.audit(ctx, "procurement.supplier_invoice.post", "supplier_invoices", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "PostSupplierInvoice", row)
 }
 
 // SupplierInvoiceChildren returns the rows of a record's child tables, by API field.
@@ -857,6 +925,9 @@ func (s *Service) GetPaymentRequisition(ctx context.Context, id uuid.UUID) (db.P
 // CreatePaymentRequisition adds one row to payment requisitions.
 func (s *Service) CreatePaymentRequisition(ctx context.Context, p db.CreatePaymentRequisitionParams) (db.PaymentRequisition, error) {
 	var zero db.PaymentRequisition
+	if err := s.guard(ctx, "CreatePaymentRequisition", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "PAY", nil)
 	if err != nil {
 		return zero, err
@@ -867,7 +938,10 @@ func (s *Service) CreatePaymentRequisition(ctx context.Context, p db.CreatePayme
 	if err != nil {
 		return zero, wrap(err, "create payment requisitions")
 	}
-	return row, s.audit(ctx, "procurement.payment_requisition.write", "payment_requisitions", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "procurement.payment_requisition.write", "payment_requisitions", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreatePaymentRequisition", row)
 }
 
 // UpdatePaymentRequisition changes one row of payment requisitions.
@@ -899,6 +973,9 @@ func (s *Service) SubmitPaymentRequisition(ctx context.Context, p db.ActSubmitPa
 	if err := s.checkSod(ctx, "procurement.payment_requisition.submit", "payment_requisitions", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitPaymentRequisition", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitPaymentRequisition(ctx, p)
 	if err != nil {
@@ -907,7 +984,10 @@ func (s *Service) SubmitPaymentRequisition(ctx context.Context, p db.ActSubmitPa
 	if err := s.audit(ctx, "procurement.payment_requisition.submit", "payment_requisitions", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "payment_requisitions", row.ID, nil, row)
+	if err := s.startApproval(ctx, "payment_requisitions", row.ID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitPaymentRequisition", row)
 }
 
 // ListPaymentBatch returns a page of payment batches.
@@ -927,6 +1007,9 @@ func (s *Service) GetPaymentBatch(ctx context.Context, id uuid.UUID) (db.Payment
 // CreatePaymentBatch adds one row to payment batches.
 func (s *Service) CreatePaymentBatch(ctx context.Context, p db.CreatePaymentBatchParams) (db.PaymentBatch, error) {
 	var zero db.PaymentBatch
+	if err := s.guard(ctx, "CreatePaymentBatch", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "PBT", nil)
 	if err != nil {
 		return zero, err
@@ -937,7 +1020,10 @@ func (s *Service) CreatePaymentBatch(ctx context.Context, p db.CreatePaymentBatc
 	if err != nil {
 		return zero, wrap(err, "create payment batches")
 	}
-	return row, s.audit(ctx, "procurement.payment_batch.write", "payment_batches", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "procurement.payment_batch.write", "payment_batches", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreatePaymentBatch", row)
 }
 
 // UpdatePaymentBatch changes one row of payment batches.
@@ -969,6 +1055,9 @@ func (s *Service) SubmitPaymentBatch(ctx context.Context, p db.ActSubmitPaymentB
 	if err := s.checkSod(ctx, "procurement.payment_batch.submit", "payment_batches", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitPaymentBatch", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitPaymentBatch(ctx, p)
 	if err != nil {
@@ -977,7 +1066,10 @@ func (s *Service) SubmitPaymentBatch(ctx context.Context, p db.ActSubmitPaymentB
 	if err := s.audit(ctx, "procurement.payment_batch.submit", "payment_batches", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "payment_batches", row.ID, nil, row)
+	if err := s.startApproval(ctx, "payment_batches", row.ID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitPaymentBatch", row)
 }
 
 // RecordExecutionPaymentBatch is the record payment made in the bank portal action on payment batches.
@@ -989,6 +1081,9 @@ func (s *Service) RecordExecutionPaymentBatch(ctx context.Context, p db.ActRecor
 	if err := s.checkSod(ctx, "procurement.payment_batch.record_execution", "payment_batches", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "RecordExecutionPaymentBatch", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActRecordExecutionPaymentBatch(ctx, p)
 	if err != nil {
@@ -997,7 +1092,7 @@ func (s *Service) RecordExecutionPaymentBatch(ctx context.Context, p db.ActRecor
 	if err := s.audit(ctx, "procurement.payment_batch.record_execution", "payment_batches", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "RecordExecutionPaymentBatch", row)
 }
 
 // ListEmergencyProcurement returns a page of emergency procurements.
@@ -1021,6 +1116,9 @@ func (s *Service) CreateEmergencyProcurement(ctx context.Context, p db.CreateEme
 	if err := canWrite(ctx, &p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreateEmergencyProcurement", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "EPR", &p.SiteID)
 	if err != nil {
 		return zero, err
@@ -1031,7 +1129,10 @@ func (s *Service) CreateEmergencyProcurement(ctx context.Context, p db.CreateEme
 	if err != nil {
 		return zero, wrap(err, "create emergency procurements")
 	}
-	return row, s.audit(ctx, "procurement.emergency_procurement.write", "emergency_procurements", row.ID, &p.SiteID, nil, row)
+	if err := s.audit(ctx, "procurement.emergency_procurement.write", "emergency_procurements", row.ID, &p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateEmergencyProcurement", row)
 }
 
 // UpdateEmergencyProcurement changes one row of emergency procurements.
@@ -1063,6 +1164,9 @@ func (s *Service) SubmitEmergencyProcurement(ctx context.Context, p db.ActSubmit
 	if err := s.checkSod(ctx, "procurement.emergency_procurement.submit", "emergency_procurements", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitEmergencyProcurement", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitEmergencyProcurement(ctx, p)
 	if err != nil {
@@ -1071,7 +1175,10 @@ func (s *Service) SubmitEmergencyProcurement(ctx context.Context, p db.ActSubmit
 	if err := s.audit(ctx, "procurement.emergency_procurement.submit", "emergency_procurements", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "emergency_procurements", row.ID, &row.SiteID, row)
+	if err := s.startApproval(ctx, "emergency_procurements", row.ID, &row.SiteID, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitEmergencyProcurement", row)
 }
 
 // ReviewEmergencyProcurement is the record post-purchase review action on emergency procurements.
@@ -1081,6 +1188,9 @@ func (s *Service) ReviewEmergencyProcurement(ctx context.Context, p db.ActReview
 		return before, err
 	}
 	if err := s.checkSod(ctx, "procurement.emergency_procurement.review", "emergency_procurements", p.ID); err != nil {
+		return before, err
+	}
+	if err := s.guard(ctx, "ReviewEmergencyProcurement", before); err != nil {
 		return before, err
 	}
 	p.UpdatedBy = actorID(ctx)
@@ -1094,7 +1204,7 @@ func (s *Service) ReviewEmergencyProcurement(ctx context.Context, p db.ActReview
 	if err := s.audit(ctx, "procurement.emergency_procurement.review", "emergency_procurements", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "ReviewEmergencyProcurement", row)
 }
 
 // ListUnauthorizedPurchase returns a page of unauthorized purchases.
@@ -1118,6 +1228,9 @@ func (s *Service) CreateUnauthorizedPurchase(ctx context.Context, p db.CreateUna
 	if err := canWrite(ctx, &p.SiteID); err != nil {
 		return zero, err
 	}
+	if err := s.guard(ctx, "CreateUnauthorizedPurchase", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "UAP", &p.SiteID)
 	if err != nil {
 		return zero, err
@@ -1128,7 +1241,10 @@ func (s *Service) CreateUnauthorizedPurchase(ctx context.Context, p db.CreateUna
 	if err != nil {
 		return zero, wrap(err, "create unauthorized purchases")
 	}
-	return row, s.audit(ctx, "procurement.unauthorized_purchase.write", "unauthorized_purchases", row.ID, &p.SiteID, nil, row)
+	if err := s.audit(ctx, "procurement.unauthorized_purchase.write", "unauthorized_purchases", row.ID, &p.SiteID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateUnauthorizedPurchase", row)
 }
 
 // UpdateUnauthorizedPurchase changes one row of unauthorized purchases.
@@ -1160,6 +1276,9 @@ func (s *Service) CloseUnauthorizedPurchase(ctx context.Context, p db.ActCloseUn
 	if err := s.checkSod(ctx, "procurement.unauthorized_purchase.close", "unauthorized_purchases", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "CloseUnauthorizedPurchase", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	if err := s.requireSignatures(ctx, "unauthorized_purchases", p.ID); err != nil {
 		return before, err
@@ -1171,7 +1290,7 @@ func (s *Service) CloseUnauthorizedPurchase(ctx context.Context, p db.ActCloseUn
 	if err := s.audit(ctx, "procurement.unauthorized_purchase.close", "unauthorized_purchases", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "CloseUnauthorizedPurchase", row)
 }
 
 // ListBudget returns a page of budgets.
@@ -1191,6 +1310,9 @@ func (s *Service) GetBudget(ctx context.Context, id uuid.UUID) (db.Budget, error
 // CreateBudget adds one row to budgets.
 func (s *Service) CreateBudget(ctx context.Context, p db.CreateBudgetParams) (db.Budget, error) {
 	var zero db.Budget
+	if err := s.guard(ctx, "CreateBudget", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "BUD", nil)
 	if err != nil {
 		return zero, err
@@ -1201,7 +1323,10 @@ func (s *Service) CreateBudget(ctx context.Context, p db.CreateBudgetParams) (db
 	if err != nil {
 		return zero, wrap(err, "create budgets")
 	}
-	return row, s.audit(ctx, "budgets.budget.write", "budgets", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "budgets.budget.write", "budgets", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateBudget", row)
 }
 
 // UpdateBudget changes one row of budgets.
@@ -1233,6 +1358,9 @@ func (s *Service) SubmitBudget(ctx context.Context, p db.ActSubmitBudgetParams) 
 	if err := s.checkSod(ctx, "budgets.budget.submit", "budgets", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitBudget", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitBudget(ctx, p)
 	if err != nil {
@@ -1241,7 +1369,10 @@ func (s *Service) SubmitBudget(ctx context.Context, p db.ActSubmitBudgetParams) 
 	if err := s.audit(ctx, "budgets.budget.submit", "budgets", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "budgets", row.ID, nil, row)
+	if err := s.startApproval(ctx, "budgets", row.ID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitBudget", row)
 }
 
 // BudgetChildren returns the rows of a record's child tables, by API field.
@@ -1322,6 +1453,9 @@ func (s *Service) GetBudgetReallocation(ctx context.Context, id uuid.UUID) (db.B
 // CreateBudgetReallocation adds one row to budget reallocations.
 func (s *Service) CreateBudgetReallocation(ctx context.Context, p db.CreateBudgetReallocationParams) (db.BudgetReallocation, error) {
 	var zero db.BudgetReallocation
+	if err := s.guard(ctx, "CreateBudgetReallocation", &p); err != nil {
+		return zero, err
+	}
 	ref, err := s.nextReference(ctx, "BRA", nil)
 	if err != nil {
 		return zero, err
@@ -1332,7 +1466,10 @@ func (s *Service) CreateBudgetReallocation(ctx context.Context, p db.CreateBudge
 	if err != nil {
 		return zero, wrap(err, "create budget reallocations")
 	}
-	return row, s.audit(ctx, "budgets.budget_reallocation.write", "budget_reallocations", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "budgets.budget_reallocation.write", "budget_reallocations", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateBudgetReallocation", row)
 }
 
 // SubmitBudgetReallocation is the submit action on budget reallocations.
@@ -1344,6 +1481,9 @@ func (s *Service) SubmitBudgetReallocation(ctx context.Context, p db.ActSubmitBu
 	if err := s.checkSod(ctx, "budgets.budget_reallocation.submit", "budget_reallocations", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitBudgetReallocation", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitBudgetReallocation(ctx, p)
 	if err != nil {
@@ -1352,5 +1492,8 @@ func (s *Service) SubmitBudgetReallocation(ctx context.Context, p db.ActSubmitBu
 	if err := s.audit(ctx, "budgets.budget_reallocation.submit", "budget_reallocations", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "budget_reallocations", row.ID, nil, row)
+	if err := s.startApproval(ctx, "budget_reallocations", row.ID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitBudgetReallocation", row)
 }

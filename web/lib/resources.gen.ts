@@ -3548,7 +3548,8 @@ export const RESOURCES: Record<string, Resource> = {
    {
     "name": "source_document_id",
     "label": "Source document",
-    "kind": "uuid"
+    "kind": "ref",
+    "ref": "documents"
    },
    {
     "name": "change_reason",
@@ -3574,9 +3575,9 @@ export const RESOURCES: Record<string, Resource> = {
   "columns": [
    "status",
    "scope_type",
+   "source_document_id",
    "effective_from",
-   "effective_to",
-   "change_reason"
+   "effective_to"
   ],
   "restricted": false,
   "getPath": "/rules/{rule_definition_id}/versions/{rule_version_id}",
@@ -3622,7 +3623,8 @@ export const RESOURCES: Record<string, Resource> = {
     {
      "name": "source_document_id",
      "label": "Source document",
-     "kind": "uuid"
+     "kind": "ref",
+     "ref": "documents"
     },
     {
      "name": "change_reason",
@@ -3797,7 +3799,8 @@ export const RESOURCES: Record<string, Resource> = {
    {
     "name": "source_document_id",
     "label": "Source document",
-    "kind": "uuid"
+    "kind": "ref",
+    "ref": "documents"
    },
    {
     "name": "status",
@@ -3863,9 +3866,9 @@ export const RESOURCES: Record<string, Resource> = {
   "columns": [
    "name",
    "status",
+   "source_document_id",
    "effective_from",
-   "workflow_key",
-   "version"
+   "workflow_key"
   ],
   "restricted": false,
   "getPath": "/approval-policies/{approval_policy_id}",
@@ -3893,7 +3896,8 @@ export const RESOURCES: Record<string, Resource> = {
     {
      "name": "source_document_id",
      "label": "Source document",
-     "kind": "uuid"
+     "kind": "ref",
+     "ref": "documents"
     },
     {
      "name": "steps",
@@ -3966,7 +3970,8 @@ export const RESOURCES: Record<string, Resource> = {
     {
      "name": "source_document_id",
      "label": "Source document",
-     "kind": "uuid"
+     "kind": "ref",
+     "ref": "documents"
     },
     {
      "name": "steps",
@@ -10334,7 +10339,8 @@ export const RESOURCES: Record<string, Resource> = {
     "name": "disciplinary_case_id",
     "label": "Disciplinary case",
     "readOnly": true,
-    "kind": "uuid"
+    "kind": "ref",
+    "ref": "disciplinary-cases"
    },
    {
     "name": "status",
@@ -13189,7 +13195,8 @@ export const RESOURCES: Record<string, Resource> = {
      {
       "name": "item_id",
       "label": "Item",
-      "kind": "uuid"
+      "kind": "ref",
+      "ref": "items"
      },
      {
       "name": "description",
@@ -13310,7 +13317,8 @@ export const RESOURCES: Record<string, Resource> = {
       {
        "name": "item_id",
        "label": "Item",
-       "kind": "uuid"
+       "kind": "ref",
+       "ref": "items"
       },
       {
        "name": "description",
@@ -13416,7 +13424,8 @@ export const RESOURCES: Record<string, Resource> = {
       {
        "name": "item_id",
        "label": "Item",
-       "kind": "uuid"
+       "kind": "ref",
+       "ref": "items"
       },
       {
        "name": "description",
@@ -13856,7 +13865,8 @@ export const RESOURCES: Record<string, Resource> = {
      {
       "name": "item_id",
       "label": "Item",
-      "kind": "uuid"
+      "kind": "ref",
+      "ref": "items"
      },
      {
       "name": "description",
@@ -13954,7 +13964,8 @@ export const RESOURCES: Record<string, Resource> = {
       {
        "name": "item_id",
        "label": "Item",
-       "kind": "uuid"
+       "kind": "ref",
+       "ref": "items"
       },
       {
        "name": "description",
@@ -14039,7 +14050,8 @@ export const RESOURCES: Record<string, Resource> = {
       {
        "name": "item_id",
        "label": "Item",
-       "kind": "uuid"
+       "kind": "ref",
+       "ref": "items"
       },
       {
        "name": "description",
@@ -14219,7 +14231,8 @@ export const RESOURCES: Record<string, Resource> = {
       "name": "item_id",
       "label": "Item",
       "required": true,
-      "kind": "uuid"
+      "kind": "ref",
+      "ref": "items"
      },
      {
       "name": "ordered_quantity",
@@ -14353,7 +14366,8 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "item_id",
        "label": "Item",
        "required": true,
-       "kind": "uuid"
+       "kind": "ref",
+       "ref": "items"
       },
       {
        "name": "ordered_quantity",
@@ -14475,7 +14489,8 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "item_id",
        "label": "Item",
        "required": true,
-       "kind": "uuid"
+       "kind": "ref",
+       "ref": "items"
       },
       {
        "name": "ordered_quantity",
@@ -14588,7 +14603,8 @@ export const RESOURCES: Record<string, Resource> = {
    {
     "name": "item_id",
     "label": "Item",
-    "kind": "uuid"
+    "kind": "ref",
+    "ref": "items"
    },
    {
     "name": "discrepancy_type",
@@ -14675,7 +14691,8 @@ export const RESOURCES: Record<string, Resource> = {
     {
      "name": "item_id",
      "label": "Item",
-     "kind": "uuid"
+     "kind": "ref",
+     "ref": "items"
     },
     {
      "name": "discrepancy_type",
@@ -14734,7 +14751,8 @@ export const RESOURCES: Record<string, Resource> = {
     {
      "name": "item_id",
      "label": "Item",
-     "kind": "uuid"
+     "kind": "ref",
+     "ref": "items"
     },
     {
      "name": "discrepancy_type",
@@ -16677,6 +16695,20701 @@ export const RESOURCES: Record<string, Resource> = {
      "draft"
     ],
     "fields": []
+   }
+  ]
+ },
+ "items": {
+  "slug": "items",
+  "title": "Items",
+  "singular": "Item",
+  "about": "Stock item master. Item codes match GAAP Unity.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/items",
+  "readPermission": "stock.item.read",
+  "fields": [
+   {
+    "name": "code",
+    "label": "Code",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "name",
+    "label": "Name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "category",
+    "label": "Category",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "stock_class",
+    "label": "Stock class",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "dry",
+     "chilled",
+     "frozen",
+     "packaging",
+     "chemical",
+     "consumable"
+    ]
+   },
+   {
+    "name": "uom",
+    "label": "Uom",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "critical",
+    "label": "Critical",
+    "kind": "boolean"
+   },
+   {
+    "name": "rotation",
+    "label": "Rotation",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "fifo",
+     "fefo"
+    ]
+   },
+   {
+    "name": "shelf_life_days",
+    "label": "Shelf life days",
+    "kind": "number"
+   },
+   {
+    "name": "gaap_ref",
+    "label": "Gaap ref",
+    "kind": "text"
+   },
+   {
+    "name": "active",
+    "label": "Active",
+    "kind": "boolean"
+   }
+  ],
+  "columns": [
+   "code",
+   "name",
+   "stock_class",
+   "rotation",
+   "category"
+  ],
+  "restricted": false,
+  "getPath": "/items/{item_id}",
+  "create": {
+   "path": "/items",
+   "permission": "stock.item.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "stock_class",
+     "label": "Stock class",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "dry",
+      "chilled",
+      "frozen",
+      "packaging",
+      "chemical",
+      "consumable"
+     ]
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "critical",
+     "label": "Critical",
+     "kind": "boolean"
+    },
+    {
+     "name": "rotation",
+     "label": "Rotation",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "fifo",
+      "fefo"
+     ]
+    },
+    {
+     "name": "shelf_life_days",
+     "label": "Shelf life days",
+     "kind": "number"
+    },
+    {
+     "name": "gaap_ref",
+     "label": "Gaap ref",
+     "kind": "text"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/items/{item_id}",
+   "permission": "stock.item.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "kind": "text"
+    },
+    {
+     "name": "stock_class",
+     "label": "Stock class",
+     "kind": "enum",
+     "options": [
+      "dry",
+      "chilled",
+      "frozen",
+      "packaging",
+      "chemical",
+      "consumable"
+     ]
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "kind": "text"
+    },
+    {
+     "name": "critical",
+     "label": "Critical",
+     "kind": "boolean"
+    },
+    {
+     "name": "rotation",
+     "label": "Rotation",
+     "kind": "enum",
+     "options": [
+      "fifo",
+      "fefo"
+     ]
+    },
+    {
+     "name": "shelf_life_days",
+     "label": "Shelf life days",
+     "kind": "number"
+    },
+    {
+     "name": "gaap_ref",
+     "label": "Gaap ref",
+     "kind": "text"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  }
+ },
+ "stock-balances": {
+  "slug": "stock-balances",
+  "title": "Stock balances",
+  "singular": "Stock balance",
+  "about": "Read model of balances from GAAP Unity, plus Foodies holds. GAAP Unity remains the authoritative balance.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/stock/balances",
+  "readPermission": "stock.stock_balance.read",
+  "fields": [
+   {
+    "name": "site_id",
+    "label": "Site",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "item_id",
+    "label": "Item",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "items"
+   },
+   {
+    "name": "quantity",
+    "label": "Quantity",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "uom",
+    "label": "Uom",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "held_quantity",
+    "label": "Held quantity",
+    "readOnly": true,
+    "kind": "decimal",
+    "hint": "Under HOLD in Foodies"
+   },
+   {
+    "name": "average_daily_usage",
+    "label": "Average daily usage",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "days_of_cover",
+    "label": "Days of cover",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "as_of",
+    "label": "As of",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "source_run_id",
+    "label": "Source run",
+    "readOnly": true,
+    "kind": "uuid"
+   }
+  ],
+  "columns": [
+   "site_id",
+   "item_id",
+   "as_of",
+   "quantity",
+   "uom"
+  ],
+  "restricted": false,
+  "getPath": "/stock/balances/{stock_balance_id}"
+ },
+ "stock-requisitions": {
+  "slug": "stock-requisitions",
+  "title": "Stock requisitions",
+  "singular": "Stock requisition",
+  "about": "Internal issue from stores. No issue without an authorised requisition.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/stock-requisitions",
+  "readPermission": "stock.stock_requisition.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "requesting_department_id",
+    "label": "Requesting department",
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "requester_employee_id",
+    "label": "Requester",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "issued_by",
+    "label": "Issued by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "issued_at",
+    "label": "Issued",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "acknowledged_at",
+    "label": "Acknowledged",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "submitted",
+     "approved",
+     "issued",
+     "acknowledged",
+     "rejected"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "item_id",
+      "label": "Item",
+      "required": true,
+      "kind": "ref",
+      "ref": "items"
+     },
+     {
+      "name": "requested_quantity",
+      "label": "Requested quantity",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "issued_quantity",
+      "label": "Issued quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "uom",
+      "label": "Uom",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "batch_lot",
+      "label": "Batch lot",
+      "kind": "text"
+     },
+     {
+      "name": "bin_card_ref",
+      "label": "Bin card ref",
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "requesting_department_id",
+   "requester_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/stock-requisitions/{stock_requisition_id}",
+  "create": {
+   "path": "/stock-requisitions",
+   "permission": "stock.stock_requisition.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "requesting_department_id",
+     "label": "Requesting department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "requester_employee_id",
+     "label": "Requester",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "requested_quantity",
+       "label": "Requested quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "issued_quantity",
+       "label": "Issued quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "batch_lot",
+       "label": "Batch lot",
+       "kind": "text"
+      },
+      {
+       "name": "bin_card_ref",
+       "label": "Bin card ref",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/stock-requisitions/{stock_requisition_id}",
+   "permission": "stock.stock_requisition.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "requesting_department_id",
+     "label": "Requesting department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "requester_employee_id",
+     "label": "Requester",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "requested_quantity",
+       "label": "Requested quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "issued_quantity",
+       "label": "Issued quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "batch_lot",
+       "label": "Batch lot",
+       "kind": "text"
+      },
+      {
+       "name": "bin_card_ref",
+       "label": "Bin card ref",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "submitted",
+   "approved",
+   "issued",
+   "acknowledged",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/stock-requisitions/{stock_requisition_id}/submit",
+    "permission": "stock.stock_requisition.submit",
+    "operationId": "submitStockRequisition",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "issue",
+    "label": "Issue stock",
+    "path": "/stock-requisitions/{stock_requisition_id}/issue",
+    "permission": "stock.stock_requisition.issue",
+    "operationId": "issueStockRequisition",
+    "from": [
+     "draft",
+     "submitted",
+     "approved"
+    ],
+    "fields": []
+   },
+   {
+    "key": "acknowledge",
+    "label": "Recipient acknowledges",
+    "path": "/stock-requisitions/{stock_requisition_id}/acknowledge",
+    "permission": "stock.stock_requisition.acknowledge",
+    "operationId": "acknowledgeStockRequisition",
+    "from": [
+     "draft",
+     "submitted",
+     "approved",
+     "issued"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "stock-transfers": {
+  "slug": "stock-transfers",
+  "title": "Stock transfers",
+  "singular": "Stock transfer",
+  "about": "Transfer between stock nodes with security stamp at both ends. Blocked for stock under HOLD.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/stock-transfers",
+  "readPermission": "stock.stock_transfer.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "from_site_id",
+    "label": "From site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "to_site_id",
+    "label": "To site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "requested_by",
+    "label": "Requested by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "vehicle",
+    "label": "Vehicle",
+    "kind": "text"
+   },
+   {
+    "name": "dispatched_at",
+    "label": "Dispatched",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "dispatch_security_employee_id",
+    "label": "Dispatch security",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "arrived_at",
+    "label": "Arrived",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "receiving_security_employee_id",
+    "label": "Receiving security",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "received_by",
+    "label": "Received by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "tba_followup_due",
+    "label": "Tba followup due",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "invoice_attachment_id",
+    "label": "Invoice attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "requested",
+     "accepted",
+     "rejected",
+     "dispatched",
+     "received",
+     "discrepancy",
+     "closed"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "item_id",
+      "label": "Item",
+      "required": true,
+      "kind": "ref",
+      "ref": "items"
+     },
+     {
+      "name": "requested_quantity",
+      "label": "Requested quantity",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "approved_quantity",
+      "label": "Approved quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "dispatched_quantity",
+      "label": "Dispatched quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "received_quantity",
+      "label": "Received quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "uom",
+      "label": "Uom",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "batch_lot",
+      "label": "Batch lot",
+      "kind": "text"
+     },
+     {
+      "name": "condition",
+      "label": "Condition",
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "from_site_id",
+   "to_site_id",
+   "requested_by"
+  ],
+  "restricted": false,
+  "getPath": "/stock-transfers/{stock_transfer_id}",
+  "create": {
+   "path": "/stock-transfers",
+   "permission": "stock.stock_transfer.write",
+   "fields": [
+    {
+     "name": "from_site_id",
+     "label": "From site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "to_site_id",
+     "label": "To site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "vehicle",
+     "label": "Vehicle",
+     "kind": "text"
+    },
+    {
+     "name": "dispatch_security_employee_id",
+     "label": "Dispatch security",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "receiving_security_employee_id",
+     "label": "Receiving security",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "invoice_attachment_id",
+     "label": "Invoice attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "requested_quantity",
+       "label": "Requested quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "approved_quantity",
+       "label": "Approved quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "dispatched_quantity",
+       "label": "Dispatched quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "received_quantity",
+       "label": "Received quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "batch_lot",
+       "label": "Batch lot",
+       "kind": "text"
+      },
+      {
+       "name": "condition",
+       "label": "Condition",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/stock-transfers/{stock_transfer_id}",
+   "permission": "stock.stock_transfer.write",
+   "fields": [
+    {
+     "name": "from_site_id",
+     "label": "From site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "to_site_id",
+     "label": "To site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "vehicle",
+     "label": "Vehicle",
+     "kind": "text"
+    },
+    {
+     "name": "dispatch_security_employee_id",
+     "label": "Dispatch security",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "receiving_security_employee_id",
+     "label": "Receiving security",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "invoice_attachment_id",
+     "label": "Invoice attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "requested_quantity",
+       "label": "Requested quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "approved_quantity",
+       "label": "Approved quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "dispatched_quantity",
+       "label": "Dispatched quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "received_quantity",
+       "label": "Received quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "batch_lot",
+       "label": "Batch lot",
+       "kind": "text"
+      },
+      {
+       "name": "condition",
+       "label": "Condition",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "requested",
+   "accepted",
+   "rejected",
+   "dispatched",
+   "received",
+   "discrepancy",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "accept",
+    "label": "Stock custodian accepts",
+    "path": "/stock-transfers/{stock_transfer_id}/accept",
+    "permission": "stock.stock_transfer.accept",
+    "operationId": "acceptStockTransfer",
+    "from": [
+     "requested"
+    ],
+    "fields": [
+     {
+      "name": "approved_lines",
+      "label": "Approved lines",
+      "kind": "json"
+     }
+    ]
+   },
+   {
+    "key": "reject",
+    "label": "Reject",
+    "path": "/stock-transfers/{stock_transfer_id}/reject",
+    "permission": "stock.stock_transfer.reject",
+    "operationId": "rejectStockTransfer",
+    "from": [
+     "requested",
+     "accepted",
+     "dispatched",
+     "received",
+     "discrepancy"
+    ],
+    "fields": [
+     {
+      "name": "reason",
+      "label": "Reason",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   },
+   {
+    "key": "dispatch",
+    "label": "Dispatch with security check",
+    "path": "/stock-transfers/{stock_transfer_id}/dispatch",
+    "permission": "stock.stock_transfer.dispatch",
+    "operationId": "dispatchStockTransfer",
+    "from": [
+     "requested",
+     "accepted"
+    ],
+    "fields": []
+   },
+   {
+    "key": "receive",
+    "label": "Receive and count",
+    "path": "/stock-transfers/{stock_transfer_id}/receive",
+    "permission": "stock.stock_transfer.receive",
+    "operationId": "receiveStockTransfer",
+    "from": [
+     "requested",
+     "accepted",
+     "dispatched"
+    ],
+    "fields": []
+   },
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/stock-transfers/{stock_transfer_id}/close",
+    "permission": "stock.stock_transfer.close",
+    "operationId": "closeStockTransfer",
+    "from": [
+     "requested",
+     "accepted",
+     "dispatched",
+     "received",
+     "discrepancy"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "stock-returns": {
+  "slug": "stock-returns",
+  "title": "Stock returns",
+  "singular": "Stock return",
+  "about": "Return, TBA and credit-note tracking with separate follow-up and closure clocks.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/stock-returns",
+  "readPermission": "stock.stock_return.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "stock_transfer_id",
+    "label": "Stock transfer",
+    "kind": "ref",
+    "ref": "stock-transfers"
+   },
+   {
+    "name": "from_site_id",
+    "label": "From site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "to_site_id",
+    "label": "To site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "item_id",
+    "label": "Item",
+    "required": true,
+    "kind": "ref",
+    "ref": "items"
+   },
+   {
+    "name": "quantity",
+    "label": "Quantity",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "followup_due",
+    "label": "Followup due",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "credit_note_reference",
+    "label": "Credit note reference",
+    "kind": "text"
+   },
+   {
+    "name": "closure_due",
+    "label": "Closure due",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "followed_up",
+     "credited",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "stock_transfer_id",
+   "from_site_id",
+   "to_site_id"
+  ],
+  "restricted": false,
+  "getPath": "/stock-returns/{stock_return_id}",
+  "create": {
+   "path": "/stock-returns",
+   "permission": "stock.stock_return.write",
+   "fields": [
+    {
+     "name": "stock_transfer_id",
+     "label": "Stock transfer",
+     "kind": "ref",
+     "ref": "stock-transfers"
+    },
+    {
+     "name": "from_site_id",
+     "label": "From site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "to_site_id",
+     "label": "To site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "required": true,
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "credit_note_reference",
+     "label": "Credit note reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/stock-returns/{stock_return_id}",
+   "permission": "stock.stock_return.write",
+   "fields": [
+    {
+     "name": "stock_transfer_id",
+     "label": "Stock transfer",
+     "kind": "ref",
+     "ref": "stock-transfers"
+    },
+    {
+     "name": "from_site_id",
+     "label": "From site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "to_site_id",
+     "label": "To site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "credit_note_reference",
+     "label": "Credit note reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "followed_up",
+   "credited",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/stock-returns/{stock_return_id}/close",
+    "permission": "stock.stock_return.close",
+    "operationId": "closeStockReturn",
+    "from": [
+     "open",
+     "followed_up",
+     "credited"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "stocktakes": {
+  "slug": "stocktakes",
+  "title": "Stocktakes",
+  "singular": "Stocktake",
+  "about": "Shift, close-of-day, month-end, year-end or cycle count, reconciled to DRS, GAAP Unity and Bin Card. A skipped count needs approval and an alternative control.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/stocktakes",
+  "readPermission": "stock.stocktake.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "shift_open",
+     "shift_close",
+     "close_of_business",
+     "cycle",
+     "month_end",
+     "year_end"
+    ]
+   },
+   {
+    "name": "count_date",
+    "label": "Count date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "shift",
+    "label": "Shift",
+    "kind": "text"
+   },
+   {
+    "name": "finance_instruction_ref",
+    "label": "Finance instruction ref",
+    "kind": "text"
+   },
+   {
+    "name": "alternative_control",
+    "label": "Alternative control",
+    "kind": "text"
+   },
+   {
+    "name": "system_capture_ref",
+    "label": "System capture ref",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "planned",
+     "counting",
+     "submitted",
+     "reviewed",
+     "approved",
+     "posted",
+     "skipped"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "item_id",
+      "label": "Item",
+      "required": true,
+      "kind": "ref",
+      "ref": "items"
+     },
+     {
+      "name": "location_id",
+      "label": "Location",
+      "kind": "ref",
+      "ref": "storage-locations"
+     },
+     {
+      "name": "sheet_number",
+      "label": "Sheet number",
+      "kind": "text"
+     },
+     {
+      "name": "counter_employee_id",
+      "label": "Counter",
+      "kind": "ref",
+      "ref": "employees"
+     },
+     {
+      "name": "count_1",
+      "label": "Count 1",
+      "kind": "decimal"
+     },
+     {
+      "name": "count_2",
+      "label": "Count 2",
+      "kind": "decimal"
+     },
+     {
+      "name": "recount",
+      "label": "Recount",
+      "kind": "decimal"
+     },
+     {
+      "name": "drs_quantity",
+      "label": "Drs quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "gaap_quantity",
+      "label": "Gaap quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "bin_card_quantity",
+      "label": "Bin card quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "obsolete",
+      "label": "Obsolete",
+      "kind": "boolean"
+     },
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "kind",
+   "site_id",
+   "count_date"
+  ],
+  "restricted": false,
+  "getPath": "/stocktakes/{stocktake_id}",
+  "create": {
+   "path": "/stocktakes",
+   "permission": "stock.stocktake.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "shift_open",
+      "shift_close",
+      "close_of_business",
+      "cycle",
+      "month_end",
+      "year_end"
+     ]
+    },
+    {
+     "name": "count_date",
+     "label": "Count date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "kind": "text"
+    },
+    {
+     "name": "finance_instruction_ref",
+     "label": "Finance instruction ref",
+     "kind": "text"
+    },
+    {
+     "name": "alternative_control",
+     "label": "Alternative control",
+     "kind": "text"
+    },
+    {
+     "name": "system_capture_ref",
+     "label": "System capture ref",
+     "kind": "text"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "location_id",
+       "label": "Location",
+       "kind": "ref",
+       "ref": "storage-locations"
+      },
+      {
+       "name": "sheet_number",
+       "label": "Sheet number",
+       "kind": "text"
+      },
+      {
+       "name": "counter_employee_id",
+       "label": "Counter",
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "count_1",
+       "label": "Count 1",
+       "kind": "decimal"
+      },
+      {
+       "name": "count_2",
+       "label": "Count 2",
+       "kind": "decimal"
+      },
+      {
+       "name": "recount",
+       "label": "Recount",
+       "kind": "decimal"
+      },
+      {
+       "name": "drs_quantity",
+       "label": "Drs quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "gaap_quantity",
+       "label": "Gaap quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "bin_card_quantity",
+       "label": "Bin card quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "obsolete",
+       "label": "Obsolete",
+       "kind": "boolean"
+      },
+      {
+       "name": "comment",
+       "label": "Comment",
+       "kind": "textarea"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/stocktakes/{stocktake_id}",
+   "permission": "stock.stocktake.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "kind": "enum",
+     "options": [
+      "shift_open",
+      "shift_close",
+      "close_of_business",
+      "cycle",
+      "month_end",
+      "year_end"
+     ]
+    },
+    {
+     "name": "count_date",
+     "label": "Count date",
+     "kind": "date"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "kind": "text"
+    },
+    {
+     "name": "finance_instruction_ref",
+     "label": "Finance instruction ref",
+     "kind": "text"
+    },
+    {
+     "name": "alternative_control",
+     "label": "Alternative control",
+     "kind": "text"
+    },
+    {
+     "name": "system_capture_ref",
+     "label": "System capture ref",
+     "kind": "text"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "location_id",
+       "label": "Location",
+       "kind": "ref",
+       "ref": "storage-locations"
+      },
+      {
+       "name": "sheet_number",
+       "label": "Sheet number",
+       "kind": "text"
+      },
+      {
+       "name": "counter_employee_id",
+       "label": "Counter",
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "count_1",
+       "label": "Count 1",
+       "kind": "decimal"
+      },
+      {
+       "name": "count_2",
+       "label": "Count 2",
+       "kind": "decimal"
+      },
+      {
+       "name": "recount",
+       "label": "Recount",
+       "kind": "decimal"
+      },
+      {
+       "name": "drs_quantity",
+       "label": "Drs quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "gaap_quantity",
+       "label": "Gaap quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "bin_card_quantity",
+       "label": "Bin card quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "obsolete",
+       "label": "Obsolete",
+       "kind": "boolean"
+      },
+      {
+       "name": "comment",
+       "label": "Comment",
+       "kind": "textarea"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "planned",
+   "counting",
+   "submitted",
+   "reviewed",
+   "approved",
+   "posted",
+   "skipped"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/stocktakes/{stocktake_id}/submit",
+    "permission": "stock.stocktake.submit",
+    "operationId": "submitStocktake",
+    "from": [
+     "planned"
+    ],
+    "fields": []
+   },
+   {
+    "key": "approve",
+    "label": "Approve",
+    "path": "/stocktakes/{stocktake_id}/approve",
+    "permission": "stock.stocktake.approve",
+    "operationId": "approveStocktake",
+    "from": [
+     "planned",
+     "counting",
+     "submitted",
+     "reviewed"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     }
+    ]
+   },
+   {
+    "key": "request-skip",
+    "label": "Request approval to skip",
+    "path": "/stocktakes/{stocktake_id}/request-skip",
+    "permission": "stock.stocktake.request_skip",
+    "operationId": "requestSkipStocktake",
+    "from": [
+     "planned"
+    ],
+    "fields": [
+     {
+      "name": "reason",
+      "label": "Reason",
+      "required": true,
+      "kind": "textarea"
+     },
+     {
+      "name": "alternative_control",
+      "label": "Alternative control",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "stock-variances": {
+  "slug": "stock-variances",
+  "title": "Stock variances",
+  "singular": "Stock variance",
+  "about": "Investigation opened for every stock variance.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/stock-variances",
+  "readPermission": "stock.stock_variance.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "stocktake_id",
+    "label": "Stocktake",
+    "required": true,
+    "kind": "ref",
+    "ref": "stocktakes"
+   },
+   {
+    "name": "item_id",
+    "label": "Item",
+    "required": true,
+    "kind": "ref",
+    "ref": "items"
+   },
+   {
+    "name": "variance_quantity",
+    "label": "Variance quantity",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "variance_value",
+    "label": "Variance value",
+    "kind": "money"
+   },
+   {
+    "name": "documents_checked",
+    "label": "Documents checked",
+    "kind": "list"
+   },
+   {
+    "name": "root_cause",
+    "label": "Root cause",
+    "kind": "text"
+   },
+   {
+    "name": "classification",
+    "label": "Classification",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "timing",
+     "capture",
+     "actual_loss"
+    ]
+   },
+   {
+    "name": "responsible_employee_id",
+    "label": "Responsible",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "recovery",
+    "label": "Recovery",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "investigating",
+     "resolved",
+     "escalated",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "classification",
+   "stocktake_id",
+   "item_id"
+  ],
+  "restricted": false,
+  "getPath": "/stock-variances/{stock_variance_id}",
+  "update": {
+   "path": "/stock-variances/{stock_variance_id}",
+   "permission": "stock.stock_variance.write",
+   "fields": [
+    {
+     "name": "stocktake_id",
+     "label": "Stocktake",
+     "kind": "ref",
+     "ref": "stocktakes"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "variance_quantity",
+     "label": "Variance quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "variance_value",
+     "label": "Variance value",
+     "kind": "money"
+    },
+    {
+     "name": "documents_checked",
+     "label": "Documents checked",
+     "kind": "list"
+    },
+    {
+     "name": "root_cause",
+     "label": "Root cause",
+     "kind": "text"
+    },
+    {
+     "name": "responsible_employee_id",
+     "label": "Responsible",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "recovery",
+     "label": "Recovery",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "investigating",
+   "resolved",
+   "escalated",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/stock-variances/{stock_variance_id}/close",
+    "permission": "stock.stock_variance.close",
+    "operationId": "closeStockVariance",
+    "from": [
+     "open",
+     "investigating",
+     "resolved",
+     "escalated"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "stock-adjustments": {
+  "slug": "stock-adjustments",
+  "title": "Stock adjustments",
+  "singular": "Stock adjustment",
+  "about": "Controlled adjustment with reason tag. Approved here, then posted to GAAP Unity.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/stock-adjustments",
+  "readPermission": "stock.stock_adjustment.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "item_id",
+    "label": "Item",
+    "required": true,
+    "kind": "ref",
+    "ref": "items"
+   },
+   {
+    "name": "quantity",
+    "label": "Quantity",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "value",
+    "label": "Value",
+    "kind": "money"
+   },
+   {
+    "name": "reason_tag",
+    "label": "Reason tag",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "wastage",
+     "damage",
+     "off_cuts",
+     "donation",
+     "expired_inventory",
+     "variance",
+     "other"
+    ]
+   },
+   {
+    "name": "root_cause",
+    "label": "Root cause",
+    "kind": "text"
+   },
+   {
+    "name": "stock_variance_id",
+    "label": "Stock variance",
+    "kind": "ref",
+    "ref": "stock-variances"
+   },
+   {
+    "name": "supporting_attachment_id",
+    "label": "Supporting attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "system_adjustment_ref",
+    "label": "System adjustment ref",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "posted",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "reason_tag",
+   "site_id",
+   "item_id"
+  ],
+  "restricted": false,
+  "getPath": "/stock-adjustments/{stock_adjustment_id}",
+  "create": {
+   "path": "/stock-adjustments",
+   "permission": "stock.stock_adjustment.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "required": true,
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "value",
+     "label": "Value",
+     "kind": "money"
+    },
+    {
+     "name": "reason_tag",
+     "label": "Reason tag",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "wastage",
+      "damage",
+      "off_cuts",
+      "donation",
+      "expired_inventory",
+      "variance",
+      "other"
+     ]
+    },
+    {
+     "name": "root_cause",
+     "label": "Root cause",
+     "kind": "text"
+    },
+    {
+     "name": "stock_variance_id",
+     "label": "Stock variance",
+     "kind": "ref",
+     "ref": "stock-variances"
+    },
+    {
+     "name": "supporting_attachment_id",
+     "label": "Supporting attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "update": {
+   "path": "/stock-adjustments/{stock_adjustment_id}",
+   "permission": "stock.stock_adjustment.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "value",
+     "label": "Value",
+     "kind": "money"
+    },
+    {
+     "name": "reason_tag",
+     "label": "Reason tag",
+     "kind": "enum",
+     "options": [
+      "wastage",
+      "damage",
+      "off_cuts",
+      "donation",
+      "expired_inventory",
+      "variance",
+      "other"
+     ]
+    },
+    {
+     "name": "root_cause",
+     "label": "Root cause",
+     "kind": "text"
+    },
+    {
+     "name": "stock_variance_id",
+     "label": "Stock variance",
+     "kind": "ref",
+     "ref": "stock-variances"
+    },
+    {
+     "name": "supporting_attachment_id",
+     "label": "Supporting attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "posted",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/stock-adjustments/{stock_adjustment_id}/submit",
+    "permission": "stock.stock_adjustment.submit",
+    "operationId": "submitStockAdjustment",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "waste-records": {
+  "slug": "waste-records",
+  "title": "Waste records",
+  "singular": "Waste record",
+  "about": "Waste at point of occurrence.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/waste-records",
+  "readPermission": "stock.waste_record.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "occurred_at",
+    "label": "Occurred",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "item_id",
+    "label": "Item",
+    "kind": "ref",
+    "ref": "items"
+   },
+   {
+    "name": "product_id",
+    "label": "Product",
+    "kind": "ref",
+    "ref": "products"
+   },
+   {
+    "name": "batch_id",
+    "label": "Batch",
+    "kind": "ref",
+    "ref": "batches"
+   },
+   {
+    "name": "quantity",
+    "label": "Quantity",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "uom",
+    "label": "Uom",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "category",
+    "label": "Category",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "trimming",
+     "cooking_loss",
+     "spoilage",
+     "expiry",
+     "damage",
+     "over_production",
+     "reject",
+     "over_portioning",
+     "contamination",
+     "other"
+    ]
+   },
+   {
+    "name": "cause",
+    "label": "Cause",
+    "kind": "text"
+   },
+   {
+    "name": "value",
+    "label": "Value",
+    "kind": "money"
+   },
+   {
+    "name": "photo_attachment_id",
+    "label": "Photo attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "disposition",
+    "label": "Disposition",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "recorded",
+     "reviewed",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "category",
+   "site_id",
+   "item_id"
+  ],
+  "restricted": false,
+  "getPath": "/waste-records/{waste_record_id}",
+  "create": {
+   "path": "/waste-records",
+   "permission": "stock.waste_record.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "occurred_at",
+     "label": "Occurred",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "trimming",
+      "cooking_loss",
+      "spoilage",
+      "expiry",
+      "damage",
+      "over_production",
+      "reject",
+      "over_portioning",
+      "contamination",
+      "other"
+     ]
+    },
+    {
+     "name": "cause",
+     "label": "Cause",
+     "kind": "text"
+    },
+    {
+     "name": "value",
+     "label": "Value",
+     "kind": "money"
+    },
+    {
+     "name": "photo_attachment_id",
+     "label": "Photo attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "disposition",
+     "label": "Disposition",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/waste-records/{waste_record_id}",
+   "permission": "stock.waste_record.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "occurred_at",
+     "label": "Occurred",
+     "kind": "datetime"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "kind": "enum",
+     "options": [
+      "trimming",
+      "cooking_loss",
+      "spoilage",
+      "expiry",
+      "damage",
+      "over_production",
+      "reject",
+      "over_portioning",
+      "contamination",
+      "other"
+     ]
+    },
+    {
+     "name": "cause",
+     "label": "Cause",
+     "kind": "text"
+    },
+    {
+     "name": "value",
+     "label": "Value",
+     "kind": "money"
+    },
+    {
+     "name": "photo_attachment_id",
+     "label": "Photo attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "disposition",
+     "label": "Disposition",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "recorded",
+   "reviewed",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "review",
+    "label": "Supervisor review",
+    "path": "/waste-records/{waste_record_id}/review",
+    "permission": "stock.waste_record.review",
+    "operationId": "reviewWasteRecord",
+    "from": [
+     "recorded"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "disposals": {
+  "slug": "disposals",
+  "title": "Disposals",
+  "singular": "Disposal",
+  "about": "Disposal and write-off. Never one person alone; approval comes before the adjustment.",
+  "group": "Stock",
+  "tile": "inventory-stores",
+  "listPath": "/disposals",
+  "readPermission": "stock.disposal.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "item_id",
+    "label": "Item",
+    "kind": "ref",
+    "ref": "items"
+   },
+   {
+    "name": "batch_id",
+    "label": "Batch",
+    "kind": "ref",
+    "ref": "batches"
+   },
+   {
+    "name": "hold_id",
+    "label": "Hold",
+    "kind": "ref",
+    "ref": "holds"
+   },
+   {
+    "name": "quantity",
+    "label": "Quantity",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "value",
+    "label": "Value",
+    "kind": "money"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "method",
+    "label": "Method",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "location",
+    "label": "Location",
+    "kind": "text"
+   },
+   {
+    "name": "witness_employee_id",
+    "label": "Witness",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "stock_adjustment_id",
+    "label": "Stock adjustment",
+    "kind": "ref",
+    "ref": "stock-adjustments"
+   },
+   {
+    "name": "disposed_at",
+    "label": "Disposed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "evidence_attachment_ids",
+    "label": "Evidence attachments",
+    "kind": "list"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "disposed",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "item_id",
+   "batch_id"
+  ],
+  "restricted": false,
+  "getPath": "/disposals/{disposal_id}",
+  "create": {
+   "path": "/disposals",
+   "permission": "stock.disposal.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "hold_id",
+     "label": "Hold",
+     "kind": "ref",
+     "ref": "holds"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "value",
+     "label": "Value",
+     "kind": "money"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "method",
+     "label": "Method",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "location",
+     "label": "Location",
+     "kind": "text"
+    },
+    {
+     "name": "witness_employee_id",
+     "label": "Witness",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "stock_adjustment_id",
+     "label": "Stock adjustment",
+     "kind": "ref",
+     "ref": "stock-adjustments"
+    },
+    {
+     "name": "evidence_attachment_ids",
+     "label": "Evidence attachments",
+     "kind": "list"
+    }
+   ]
+  },
+  "update": {
+   "path": "/disposals/{disposal_id}",
+   "permission": "stock.disposal.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "hold_id",
+     "label": "Hold",
+     "kind": "ref",
+     "ref": "holds"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "value",
+     "label": "Value",
+     "kind": "money"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "method",
+     "label": "Method",
+     "kind": "text"
+    },
+    {
+     "name": "location",
+     "label": "Location",
+     "kind": "text"
+    },
+    {
+     "name": "witness_employee_id",
+     "label": "Witness",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "stock_adjustment_id",
+     "label": "Stock adjustment",
+     "kind": "ref",
+     "ref": "stock-adjustments"
+    },
+    {
+     "name": "evidence_attachment_ids",
+     "label": "Evidence attachments",
+     "kind": "list"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "disposed",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/disposals/{disposal_id}/submit",
+    "permission": "stock.disposal.submit",
+    "operationId": "submitDisposal",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "record-disposal",
+    "label": "Record disposal done",
+    "path": "/disposals/{disposal_id}/record-disposal",
+    "permission": "stock.disposal.record_disposal",
+    "operationId": "recordDisposalDisposal",
+    "from": [
+     "approved"
+    ],
+    "fields": [
+     {
+      "name": "disposed_at",
+      "label": "Disposed",
+      "required": true,
+      "kind": "datetime"
+     }
+    ]
+   }
+  ]
+ },
+ "recipes": {
+  "slug": "recipes",
+  "title": "Recipes",
+  "singular": "Recipe",
+  "about": "Controlled recipe or specification. Access is restricted.",
+  "group": "Central Kitchen & Production",
+  "tile": "production-kitchen",
+  "listPath": "/recipes",
+  "readPermission": "production.recipe.read",
+  "fields": [
+   {
+    "name": "code",
+    "label": "Code",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "name",
+    "label": "Name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "product_id",
+    "label": "Product",
+    "kind": "ref",
+    "ref": "products"
+   },
+   {
+    "name": "owner_role_id",
+    "label": "Owner role",
+    "kind": "ref",
+    "ref": "roles"
+   },
+   {
+    "name": "current_version_id",
+    "label": "Current version",
+    "readOnly": true,
+    "kind": "uuid"
+   },
+   {
+    "name": "active",
+    "label": "Active",
+    "kind": "boolean"
+   }
+  ],
+  "columns": [
+   "code",
+   "name",
+   "product_id",
+   "owner_role_id",
+   "active"
+  ],
+  "restricted": true,
+  "getPath": "/recipes/{recipe_id}",
+  "create": {
+   "path": "/recipes",
+   "permission": "production.recipe.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "owner_role_id",
+     "label": "Owner role",
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/recipes/{recipe_id}",
+   "permission": "production.recipe.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "kind": "text"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "owner_role_id",
+     "label": "Owner role",
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  }
+ },
+ "recipe-versions": {
+  "slug": "recipe-versions",
+  "title": "Recipe versions",
+  "singular": "Recipe version",
+  "about": "Approved recipe revision with standard yield.",
+  "group": "Central Kitchen & Production",
+  "tile": "production-kitchen",
+  "listPath": "/recipes/{recipe_id}/versions",
+  "readPermission": "production.recipe_version.read",
+  "fields": [
+   {
+    "name": "version",
+    "label": "Version",
+    "readOnly": true,
+    "kind": "number"
+   },
+   {
+    "name": "batch_size",
+    "label": "Batch size",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "uom",
+    "label": "Uom",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "standard_output",
+    "label": "Standard output",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "standard_yield_percent",
+    "label": "Standard yield percent",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "normal_waste_percent",
+    "label": "Normal waste percent",
+    "kind": "decimal"
+   },
+   {
+    "name": "method_document_id",
+    "label": "Method document",
+    "kind": "ref",
+    "ref": "documents"
+   },
+   {
+    "name": "effective_from",
+    "label": "Effective from",
+    "kind": "date"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "active",
+     "superseded"
+    ]
+   },
+   {
+    "name": "ingredients",
+    "label": "Ingredients",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "item_id",
+      "label": "Item",
+      "required": true,
+      "kind": "ref",
+      "ref": "items"
+     },
+     {
+      "name": "quantity",
+      "label": "Quantity",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "uom",
+      "label": "Uom",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "allergen_tags",
+      "label": "Allergen tags",
+      "kind": "list"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "method_document_id",
+   "effective_from",
+   "version",
+   "batch_size"
+  ],
+  "restricted": true,
+  "getPath": "/recipes/{recipe_id}/versions/{recipe_version_id}",
+  "create": {
+   "path": "/recipes/{recipe_id}/versions",
+   "permission": "production.recipe_version.write",
+   "fields": [
+    {
+     "name": "batch_size",
+     "label": "Batch size",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "standard_output",
+     "label": "Standard output",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "standard_yield_percent",
+     "label": "Standard yield percent",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "normal_waste_percent",
+     "label": "Normal waste percent",
+     "kind": "decimal"
+    },
+    {
+     "name": "method_document_id",
+     "label": "Method document",
+     "kind": "ref",
+     "ref": "documents"
+    },
+    {
+     "name": "effective_from",
+     "label": "Effective from",
+     "kind": "date"
+    },
+    {
+     "name": "ingredients",
+     "label": "Ingredients",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "quantity",
+       "label": "Quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "allergen_tags",
+       "label": "Allergen tags",
+       "kind": "list"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/recipes/{recipe_id}/versions/{recipe_version_id}",
+   "permission": "production.recipe_version.write",
+   "fields": [
+    {
+     "name": "batch_size",
+     "label": "Batch size",
+     "kind": "decimal"
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "kind": "text"
+    },
+    {
+     "name": "standard_output",
+     "label": "Standard output",
+     "kind": "decimal"
+    },
+    {
+     "name": "standard_yield_percent",
+     "label": "Standard yield percent",
+     "kind": "decimal"
+    },
+    {
+     "name": "normal_waste_percent",
+     "label": "Normal waste percent",
+     "kind": "decimal"
+    },
+    {
+     "name": "method_document_id",
+     "label": "Method document",
+     "kind": "ref",
+     "ref": "documents"
+    },
+    {
+     "name": "effective_from",
+     "label": "Effective from",
+     "kind": "date"
+    },
+    {
+     "name": "ingredients",
+     "label": "Ingredients",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "quantity",
+       "label": "Quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "allergen_tags",
+       "label": "Allergen tags",
+       "kind": "list"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "active",
+   "superseded"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/recipes/{recipe_id}/versions/{recipe_version_id}/submit",
+    "permission": "production.recipe_version.submit",
+    "operationId": "submitRecipeVersion",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ],
+  "nestedUnder": "recipes"
+ },
+ "kitchen-orders": {
+  "slug": "kitchen-orders",
+  "title": "Kitchen orders",
+  "singular": "Kitchen order",
+  "about": "Branch order in the morning or evening cycle. Deadlines come from `ck.order_deadline_*`. Unusual quantities are flagged.",
+  "group": "Central Kitchen & Production",
+  "tile": "production-kitchen",
+  "listPath": "/central-kitchen/orders",
+  "readPermission": "production.kitchen_order.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "cycle",
+    "label": "Cycle",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "morning",
+     "evening"
+    ]
+   },
+   {
+    "name": "order_date",
+    "label": "Order date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "supervisor_employee_id",
+    "label": "Supervisor",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "deadline_at",
+    "label": "Deadline",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "submitted_at",
+    "label": "Submitted",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "late",
+    "label": "Late",
+    "readOnly": true,
+    "kind": "boolean"
+   },
+   {
+    "name": "late_reason",
+    "label": "Late reason",
+    "kind": "text"
+   },
+   {
+    "name": "expected_submission_at",
+    "label": "Expected submission",
+    "kind": "datetime"
+   },
+   {
+    "name": "acknowledged_by",
+    "label": "Acknowledged by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "submitted",
+     "late_pending",
+     "confirmed",
+     "planned",
+     "dispatched",
+     "received",
+     "cancelled"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "product_id",
+      "label": "Product",
+      "required": true,
+      "kind": "ref",
+      "ref": "products"
+     },
+     {
+      "name": "quantity",
+      "label": "Quantity",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "uom",
+      "label": "Uom",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "stock_on_hand",
+      "label": "Stock on hand",
+      "kind": "decimal"
+     },
+     {
+      "name": "par_level",
+      "label": "Par level",
+      "kind": "decimal"
+     },
+     {
+      "name": "expected_sales",
+      "label": "Expected sales",
+      "kind": "decimal"
+     },
+     {
+      "name": "confirmed_quantity",
+      "label": "Confirmed quantity",
+      "kind": "decimal"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "cycle",
+   "site_id",
+   "supervisor_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/central-kitchen/orders/{kitchen_order_id}",
+  "create": {
+   "path": "/central-kitchen/orders",
+   "permission": "production.kitchen_order.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "cycle",
+     "label": "Cycle",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "name": "order_date",
+     "label": "Order date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "supervisor_employee_id",
+     "label": "Supervisor",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "late_reason",
+     "label": "Late reason",
+     "kind": "text"
+    },
+    {
+     "name": "expected_submission_at",
+     "label": "Expected submission",
+     "kind": "datetime"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "product_id",
+       "label": "Product",
+       "required": true,
+       "kind": "ref",
+       "ref": "products"
+      },
+      {
+       "name": "quantity",
+       "label": "Quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "stock_on_hand",
+       "label": "Stock on hand",
+       "kind": "decimal"
+      },
+      {
+       "name": "par_level",
+       "label": "Par level",
+       "kind": "decimal"
+      },
+      {
+       "name": "expected_sales",
+       "label": "Expected sales",
+       "kind": "decimal"
+      },
+      {
+       "name": "confirmed_quantity",
+       "label": "Confirmed quantity",
+       "kind": "decimal"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/central-kitchen/orders/{kitchen_order_id}",
+   "permission": "production.kitchen_order.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "cycle",
+     "label": "Cycle",
+     "kind": "enum",
+     "options": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "name": "order_date",
+     "label": "Order date",
+     "kind": "date"
+    },
+    {
+     "name": "supervisor_employee_id",
+     "label": "Supervisor",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "late_reason",
+     "label": "Late reason",
+     "kind": "text"
+    },
+    {
+     "name": "expected_submission_at",
+     "label": "Expected submission",
+     "kind": "datetime"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "product_id",
+       "label": "Product",
+       "required": true,
+       "kind": "ref",
+       "ref": "products"
+      },
+      {
+       "name": "quantity",
+       "label": "Quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "stock_on_hand",
+       "label": "Stock on hand",
+       "kind": "decimal"
+      },
+      {
+       "name": "par_level",
+       "label": "Par level",
+       "kind": "decimal"
+      },
+      {
+       "name": "expected_sales",
+       "label": "Expected sales",
+       "kind": "decimal"
+      },
+      {
+       "name": "confirmed_quantity",
+       "label": "Confirmed quantity",
+       "kind": "decimal"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "submitted",
+   "late_pending",
+   "confirmed",
+   "planned",
+   "dispatched",
+   "received",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/central-kitchen/orders/{kitchen_order_id}/submit",
+    "permission": "production.kitchen_order.submit",
+    "operationId": "submitKitchenOrder",
+    "from": [
+     "draft",
+     "planned"
+    ],
+    "fields": []
+   },
+   {
+    "key": "acknowledge-late",
+    "label": "Acknowledge a late order",
+    "path": "/central-kitchen/orders/{kitchen_order_id}/acknowledge-late",
+    "permission": "production.kitchen_order.acknowledge_late",
+    "operationId": "acknowledgeLateKitchenOrder",
+    "from": [
+     "late_pending"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     }
+    ]
+   },
+   {
+    "key": "confirm",
+    "label": "Central Kitchen confirms flagged quantities",
+    "path": "/central-kitchen/orders/{kitchen_order_id}/confirm",
+    "permission": "production.kitchen_order.confirm",
+    "operationId": "confirmKitchenOrder",
+    "from": [
+     "draft",
+     "submitted",
+     "late_pending"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "production-plans": {
+  "slug": "production-plans",
+  "title": "Production plans",
+  "singular": "Production plan",
+  "about": "Consolidated daily plan with line-clearance status.",
+  "group": "Central Kitchen & Production",
+  "tile": "production-kitchen",
+  "listPath": "/production-plans",
+  "readPermission": "production.production_plan.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "plan_date",
+    "label": "Plan date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "cycle",
+    "label": "Cycle",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "morning",
+     "evening",
+     "day"
+    ]
+   },
+   {
+    "name": "line_clearance_submission_id",
+    "label": "Line clearance submission",
+    "kind": "ref",
+    "ref": "form-submissions"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "confirmed",
+     "in_progress",
+     "completed"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "product_id",
+      "label": "Product",
+      "required": true,
+      "kind": "ref",
+      "ref": "products"
+     },
+     {
+      "name": "production_line_id",
+      "label": "Production line",
+      "kind": "ref",
+      "ref": "production-lines"
+     },
+     {
+      "name": "planned_quantity",
+      "label": "Planned quantity",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "uom",
+      "label": "Uom",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "material_shortage",
+      "label": "Material shortage",
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "cycle",
+   "site_id",
+   "line_clearance_submission_id"
+  ],
+  "restricted": false,
+  "getPath": "/production-plans/{production_plan_id}",
+  "create": {
+   "path": "/production-plans",
+   "permission": "production.production_plan.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "plan_date",
+     "label": "Plan date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "cycle",
+     "label": "Cycle",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "morning",
+      "evening",
+      "day"
+     ]
+    },
+    {
+     "name": "line_clearance_submission_id",
+     "label": "Line clearance submission",
+     "kind": "ref",
+     "ref": "form-submissions"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "product_id",
+       "label": "Product",
+       "required": true,
+       "kind": "ref",
+       "ref": "products"
+      },
+      {
+       "name": "production_line_id",
+       "label": "Production line",
+       "kind": "ref",
+       "ref": "production-lines"
+      },
+      {
+       "name": "planned_quantity",
+       "label": "Planned quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "material_shortage",
+       "label": "Material shortage",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/production-plans/{production_plan_id}",
+   "permission": "production.production_plan.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "plan_date",
+     "label": "Plan date",
+     "kind": "date"
+    },
+    {
+     "name": "cycle",
+     "label": "Cycle",
+     "kind": "enum",
+     "options": [
+      "morning",
+      "evening",
+      "day"
+     ]
+    },
+    {
+     "name": "line_clearance_submission_id",
+     "label": "Line clearance submission",
+     "kind": "ref",
+     "ref": "form-submissions"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "product_id",
+       "label": "Product",
+       "required": true,
+       "kind": "ref",
+       "ref": "products"
+      },
+      {
+       "name": "production_line_id",
+       "label": "Production line",
+       "kind": "ref",
+       "ref": "production-lines"
+      },
+      {
+       "name": "planned_quantity",
+       "label": "Planned quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "material_shortage",
+       "label": "Material shortage",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "confirmed",
+   "in_progress",
+   "completed"
+  ],
+  "actions": [
+   {
+    "key": "confirm",
+    "label": "Confirm the plan",
+    "path": "/production-plans/{production_plan_id}/confirm",
+    "permission": "production.production_plan.confirm",
+    "operationId": "confirmProductionPlan",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "batches": {
+  "slug": "batches",
+  "title": "Batches",
+  "singular": "Batch",
+  "about": "Production batch: the traceability anchor from supplier lot to destination. Product with no clear status cannot move.",
+  "group": "Central Kitchen & Production",
+  "tile": "production-kitchen",
+  "listPath": "/batches",
+  "readPermission": "production.batch.read",
+  "fields": [
+   {
+    "name": "batch_number",
+    "label": "Batch number",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "product_id",
+    "label": "Product",
+    "required": true,
+    "kind": "ref",
+    "ref": "products"
+   },
+   {
+    "name": "recipe_version_id",
+    "label": "Recipe version",
+    "kind": "uuid"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "production_line_id",
+    "label": "Production line",
+    "kind": "ref",
+    "ref": "production-lines"
+   },
+   {
+    "name": "production_plan_id",
+    "label": "Production plan",
+    "kind": "ref",
+    "ref": "production-plans"
+   },
+   {
+    "name": "production_date",
+    "label": "Production date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "shift",
+    "label": "Shift",
+    "kind": "text"
+   },
+   {
+    "name": "operator_employee_id",
+    "label": "Operator",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "input_quantity",
+    "label": "Input quantity",
+    "kind": "decimal"
+   },
+   {
+    "name": "planned_output",
+    "label": "Planned output",
+    "kind": "decimal"
+   },
+   {
+    "name": "actual_output",
+    "label": "Actual output",
+    "kind": "decimal"
+   },
+   {
+    "name": "uom",
+    "label": "Uom",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "actual_yield_percent",
+    "label": "Actual yield percent",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "standard_yield_percent",
+    "label": "Standard yield percent",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "yield_variance_percent",
+    "label": "Yield variance percent",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "qc_status",
+    "label": "Qc status",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "pending",
+     "released",
+     "hold",
+     "rework",
+     "rejected",
+     "disposed"
+    ]
+   },
+   {
+    "name": "expiry_date",
+    "label": "Expiry date",
+    "kind": "date"
+   },
+   {
+    "name": "holding_condition",
+    "label": "Holding condition",
+    "kind": "text"
+   },
+   {
+    "name": "gaap_transaction_ref",
+    "label": "Gaap transaction ref",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "in_progress",
+     "completed",
+     "closed"
+    ]
+   },
+   {
+    "name": "ingredients",
+    "label": "Ingredients",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "item_id",
+      "label": "Item",
+      "required": true,
+      "kind": "ref",
+      "ref": "items"
+     },
+     {
+      "name": "supplier_lot",
+      "label": "Supplier lot",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "goods_receipt_line_id",
+      "label": "Goods receipt line",
+      "kind": "uuid"
+     },
+     {
+      "name": "planned_quantity",
+      "label": "Planned quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "issued_quantity",
+      "label": "Issued quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "actual_quantity",
+      "label": "Actual quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "uom",
+      "label": "Uom",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "qc_status",
+   "product_id",
+   "site_id",
+   "production_line_id"
+  ],
+  "restricted": false,
+  "getPath": "/batches/{batch_id}",
+  "create": {
+   "path": "/batches",
+   "permission": "production.batch.write",
+   "fields": [
+    {
+     "name": "batch_number",
+     "label": "Batch number",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "required": true,
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "recipe_version_id",
+     "label": "Recipe version",
+     "kind": "uuid"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "production_line_id",
+     "label": "Production line",
+     "kind": "ref",
+     "ref": "production-lines"
+    },
+    {
+     "name": "production_plan_id",
+     "label": "Production plan",
+     "kind": "ref",
+     "ref": "production-plans"
+    },
+    {
+     "name": "production_date",
+     "label": "Production date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "kind": "text"
+    },
+    {
+     "name": "operator_employee_id",
+     "label": "Operator",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "input_quantity",
+     "label": "Input quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "planned_output",
+     "label": "Planned output",
+     "kind": "decimal"
+    },
+    {
+     "name": "actual_output",
+     "label": "Actual output",
+     "kind": "decimal"
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "expiry_date",
+     "label": "Expiry date",
+     "kind": "date"
+    },
+    {
+     "name": "holding_condition",
+     "label": "Holding condition",
+     "kind": "text"
+    },
+    {
+     "name": "ingredients",
+     "label": "Ingredients",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "supplier_lot",
+       "label": "Supplier lot",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "goods_receipt_line_id",
+       "label": "Goods receipt line",
+       "kind": "uuid"
+      },
+      {
+       "name": "planned_quantity",
+       "label": "Planned quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "issued_quantity",
+       "label": "Issued quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "actual_quantity",
+       "label": "Actual quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/batches/{batch_id}",
+   "permission": "production.batch.write",
+   "fields": [
+    {
+     "name": "batch_number",
+     "label": "Batch number",
+     "kind": "text"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "recipe_version_id",
+     "label": "Recipe version",
+     "kind": "uuid"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "production_line_id",
+     "label": "Production line",
+     "kind": "ref",
+     "ref": "production-lines"
+    },
+    {
+     "name": "production_plan_id",
+     "label": "Production plan",
+     "kind": "ref",
+     "ref": "production-plans"
+    },
+    {
+     "name": "production_date",
+     "label": "Production date",
+     "kind": "date"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "kind": "text"
+    },
+    {
+     "name": "operator_employee_id",
+     "label": "Operator",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "input_quantity",
+     "label": "Input quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "planned_output",
+     "label": "Planned output",
+     "kind": "decimal"
+    },
+    {
+     "name": "actual_output",
+     "label": "Actual output",
+     "kind": "decimal"
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "kind": "text"
+    },
+    {
+     "name": "expiry_date",
+     "label": "Expiry date",
+     "kind": "date"
+    },
+    {
+     "name": "holding_condition",
+     "label": "Holding condition",
+     "kind": "text"
+    },
+    {
+     "name": "ingredients",
+     "label": "Ingredients",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "ref",
+       "ref": "items"
+      },
+      {
+       "name": "supplier_lot",
+       "label": "Supplier lot",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "goods_receipt_line_id",
+       "label": "Goods receipt line",
+       "kind": "uuid"
+      },
+      {
+       "name": "planned_quantity",
+       "label": "Planned quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "issued_quantity",
+       "label": "Issued quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "actual_quantity",
+       "label": "Actual quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "in_progress",
+   "completed",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "complete",
+    "label": "Record output and complete",
+    "path": "/batches/{batch_id}/complete",
+    "permission": "production.batch.complete",
+    "operationId": "completeBatch",
+    "from": [
+     "in_progress"
+    ],
+    "fields": []
+   },
+   {
+    "key": "release",
+    "label": "QC release",
+    "path": "/batches/{batch_id}/release",
+    "permission": "production.batch.release",
+    "operationId": "releaseBatch",
+    "from": [
+     "completed"
+    ],
+    "fields": [
+     {
+      "name": "evidence_attachment_ids",
+      "label": "Evidence attachments",
+      "kind": "list"
+     },
+     {
+      "name": "signature_id",
+      "label": "Your 6-digit PIN",
+      "required": true,
+      "kind": "pin"
+     }
+    ]
+   }
+  ]
+ },
+ "dispatch-notes": {
+  "slug": "dispatch-notes",
+  "title": "Dispatch notes",
+  "singular": "Dispatch note",
+  "about": "D-Note. Nothing leaves Central Kitchen without a signed D-Note and security match. HOLD batches are blocked.",
+  "group": "Central Kitchen & Production",
+  "tile": "production-kitchen",
+  "listPath": "/dispatch-notes",
+  "readPermission": "production.dispatch_note.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "from_site_id",
+    "label": "From site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "to_site_id",
+    "label": "To site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "kitchen_order_id",
+    "label": "Kitchen order",
+    "kind": "ref",
+    "ref": "kitchen-orders"
+   },
+   {
+    "name": "vehicle",
+    "label": "Vehicle",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "driver_employee_id",
+    "label": "Driver",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "loading_temperature_c",
+    "label": "Loading temperature c",
+    "kind": "decimal"
+   },
+   {
+    "name": "dispatched_at",
+    "label": "Dispatched",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "delivery_temperature_c",
+    "label": "Delivery temperature c",
+    "kind": "decimal"
+   },
+   {
+    "name": "delivered_at",
+    "label": "Delivered",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "picked",
+     "verified",
+     "security_cleared",
+     "in_transit",
+     "delivered",
+     "discrepancy",
+     "closed"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "product_id",
+      "label": "Product",
+      "required": true,
+      "kind": "ref",
+      "ref": "products"
+     },
+     {
+      "name": "batch_id",
+      "label": "Batch",
+      "required": true,
+      "kind": "ref",
+      "ref": "batches"
+     },
+     {
+      "name": "ordered_quantity",
+      "label": "Ordered quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "picked_quantity",
+      "label": "Picked quantity",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "delivered_quantity",
+      "label": "Delivered quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "expiry_date",
+      "label": "Expiry date",
+      "kind": "date"
+     },
+     {
+      "name": "condition",
+      "label": "Condition",
+      "kind": "text"
+     },
+     {
+      "name": "raw_or_rte",
+      "label": "Raw or rte",
+      "kind": "enum",
+      "options": [
+       "raw",
+       "rte"
+      ]
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "from_site_id",
+   "to_site_id",
+   "kitchen_order_id"
+  ],
+  "restricted": false,
+  "getPath": "/dispatch-notes/{dispatch_note_id}",
+  "create": {
+   "path": "/dispatch-notes",
+   "permission": "production.dispatch_note.write",
+   "fields": [
+    {
+     "name": "from_site_id",
+     "label": "From site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "to_site_id",
+     "label": "To site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "kitchen_order_id",
+     "label": "Kitchen order",
+     "kind": "ref",
+     "ref": "kitchen-orders"
+    },
+    {
+     "name": "vehicle",
+     "label": "Vehicle",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "driver_employee_id",
+     "label": "Driver",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "loading_temperature_c",
+     "label": "Loading temperature c",
+     "kind": "decimal"
+    },
+    {
+     "name": "delivery_temperature_c",
+     "label": "Delivery temperature c",
+     "kind": "decimal"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "product_id",
+       "label": "Product",
+       "required": true,
+       "kind": "ref",
+       "ref": "products"
+      },
+      {
+       "name": "batch_id",
+       "label": "Batch",
+       "required": true,
+       "kind": "ref",
+       "ref": "batches"
+      },
+      {
+       "name": "ordered_quantity",
+       "label": "Ordered quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "picked_quantity",
+       "label": "Picked quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "delivered_quantity",
+       "label": "Delivered quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "expiry_date",
+       "label": "Expiry date",
+       "kind": "date"
+      },
+      {
+       "name": "condition",
+       "label": "Condition",
+       "kind": "text"
+      },
+      {
+       "name": "raw_or_rte",
+       "label": "Raw or rte",
+       "kind": "enum",
+       "options": [
+        "raw",
+        "rte"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/dispatch-notes/{dispatch_note_id}",
+   "permission": "production.dispatch_note.write",
+   "fields": [
+    {
+     "name": "from_site_id",
+     "label": "From site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "to_site_id",
+     "label": "To site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "kitchen_order_id",
+     "label": "Kitchen order",
+     "kind": "ref",
+     "ref": "kitchen-orders"
+    },
+    {
+     "name": "vehicle",
+     "label": "Vehicle",
+     "kind": "text"
+    },
+    {
+     "name": "driver_employee_id",
+     "label": "Driver",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "loading_temperature_c",
+     "label": "Loading temperature c",
+     "kind": "decimal"
+    },
+    {
+     "name": "delivery_temperature_c",
+     "label": "Delivery temperature c",
+     "kind": "decimal"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "product_id",
+       "label": "Product",
+       "required": true,
+       "kind": "ref",
+       "ref": "products"
+      },
+      {
+       "name": "batch_id",
+       "label": "Batch",
+       "required": true,
+       "kind": "ref",
+       "ref": "batches"
+      },
+      {
+       "name": "ordered_quantity",
+       "label": "Ordered quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "picked_quantity",
+       "label": "Picked quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "delivered_quantity",
+       "label": "Delivered quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "expiry_date",
+       "label": "Expiry date",
+       "kind": "date"
+      },
+      {
+       "name": "condition",
+       "label": "Condition",
+       "kind": "text"
+      },
+      {
+       "name": "raw_or_rte",
+       "label": "Raw or rte",
+       "kind": "enum",
+       "options": [
+        "raw",
+        "rte"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "picked",
+   "verified",
+   "security_cleared",
+   "in_transit",
+   "delivered",
+   "discrepancy",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "verify",
+    "label": "Supervisor verifies quantities",
+    "path": "/dispatch-notes/{dispatch_note_id}/verify",
+    "permission": "production.dispatch_note.verify",
+    "operationId": "verifyDispatchNote",
+    "from": [
+     "draft",
+     "picked"
+    ],
+    "fields": []
+   },
+   {
+    "key": "security-clear",
+    "label": "Security matches items to the D-Note",
+    "path": "/dispatch-notes/{dispatch_note_id}/security-clear",
+    "permission": "production.dispatch_note.security_clear",
+    "operationId": "securityClearDispatchNote",
+    "from": [
+     "verified"
+    ],
+    "fields": [
+     {
+      "name": "discrepancy",
+      "label": "Discrepancy",
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "confirm-delivery",
+    "label": "Receiving supervisor confirms",
+    "path": "/dispatch-notes/{dispatch_note_id}/confirm-delivery",
+    "permission": "production.dispatch_note.confirm_delivery",
+    "operationId": "confirmDeliveryDispatchNote",
+    "from": [
+     "security_cleared",
+     "in_transit"
+    ],
+    "fields": []
+   },
+   {
+    "key": "raise-discrepancy",
+    "label": "Record a shortage, rejection or temperature issue",
+    "path": "/dispatch-notes/{dispatch_note_id}/raise-discrepancy",
+    "permission": "production.dispatch_note.raise_discrepancy",
+    "operationId": "raiseDiscrepancyDispatchNote",
+    "from": [
+     "security_cleared",
+     "in_transit",
+     "delivered"
+    ],
+    "fields": [
+     {
+      "name": "description",
+      "label": "Description",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "products": {
+  "slug": "products",
+  "title": "Products",
+  "singular": "Product",
+  "about": "Approved product master. Details are loaded from approved sources and never inferred.",
+  "group": "Products & NPD",
+  "tile": "quality-compliance",
+  "listPath": "/products",
+  "readPermission": "products.product.read",
+  "fields": [
+   {
+    "name": "code",
+    "label": "Code",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "name",
+    "label": "Name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "category",
+    "label": "Category",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "kind": "textarea"
+   },
+   {
+    "name": "active",
+    "label": "Active",
+    "kind": "boolean"
+   },
+   {
+    "name": "branch_site_ids",
+    "label": "Branch sites",
+    "kind": "list"
+   },
+   {
+    "name": "recipe_id",
+    "label": "Recipe",
+    "kind": "ref",
+    "ref": "recipes"
+   },
+   {
+    "name": "menu_version",
+    "label": "Menu version",
+    "kind": "text"
+   },
+   {
+    "name": "allergens",
+    "label": "Allergens",
+    "kind": "list"
+   },
+   {
+    "name": "allergens_verified_by",
+    "label": "Allergens verified by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "portion_standard",
+    "label": "Portion standard",
+    "kind": "text"
+   },
+   {
+    "name": "storage_and_shelf_life",
+    "label": "Storage and shelf life",
+    "kind": "text"
+   },
+   {
+    "name": "image_attachment_id",
+    "label": "Image attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "card",
+    "label": "Card",
+    "kind": "json",
+    "hint": "Staff product knowledge card"
+   },
+   {
+    "name": "faq",
+    "label": "Faq",
+    "kind": "json"
+   }
+  ],
+  "columns": [
+   "code",
+   "name",
+   "recipe_id",
+   "allergens_verified_by",
+   "image_attachment_id"
+  ],
+  "restricted": false,
+  "getPath": "/products/{product_id}",
+  "create": {
+   "path": "/products",
+   "permission": "products.product.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    },
+    {
+     "name": "branch_site_ids",
+     "label": "Branch sites",
+     "kind": "list"
+    },
+    {
+     "name": "recipe_id",
+     "label": "Recipe",
+     "kind": "ref",
+     "ref": "recipes"
+    },
+    {
+     "name": "menu_version",
+     "label": "Menu version",
+     "kind": "text"
+    },
+    {
+     "name": "allergens",
+     "label": "Allergens",
+     "kind": "list"
+    },
+    {
+     "name": "portion_standard",
+     "label": "Portion standard",
+     "kind": "text"
+    },
+    {
+     "name": "storage_and_shelf_life",
+     "label": "Storage and shelf life",
+     "kind": "text"
+    },
+    {
+     "name": "image_attachment_id",
+     "label": "Image attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "card",
+     "label": "Card",
+     "kind": "json",
+     "hint": "Staff product knowledge card"
+    },
+    {
+     "name": "faq",
+     "label": "Faq",
+     "kind": "json"
+    }
+   ]
+  },
+  "update": {
+   "path": "/products/{product_id}",
+   "permission": "products.product.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "kind": "text"
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    },
+    {
+     "name": "branch_site_ids",
+     "label": "Branch sites",
+     "kind": "list"
+    },
+    {
+     "name": "recipe_id",
+     "label": "Recipe",
+     "kind": "ref",
+     "ref": "recipes"
+    },
+    {
+     "name": "menu_version",
+     "label": "Menu version",
+     "kind": "text"
+    },
+    {
+     "name": "allergens",
+     "label": "Allergens",
+     "kind": "list"
+    },
+    {
+     "name": "portion_standard",
+     "label": "Portion standard",
+     "kind": "text"
+    },
+    {
+     "name": "storage_and_shelf_life",
+     "label": "Storage and shelf life",
+     "kind": "text"
+    },
+    {
+     "name": "image_attachment_id",
+     "label": "Image attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "card",
+     "label": "Card",
+     "kind": "json",
+     "hint": "Staff product knowledge card"
+    },
+    {
+     "name": "faq",
+     "label": "Faq",
+     "kind": "json"
+    }
+   ]
+  }
+ },
+ "product-changes": {
+  "slug": "product-changes",
+  "title": "Product changes",
+  "singular": "Product change",
+  "about": "Product, recipe or menu change with approval, effective date and retraining impact.",
+  "group": "Products & NPD",
+  "tile": "quality-compliance",
+  "listPath": "/product-changes",
+  "readPermission": "products.product_change.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "product_id",
+    "label": "Product",
+    "required": true,
+    "kind": "ref",
+    "ref": "products"
+   },
+   {
+    "name": "change_type",
+    "label": "Change type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "new",
+     "recipe",
+     "price",
+     "menu",
+     "withdrawal",
+     "seasonal"
+    ]
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "effective_on",
+    "label": "Effective on",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "pos_change_reference",
+    "label": "POS change reference",
+    "kind": "text"
+   },
+   {
+    "name": "affected_role_ids",
+    "label": "Affected roles",
+    "kind": "list"
+   },
+   {
+    "name": "training_request_id",
+    "label": "Training request",
+    "kind": "ref",
+    "ref": "training-requests"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "effective",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "change_type",
+   "product_id",
+   "training_request_id"
+  ],
+  "restricted": false,
+  "getPath": "/product-changes/{product_change_id}",
+  "create": {
+   "path": "/product-changes",
+   "permission": "products.product_change.write",
+   "fields": [
+    {
+     "name": "product_id",
+     "label": "Product",
+     "required": true,
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "change_type",
+     "label": "Change type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "new",
+      "recipe",
+      "price",
+      "menu",
+      "withdrawal",
+      "seasonal"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "effective_on",
+     "label": "Effective on",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "pos_change_reference",
+     "label": "POS change reference",
+     "kind": "text"
+    },
+    {
+     "name": "affected_role_ids",
+     "label": "Affected roles",
+     "kind": "list"
+    },
+    {
+     "name": "training_request_id",
+     "label": "Training request",
+     "kind": "ref",
+     "ref": "training-requests"
+    }
+   ]
+  },
+  "update": {
+   "path": "/product-changes/{product_change_id}",
+   "permission": "products.product_change.write",
+   "fields": [
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "change_type",
+     "label": "Change type",
+     "kind": "enum",
+     "options": [
+      "new",
+      "recipe",
+      "price",
+      "menu",
+      "withdrawal",
+      "seasonal"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "effective_on",
+     "label": "Effective on",
+     "kind": "date"
+    },
+    {
+     "name": "pos_change_reference",
+     "label": "POS change reference",
+     "kind": "text"
+    },
+    {
+     "name": "affected_role_ids",
+     "label": "Affected roles",
+     "kind": "list"
+    },
+    {
+     "name": "training_request_id",
+     "label": "Training request",
+     "kind": "ref",
+     "ref": "training-requests"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "effective",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/product-changes/{product_change_id}/submit",
+    "permission": "products.product_change.submit",
+    "operationId": "submitProductChange",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "cost-sheets": {
+  "slug": "cost-sheets",
+  "title": "Cost sheets",
+  "singular": "Cost sheet",
+  "about": "Recipe standard cost and margin. Confidential.",
+  "group": "Products & NPD",
+  "tile": "quality-compliance",
+  "listPath": "/cost-sheets",
+  "readPermission": "products.cost_sheet.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "recipe_version_id",
+    "label": "Recipe version",
+    "required": true,
+    "kind": "uuid"
+   },
+   {
+    "name": "currency",
+    "label": "Currency",
+    "required": true,
+    "kind": "currency"
+   },
+   {
+    "name": "ingredient_cost",
+    "label": "Ingredient cost",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "labour_cost",
+    "label": "Labour cost",
+    "kind": "decimal"
+   },
+   {
+    "name": "overhead_cost",
+    "label": "Overhead cost",
+    "kind": "decimal"
+   },
+   {
+    "name": "cost_per_unit",
+    "label": "Cost per unit",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "selling_price",
+    "label": "Selling price",
+    "kind": "decimal"
+   },
+   {
+    "name": "gross_margin_percent",
+    "label": "Gross margin percent",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "review_trigger",
+    "label": "Review trigger",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "superseded"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "ingredient_cost",
+   "labour_cost",
+   "overhead_cost"
+  ],
+  "restricted": true,
+  "getPath": "/cost-sheets/{cost_sheet_id}",
+  "create": {
+   "path": "/cost-sheets",
+   "permission": "products.cost_sheet.write",
+   "fields": [
+    {
+     "name": "recipe_version_id",
+     "label": "Recipe version",
+     "required": true,
+     "kind": "uuid"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "required": true,
+     "kind": "currency"
+    },
+    {
+     "name": "ingredient_cost",
+     "label": "Ingredient cost",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "labour_cost",
+     "label": "Labour cost",
+     "kind": "decimal"
+    },
+    {
+     "name": "overhead_cost",
+     "label": "Overhead cost",
+     "kind": "decimal"
+    },
+    {
+     "name": "selling_price",
+     "label": "Selling price",
+     "kind": "decimal"
+    },
+    {
+     "name": "review_trigger",
+     "label": "Review trigger",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cost-sheets/{cost_sheet_id}",
+   "permission": "products.cost_sheet.write",
+   "fields": [
+    {
+     "name": "recipe_version_id",
+     "label": "Recipe version",
+     "kind": "uuid"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "kind": "currency"
+    },
+    {
+     "name": "ingredient_cost",
+     "label": "Ingredient cost",
+     "kind": "decimal"
+    },
+    {
+     "name": "labour_cost",
+     "label": "Labour cost",
+     "kind": "decimal"
+    },
+    {
+     "name": "overhead_cost",
+     "label": "Overhead cost",
+     "kind": "decimal"
+    },
+    {
+     "name": "selling_price",
+     "label": "Selling price",
+     "kind": "decimal"
+    },
+    {
+     "name": "review_trigger",
+     "label": "Review trigger",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "superseded"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cost-sheets/{cost_sheet_id}/submit",
+    "permission": "products.cost_sheet.submit",
+    "operationId": "submitCostSheet",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "npd-projects": {
+  "slug": "npd-projects",
+  "title": "NPD projects",
+  "singular": "NPD project",
+  "about": "New product through stage gates G0 to G5. Confidential recipe and cost data.",
+  "group": "Products & NPD",
+  "tile": "quality-compliance",
+  "listPath": "/npd/projects",
+  "readPermission": "products.npd_project.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "name",
+    "label": "Name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "business_case",
+    "label": "Business case",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "current_gate",
+    "label": "Current gate",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "G0",
+     "G1",
+     "G2",
+     "G3",
+     "G4",
+     "G5"
+    ]
+   },
+   {
+    "name": "owner_employee_id",
+    "label": "Owner",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "product_id",
+    "label": "Product",
+    "kind": "ref",
+    "ref": "products"
+   },
+   {
+    "name": "launched_on",
+    "label": "Launched on",
+    "kind": "date"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "active",
+     "on_hold",
+     "launched",
+     "cancelled"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "name",
+   "status",
+   "current_gate",
+   "owner_employee_id"
+  ],
+  "restricted": true,
+  "getPath": "/npd/projects/{npd_project_id}",
+  "create": {
+   "path": "/npd/projects",
+   "permission": "products.npd_project.write",
+   "fields": [
+    {
+     "name": "name",
+     "label": "Name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "business_case",
+     "label": "Business case",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "launched_on",
+     "label": "Launched on",
+     "kind": "date"
+    }
+   ]
+  },
+  "update": {
+   "path": "/npd/projects/{npd_project_id}",
+   "permission": "products.npd_project.write",
+   "fields": [
+    {
+     "name": "name",
+     "label": "Name",
+     "kind": "text"
+    },
+    {
+     "name": "business_case",
+     "label": "Business case",
+     "kind": "text"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "launched_on",
+     "label": "Launched on",
+     "kind": "date"
+    }
+   ]
+  },
+  "statuses": [
+   "active",
+   "on_hold",
+   "launched",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "advance-gate",
+    "label": "Record gate decision for approval",
+    "path": "/npd/projects/{npd_project_id}/advance-gate",
+    "permission": "products.npd_project.advance_gate",
+    "operationId": "advanceGateNpdProject",
+    "fields": [
+     {
+      "name": "gate",
+      "label": "Gate",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "G0",
+       "G1",
+       "G2",
+       "G3",
+       "G4",
+       "G5"
+      ]
+     },
+     {
+      "name": "note",
+      "label": "Note",
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "ncrs": {
+  "slug": "ncrs",
+  "title": "Ncrs",
+  "singular": "NCR",
+  "about": "Non-conformance report. Cannot close until effectiveness is verified.",
+  "group": "Quality",
+  "tile": "quality-compliance",
+  "listPath": "/ncrs",
+  "readPermission": "quality.ncr.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "occurred_at",
+    "label": "Occurred",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "product_id",
+    "label": "Product",
+    "kind": "ref",
+    "ref": "products"
+   },
+   {
+    "name": "item_id",
+    "label": "Item",
+    "kind": "ref",
+    "ref": "items"
+   },
+   {
+    "name": "batch_id",
+    "label": "Batch",
+    "kind": "ref",
+    "ref": "batches"
+   },
+   {
+    "name": "quantity",
+    "label": "Quantity",
+    "kind": "decimal"
+   },
+   {
+    "name": "location",
+    "label": "Location",
+    "kind": "text"
+   },
+   {
+    "name": "deviation",
+    "label": "Deviation",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "severity_level",
+    "label": "Severity level",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "containment",
+    "label": "Containment",
+    "kind": "text"
+   },
+   {
+    "name": "production_stopped",
+    "label": "Production stopped",
+    "kind": "boolean"
+   },
+   {
+    "name": "root_cause",
+    "label": "Root cause",
+    "kind": "text"
+   },
+   {
+    "name": "verified_by",
+    "label": "Verified by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "contained",
+     "investigating",
+     "action_pending",
+     "pending_verification",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "product_id",
+   "item_id"
+  ],
+  "restricted": false,
+  "getPath": "/ncrs/{ncr_id}",
+  "create": {
+   "path": "/ncrs",
+   "permission": "quality.ncr.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "occurred_at",
+     "label": "Occurred",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "location",
+     "label": "Location",
+     "kind": "text"
+    },
+    {
+     "name": "deviation",
+     "label": "Deviation",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "severity_level",
+     "label": "Severity level",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "containment",
+     "label": "Containment",
+     "kind": "text"
+    },
+    {
+     "name": "production_stopped",
+     "label": "Production stopped",
+     "kind": "boolean"
+    },
+    {
+     "name": "root_cause",
+     "label": "Root cause",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/ncrs/{ncr_id}",
+   "permission": "quality.ncr.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "occurred_at",
+     "label": "Occurred",
+     "kind": "datetime"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "location",
+     "label": "Location",
+     "kind": "text"
+    },
+    {
+     "name": "deviation",
+     "label": "Deviation",
+     "kind": "text"
+    },
+    {
+     "name": "severity_level",
+     "label": "Severity level",
+     "kind": "number"
+    },
+    {
+     "name": "containment",
+     "label": "Containment",
+     "kind": "text"
+    },
+    {
+     "name": "production_stopped",
+     "label": "Production stopped",
+     "kind": "boolean"
+    },
+    {
+     "name": "root_cause",
+     "label": "Root cause",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "contained",
+   "investigating",
+   "action_pending",
+   "pending_verification",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "contain",
+    "label": "Record containment",
+    "path": "/ncrs/{ncr_id}/contain",
+    "permission": "quality.ncr.contain",
+    "operationId": "containNcr",
+    "from": [
+     "open"
+    ],
+    "fields": [
+     {
+      "name": "containment",
+      "label": "Containment",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "verify-close",
+    "label": "Verify effectiveness and close",
+    "path": "/ncrs/{ncr_id}/verify-close",
+    "permission": "quality.ncr.verify_close",
+    "operationId": "verifyCloseNcr",
+    "from": [
+     "pending_verification"
+    ],
+    "fields": [
+     {
+      "name": "effectiveness_result",
+      "label": "Effectiveness result",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "holds": {
+  "slug": "holds",
+  "title": "Holds",
+  "singular": "Hold",
+  "about": "HOLD or quarantine. Blocks Foodies transfers, dispatches, issues and disposals, and raises a stop-sale instruction for POS.",
+  "group": "Quality",
+  "tile": "quality-compliance",
+  "listPath": "/holds",
+  "readPermission": "quality.hold.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "product_id",
+    "label": "Product",
+    "kind": "ref",
+    "ref": "products"
+   },
+   {
+    "name": "item_id",
+    "label": "Item",
+    "kind": "ref",
+    "ref": "items"
+   },
+   {
+    "name": "batch_id",
+    "label": "Batch",
+    "kind": "ref",
+    "ref": "batches"
+   },
+   {
+    "name": "batch_lot",
+    "label": "Batch lot",
+    "kind": "text"
+   },
+   {
+    "name": "quantity",
+    "label": "Quantity",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "uom",
+    "label": "Uom",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "quarantine_location_id",
+    "label": "Quarantine location",
+    "kind": "ref",
+    "ref": "storage-locations"
+   },
+   {
+    "name": "owner_employee_id",
+    "label": "Owner",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "ncr_id",
+    "label": "NCR",
+    "kind": "ref",
+    "ref": "ncrs"
+   },
+   {
+    "name": "recall_id",
+    "label": "Recall",
+    "kind": "ref",
+    "ref": "recalls"
+   },
+   {
+    "name": "label_confirmed",
+    "label": "Label confirmed",
+    "kind": "boolean"
+   },
+   {
+    "name": "stop_sale_posting_id",
+    "label": "Stop sale posting",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "postings"
+   },
+   {
+    "name": "released_at",
+    "label": "Released",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "on_hold",
+     "pending_disposition",
+     "released",
+     "rework",
+     "rejected",
+     "disposed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "product_id",
+   "item_id"
+  ],
+  "restricted": false,
+  "getPath": "/holds/{hold_id}",
+  "create": {
+   "path": "/holds",
+   "permission": "quality.hold.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "batch_lot",
+     "label": "Batch lot",
+     "kind": "text"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "quarantine_location_id",
+     "label": "Quarantine location",
+     "kind": "ref",
+     "ref": "storage-locations"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "ncr_id",
+     "label": "NCR",
+     "kind": "ref",
+     "ref": "ncrs"
+    },
+    {
+     "name": "recall_id",
+     "label": "Recall",
+     "kind": "ref",
+     "ref": "recalls"
+    },
+    {
+     "name": "label_confirmed",
+     "label": "Label confirmed",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/holds/{hold_id}",
+   "permission": "quality.hold.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "ref",
+     "ref": "items"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "batch_lot",
+     "label": "Batch lot",
+     "kind": "text"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "kind": "decimal"
+    },
+    {
+     "name": "uom",
+     "label": "Uom",
+     "kind": "text"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "quarantine_location_id",
+     "label": "Quarantine location",
+     "kind": "ref",
+     "ref": "storage-locations"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "ncr_id",
+     "label": "NCR",
+     "kind": "ref",
+     "ref": "ncrs"
+    },
+    {
+     "name": "recall_id",
+     "label": "Recall",
+     "kind": "ref",
+     "ref": "recalls"
+    },
+    {
+     "name": "label_confirmed",
+     "label": "Label confirmed",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "statuses": [
+   "on_hold",
+   "pending_disposition",
+   "released",
+   "rework",
+   "rejected",
+   "disposed"
+  ],
+  "actions": [
+   {
+    "key": "release",
+    "label": "Authorised release with QC evidence",
+    "path": "/holds/{hold_id}/release",
+    "permission": "quality.hold.release",
+    "operationId": "releaseHold",
+    "from": [
+     "on_hold",
+     "pending_disposition"
+    ],
+    "fields": [
+     {
+      "name": "evidence_attachment_ids",
+      "label": "Evidence attachments",
+      "kind": "list"
+     },
+     {
+      "name": "signature_id",
+      "label": "Your 6-digit PIN",
+      "required": true,
+      "kind": "pin"
+     }
+    ]
+   }
+  ]
+ },
+ "dispositions": {
+  "slug": "dispositions",
+  "title": "Dispositions",
+  "singular": "Disposition",
+  "about": "Rework, recovery, rejection, disposal or return decision for held product.",
+  "group": "Quality",
+  "tile": "quality-compliance",
+  "listPath": "/holds/{hold_id}/dispositions",
+  "readPermission": "quality.disposition.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "disposition_type",
+    "label": "Disposition type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "rework",
+     "recovery",
+     "reject",
+     "dispose",
+     "supplier_return"
+    ]
+   },
+   {
+    "name": "quantity",
+    "label": "Quantity",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "method",
+    "label": "Method",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "safety_assessment",
+    "label": "Safety assessment",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "rework_batch_id",
+    "label": "Rework batch",
+    "kind": "ref",
+    "ref": "batches"
+   },
+   {
+    "name": "disposal_id",
+    "label": "Disposal",
+    "kind": "ref",
+    "ref": "disposals"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "executed",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "disposition_type",
+   "rework_batch_id",
+   "disposal_id"
+  ],
+  "restricted": false,
+  "getPath": "/holds/{hold_id}/dispositions/{disposition_id}",
+  "create": {
+   "path": "/holds/{hold_id}/dispositions",
+   "permission": "quality.disposition.write",
+   "fields": [
+    {
+     "name": "disposition_type",
+     "label": "Disposition type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "rework",
+      "recovery",
+      "reject",
+      "dispose",
+      "supplier_return"
+     ]
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "method",
+     "label": "Method",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "safety_assessment",
+     "label": "Safety assessment",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "rework_batch_id",
+     "label": "Rework batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "disposal_id",
+     "label": "Disposal",
+     "kind": "ref",
+     "ref": "disposals"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "executed",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/holds/{hold_id}/dispositions/{disposition_id}/submit",
+    "permission": "quality.disposition.submit",
+    "operationId": "submitDisposition",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "execute",
+    "label": "Record execution",
+    "path": "/holds/{hold_id}/dispositions/{disposition_id}/execute",
+    "permission": "quality.disposition.execute",
+    "operationId": "executeDisposition",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved"
+    ],
+    "fields": []
+   }
+  ],
+  "nestedUnder": "holds"
+ },
+ "recalls": {
+  "slug": "recalls",
+  "title": "Recalls",
+  "singular": "Recall",
+  "about": "Recall, withdrawal, internal hold or mock exercise. Launched from an NCR, incident, complaint or HOLD. Closure needs reconciled quantities and started CAPA.",
+  "group": "Quality",
+  "tile": "quality-compliance",
+  "listPath": "/recalls",
+  "readPermission": "quality.recall.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "internal_hold",
+     "withdrawal",
+     "recall",
+     "mock"
+    ]
+   },
+   {
+    "name": "trigger",
+    "label": "Trigger",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "microbiological",
+     "foreign_body",
+     "chemical",
+     "undeclared_allergen",
+     "incorrect_recipe",
+     "labelling",
+     "ccp_failure",
+     "packaging",
+     "supplier_notice",
+     "complaint",
+     "lab_result",
+     "regulatory"
+    ]
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "product_id",
+    "label": "Product",
+    "kind": "ref",
+    "ref": "products"
+   },
+   {
+    "name": "batch_ids",
+    "label": "Batchs",
+    "kind": "list"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "reporter_employee_id",
+    "label": "Reporter",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "hazard",
+    "label": "Hazard",
+    "kind": "text"
+   },
+   {
+    "name": "severity_rating",
+    "label": "Severity rating",
+    "kind": "enum",
+    "options": [
+     "critical",
+     "major",
+     "minor"
+    ]
+   },
+   {
+    "name": "likelihood",
+    "label": "Likelihood",
+    "kind": "text"
+   },
+   {
+    "name": "customer_exposure",
+    "label": "Customer exposure",
+    "kind": "text"
+   },
+   {
+    "name": "distribution_summary",
+    "label": "Distribution summary",
+    "kind": "text"
+   },
+   {
+    "name": "decision",
+    "label": "Decision",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "internal_hold",
+     "withdrawal",
+     "recall"
+    ]
+   },
+   {
+    "name": "decision_rationale",
+    "label": "Decision rationale",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "decided_at",
+    "label": "Decided",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "regulatory_notification_required",
+    "label": "Regulatory notification required",
+    "kind": "boolean"
+   },
+   {
+    "name": "effectiveness_summary",
+    "label": "Effectiveness summary",
+    "kind": "text"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "initiated",
+     "held",
+     "assessed",
+     "decided",
+     "retrieving",
+     "reconciling",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "kind",
+   "trigger",
+   "severity_rating"
+  ],
+  "restricted": false,
+  "getPath": "/recalls/{recall_id}",
+  "create": {
+   "path": "/recalls",
+   "permission": "quality.recall.write",
+   "fields": [
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "internal_hold",
+      "withdrawal",
+      "recall",
+      "mock"
+     ]
+    },
+    {
+     "name": "trigger",
+     "label": "Trigger",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "microbiological",
+      "foreign_body",
+      "chemical",
+      "undeclared_allergen",
+      "incorrect_recipe",
+      "labelling",
+      "ccp_failure",
+      "packaging",
+      "supplier_notice",
+      "complaint",
+      "lab_result",
+      "regulatory"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "batch_ids",
+     "label": "Batchs",
+     "kind": "list"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "reporter_employee_id",
+     "label": "Reporter",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "hazard",
+     "label": "Hazard",
+     "kind": "text"
+    },
+    {
+     "name": "severity_rating",
+     "label": "Severity rating",
+     "kind": "enum",
+     "options": [
+      "critical",
+      "major",
+      "minor"
+     ]
+    },
+    {
+     "name": "likelihood",
+     "label": "Likelihood",
+     "kind": "text"
+    },
+    {
+     "name": "customer_exposure",
+     "label": "Customer exposure",
+     "kind": "text"
+    },
+    {
+     "name": "distribution_summary",
+     "label": "Distribution summary",
+     "kind": "text"
+    },
+    {
+     "name": "regulatory_notification_required",
+     "label": "Regulatory notification required",
+     "kind": "boolean"
+    },
+    {
+     "name": "effectiveness_summary",
+     "label": "Effectiveness summary",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/recalls/{recall_id}",
+   "permission": "quality.recall.write",
+   "fields": [
+    {
+     "name": "kind",
+     "label": "Kind",
+     "kind": "enum",
+     "options": [
+      "internal_hold",
+      "withdrawal",
+      "recall",
+      "mock"
+     ]
+    },
+    {
+     "name": "trigger",
+     "label": "Trigger",
+     "kind": "enum",
+     "options": [
+      "microbiological",
+      "foreign_body",
+      "chemical",
+      "undeclared_allergen",
+      "incorrect_recipe",
+      "labelling",
+      "ccp_failure",
+      "packaging",
+      "supplier_notice",
+      "complaint",
+      "lab_result",
+      "regulatory"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "batch_ids",
+     "label": "Batchs",
+     "kind": "list"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "reporter_employee_id",
+     "label": "Reporter",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "hazard",
+     "label": "Hazard",
+     "kind": "text"
+    },
+    {
+     "name": "severity_rating",
+     "label": "Severity rating",
+     "kind": "enum",
+     "options": [
+      "critical",
+      "major",
+      "minor"
+     ]
+    },
+    {
+     "name": "likelihood",
+     "label": "Likelihood",
+     "kind": "text"
+    },
+    {
+     "name": "customer_exposure",
+     "label": "Customer exposure",
+     "kind": "text"
+    },
+    {
+     "name": "distribution_summary",
+     "label": "Distribution summary",
+     "kind": "text"
+    },
+    {
+     "name": "regulatory_notification_required",
+     "label": "Regulatory notification required",
+     "kind": "boolean"
+    },
+    {
+     "name": "effectiveness_summary",
+     "label": "Effectiveness summary",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "initiated",
+   "held",
+   "assessed",
+   "decided",
+   "retrieving",
+   "reconciling",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "assess",
+    "label": "Record risk assessment",
+    "path": "/recalls/{recall_id}/assess",
+    "permission": "quality.recall.assess",
+    "operationId": "assessRecall",
+    "from": [
+     "held"
+    ],
+    "fields": [
+     {
+      "name": "hazard",
+      "label": "Hazard",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "severity_rating",
+      "label": "Severity rating",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "critical",
+       "major",
+       "minor"
+      ]
+     },
+     {
+      "name": "likelihood",
+      "label": "Likelihood",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "decide",
+    "label": "Record the decision for approval",
+    "path": "/recalls/{recall_id}/decide",
+    "permission": "quality.recall.decide",
+    "operationId": "decideRecall",
+    "from": [
+     "initiated",
+     "held",
+     "assessed"
+    ],
+    "fields": [
+     {
+      "name": "decision",
+      "label": "Decision",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "internal_hold",
+       "withdrawal",
+       "recall"
+      ]
+     },
+     {
+      "name": "rationale",
+      "label": "Rationale",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "close",
+    "label": "Close with effectiveness report",
+    "path": "/recalls/{recall_id}/close",
+    "permission": "quality.recall.close",
+    "operationId": "closeRecall",
+    "from": [
+     "initiated",
+     "held",
+     "assessed",
+     "decided",
+     "retrieving",
+     "reconciling"
+    ],
+    "fields": [
+     {
+      "name": "effectiveness_summary",
+      "label": "Effectiveness summary",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "recall-communications": {
+  "slug": "recall-communications",
+  "title": "Recall communications",
+  "singular": "Recall communication",
+  "about": "Approved notice to a location, customer or authority, tracked to acknowledgement.",
+  "group": "Quality",
+  "tile": "quality-compliance",
+  "listPath": "/recalls/{recall_id}/communications",
+  "readPermission": "quality.recall_communication.read",
+  "fields": [
+   {
+    "name": "audience",
+    "label": "Audience",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "internal",
+     "branch",
+     "customer",
+     "distributor",
+     "regulator"
+    ]
+   },
+   {
+    "name": "recipient",
+    "label": "Recipient",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "message",
+    "label": "Message",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "channel",
+    "label": "Channel",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "approved_by",
+    "label": "Approved by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "sent_at",
+    "label": "Sent",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "acknowledged_at",
+    "label": "Acknowledged",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "sent",
+     "acknowledged"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "audience",
+   "approved_by",
+   "sent_at",
+   "acknowledged_at"
+  ],
+  "restricted": false,
+  "getPath": "/recalls/{recall_id}/communications/{recall_communication_id}",
+  "create": {
+   "path": "/recalls/{recall_id}/communications",
+   "permission": "quality.recall_communication.write",
+   "fields": [
+    {
+     "name": "audience",
+     "label": "Audience",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "internal",
+      "branch",
+      "customer",
+      "distributor",
+      "regulator"
+     ]
+    },
+    {
+     "name": "recipient",
+     "label": "Recipient",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "message",
+     "label": "Message",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "channel",
+     "label": "Channel",
+     "required": true,
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "sent",
+   "acknowledged"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/recalls/{recall_id}/communications/{recall_communication_id}/submit",
+    "permission": "quality.recall_communication.submit",
+    "operationId": "submitRecallCommunication",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "mark-sent",
+    "label": "Record as sent",
+    "path": "/recalls/{recall_id}/communications/{recall_communication_id}/mark-sent",
+    "permission": "quality.recall_communication.mark_sent",
+    "operationId": "markSentRecallCommunication",
+    "from": [
+     "draft",
+     "pending_approval"
+    ],
+    "fields": []
+   },
+   {
+    "key": "acknowledge",
+    "label": "Record acknowledgement",
+    "path": "/recalls/{recall_id}/communications/{recall_communication_id}/acknowledge",
+    "permission": "quality.recall_communication.acknowledge",
+    "operationId": "acknowledgeRecallCommunication",
+    "from": [
+     "draft",
+     "pending_approval",
+     "sent"
+    ],
+    "fields": []
+   }
+  ],
+  "nestedUnder": "recalls"
+ },
+ "recall-retrievals": {
+  "slug": "recall-retrievals",
+  "title": "Recall retrievals",
+  "singular": "Recall retrieval",
+  "about": "Retrieval from each identified location.",
+  "group": "Quality",
+  "tile": "quality-compliance",
+  "listPath": "/recalls/{recall_id}/retrievals",
+  "readPermission": "quality.recall_retrieval.read",
+  "fields": [
+   {
+    "name": "location_site_id",
+    "label": "Location site",
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "location_name",
+    "label": "Location name",
+    "kind": "text"
+   },
+   {
+    "name": "batch_id",
+    "label": "Batch",
+    "kind": "ref",
+    "ref": "batches"
+   },
+   {
+    "name": "quantity_dispatched",
+    "label": "Quantity dispatched",
+    "kind": "decimal"
+   },
+   {
+    "name": "quantity_returned",
+    "label": "Quantity returned",
+    "kind": "decimal"
+   },
+   {
+    "name": "returned_at",
+    "label": "Returned",
+    "kind": "datetime"
+   },
+   {
+    "name": "condition",
+    "label": "Condition",
+    "kind": "text"
+   },
+   {
+    "name": "quarantine_location_id",
+    "label": "Quarantine location",
+    "kind": "ref",
+    "ref": "storage-locations"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "returned",
+     "no_stock",
+     "unaccounted"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "location_site_id",
+   "batch_id",
+   "quarantine_location_id",
+   "returned_at"
+  ],
+  "restricted": false,
+  "getPath": "/recalls/{recall_id}/retrievals/{recall_retrieval_id}",
+  "create": {
+   "path": "/recalls/{recall_id}/retrievals",
+   "permission": "quality.recall_retrieval.write",
+   "fields": [
+    {
+     "name": "location_site_id",
+     "label": "Location site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "location_name",
+     "label": "Location name",
+     "kind": "text"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "quantity_dispatched",
+     "label": "Quantity dispatched",
+     "kind": "decimal"
+    },
+    {
+     "name": "quantity_returned",
+     "label": "Quantity returned",
+     "kind": "decimal"
+    },
+    {
+     "name": "returned_at",
+     "label": "Returned",
+     "kind": "datetime"
+    },
+    {
+     "name": "condition",
+     "label": "Condition",
+     "kind": "text"
+    },
+    {
+     "name": "quarantine_location_id",
+     "label": "Quarantine location",
+     "kind": "ref",
+     "ref": "storage-locations"
+    }
+   ]
+  },
+  "update": {
+   "path": "/recalls/{recall_id}/retrievals/{recall_retrieval_id}",
+   "permission": "quality.recall_retrieval.write",
+   "fields": [
+    {
+     "name": "location_site_id",
+     "label": "Location site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "location_name",
+     "label": "Location name",
+     "kind": "text"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "quantity_dispatched",
+     "label": "Quantity dispatched",
+     "kind": "decimal"
+    },
+    {
+     "name": "quantity_returned",
+     "label": "Quantity returned",
+     "kind": "decimal"
+    },
+    {
+     "name": "returned_at",
+     "label": "Returned",
+     "kind": "datetime"
+    },
+    {
+     "name": "condition",
+     "label": "Condition",
+     "kind": "text"
+    },
+    {
+     "name": "quarantine_location_id",
+     "label": "Quarantine location",
+     "kind": "ref",
+     "ref": "storage-locations"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "returned",
+   "no_stock",
+   "unaccounted"
+  ],
+  "nestedUnder": "recalls"
+ },
+ "recall-reconciliations": {
+  "slug": "recall-reconciliations",
+  "title": "Recall reconciliations",
+  "singular": "Recall reconciliation",
+  "about": "Quantity reconciliation, independently reviewed.",
+  "group": "Quality",
+  "tile": "quality-compliance",
+  "listPath": "/recalls/{recall_id}/reconciliations",
+  "readPermission": "quality.recall_reconciliation.read",
+  "fields": [
+   {
+    "name": "produced_received",
+    "label": "Produced received",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "remaining_stock",
+    "label": "Remaining stock",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "distributed",
+    "label": "Distributed",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "sold",
+    "label": "Sold",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "returned",
+    "label": "Returned",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "disposed",
+    "label": "Disposed",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "variance",
+    "label": "Variance",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "explanation",
+    "label": "Explanation",
+    "kind": "text"
+   },
+   {
+    "name": "independent_reviewer_id",
+    "label": "Independent reviewer",
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "reviewed"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "independent_reviewer_id",
+   "produced_received",
+   "remaining_stock",
+   "distributed"
+  ],
+  "restricted": false,
+  "getPath": "/recalls/{recall_id}/reconciliations/{recall_reconciliation_id}",
+  "create": {
+   "path": "/recalls/{recall_id}/reconciliations",
+   "permission": "quality.recall_reconciliation.write",
+   "fields": [
+    {
+     "name": "produced_received",
+     "label": "Produced received",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "remaining_stock",
+     "label": "Remaining stock",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "distributed",
+     "label": "Distributed",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "sold",
+     "label": "Sold",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "returned",
+     "label": "Returned",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "disposed",
+     "label": "Disposed",
+     "required": true,
+     "kind": "decimal"
+    },
+    {
+     "name": "explanation",
+     "label": "Explanation",
+     "kind": "text"
+    },
+    {
+     "name": "independent_reviewer_id",
+     "label": "Independent reviewer",
+     "kind": "ref",
+     "ref": "users"
+    }
+   ]
+  },
+  "update": {
+   "path": "/recalls/{recall_id}/reconciliations/{recall_reconciliation_id}",
+   "permission": "quality.recall_reconciliation.write",
+   "fields": [
+    {
+     "name": "produced_received",
+     "label": "Produced received",
+     "kind": "decimal"
+    },
+    {
+     "name": "remaining_stock",
+     "label": "Remaining stock",
+     "kind": "decimal"
+    },
+    {
+     "name": "distributed",
+     "label": "Distributed",
+     "kind": "decimal"
+    },
+    {
+     "name": "sold",
+     "label": "Sold",
+     "kind": "decimal"
+    },
+    {
+     "name": "returned",
+     "label": "Returned",
+     "kind": "decimal"
+    },
+    {
+     "name": "disposed",
+     "label": "Disposed",
+     "kind": "decimal"
+    },
+    {
+     "name": "explanation",
+     "label": "Explanation",
+     "kind": "text"
+    },
+    {
+     "name": "independent_reviewer_id",
+     "label": "Independent reviewer",
+     "kind": "ref",
+     "ref": "users"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "reviewed"
+  ],
+  "actions": [
+   {
+    "key": "review",
+    "label": "Independent review",
+    "path": "/recalls/{recall_id}/reconciliations/{recall_reconciliation_id}/review",
+    "permission": "quality.recall_reconciliation.review",
+    "operationId": "reviewRecallReconciliation",
+    "from": [
+     "draft"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     }
+    ]
+   }
+  ],
+  "nestedUnder": "recalls"
+ },
+ "incidents": {
+  "slug": "incidents",
+  "title": "Incidents",
+  "singular": "Incident",
+  "about": "Single register for incidents. Domain answers sit in `details`, validated by the template for that type.",
+  "group": "Incidents",
+  "tile": "quality-compliance",
+  "listPath": "/incidents",
+  "readPermission": "incidents.incident.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "incident_type",
+    "label": "Incident type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "security",
+     "she_injury",
+     "she_near_miss",
+     "fire",
+     "food_safety",
+     "cash_discrepancy",
+     "cit_discrepancy",
+     "key_lost",
+     "equipment",
+     "environmental",
+     "fraud",
+     "cctv",
+     "other"
+    ]
+   },
+   {
+    "name": "severity_level",
+    "label": "Severity level",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "occurred_at",
+    "label": "Occurred",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "discovered_at",
+    "label": "Discovered",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "notified_at",
+    "label": "Notified",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "persons_involved",
+    "label": "Persons involved",
+    "kind": "text"
+   },
+   {
+    "name": "immediate_action",
+    "label": "Immediate action",
+    "kind": "text"
+   },
+   {
+    "name": "details",
+    "label": "Details",
+    "kind": "json"
+   },
+   {
+    "name": "reporter_employee_id",
+    "label": "Reporter",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "statutory_notification_required",
+    "label": "Statutory notification required",
+    "kind": "boolean"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "reported",
+     "acknowledged",
+     "investigating",
+     "action_pending",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "incident_type",
+   "site_id",
+   "reporter_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/incidents/{incident_id}",
+  "create": {
+   "path": "/incidents",
+   "permission": "incidents.incident.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "incident_type",
+     "label": "Incident type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "security",
+      "she_injury",
+      "she_near_miss",
+      "fire",
+      "food_safety",
+      "cash_discrepancy",
+      "cit_discrepancy",
+      "key_lost",
+      "equipment",
+      "environmental",
+      "fraud",
+      "cctv",
+      "other"
+     ]
+    },
+    {
+     "name": "severity_level",
+     "label": "Severity level",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "occurred_at",
+     "label": "Occurred",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "discovered_at",
+     "label": "Discovered",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "persons_involved",
+     "label": "Persons involved",
+     "kind": "text"
+    },
+    {
+     "name": "immediate_action",
+     "label": "Immediate action",
+     "kind": "text"
+    },
+    {
+     "name": "details",
+     "label": "Details",
+     "kind": "json"
+    },
+    {
+     "name": "reporter_employee_id",
+     "label": "Reporter",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "statutory_notification_required",
+     "label": "Statutory notification required",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/incidents/{incident_id}",
+   "permission": "incidents.incident.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "incident_type",
+     "label": "Incident type",
+     "kind": "enum",
+     "options": [
+      "security",
+      "she_injury",
+      "she_near_miss",
+      "fire",
+      "food_safety",
+      "cash_discrepancy",
+      "cit_discrepancy",
+      "key_lost",
+      "equipment",
+      "environmental",
+      "fraud",
+      "cctv",
+      "other"
+     ]
+    },
+    {
+     "name": "severity_level",
+     "label": "Severity level",
+     "kind": "number"
+    },
+    {
+     "name": "occurred_at",
+     "label": "Occurred",
+     "kind": "datetime"
+    },
+    {
+     "name": "discovered_at",
+     "label": "Discovered",
+     "kind": "datetime"
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "persons_involved",
+     "label": "Persons involved",
+     "kind": "text"
+    },
+    {
+     "name": "immediate_action",
+     "label": "Immediate action",
+     "kind": "text"
+    },
+    {
+     "name": "details",
+     "label": "Details",
+     "kind": "json"
+    },
+    {
+     "name": "reporter_employee_id",
+     "label": "Reporter",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "statutory_notification_required",
+     "label": "Statutory notification required",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "statuses": [
+   "reported",
+   "acknowledged",
+   "investigating",
+   "action_pending",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "close",
+    "label": "Close with outcome",
+    "path": "/incidents/{incident_id}/close",
+    "permission": "incidents.incident.close",
+    "operationId": "closeIncident",
+    "from": [
+     "reported",
+     "acknowledged",
+     "investigating",
+     "action_pending"
+    ],
+    "fields": [
+     {
+      "name": "outcome",
+      "label": "Outcome",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "complaints": {
+  "slug": "complaints",
+  "title": "Complaints",
+  "singular": "Complaint",
+  "about": "Customer complaint or enquiry case. One case reference links the order, sale, payment, refund and follow-up. Open cases appear in shift handover.",
+  "group": "Customer Service",
+  "tile": "sales-customer",
+  "listPath": "/complaints",
+  "readPermission": "customer.complaint.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "channel",
+    "label": "Channel",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "in_person",
+     "phone",
+     "email",
+     "whatsapp",
+     "social",
+     "other"
+    ]
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "received_at",
+    "label": "Received",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "customer_name",
+    "label": "Customer name",
+    "kind": "text"
+   },
+   {
+    "name": "customer_contact",
+    "label": "Customer contact",
+    "kind": "text"
+   },
+   {
+    "name": "category",
+    "label": "Category",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "food_safety",
+     "foreign_object",
+     "service",
+     "product_quality",
+     "payment",
+     "staff",
+     "facility",
+     "other"
+    ]
+   },
+   {
+    "name": "severity_level",
+    "label": "Severity level",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "pos_transaction_ref",
+    "label": "POS transaction ref",
+    "kind": "text"
+   },
+   {
+    "name": "product_id",
+    "label": "Product",
+    "kind": "ref",
+    "ref": "products"
+   },
+   {
+    "name": "batch_id",
+    "label": "Batch",
+    "kind": "ref",
+    "ref": "batches"
+   },
+   {
+    "name": "owner_employee_id",
+    "label": "Owner",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "due_at",
+    "label": "Due",
+    "kind": "datetime"
+   },
+   {
+    "name": "food_safety_details",
+    "label": "Food safety details",
+    "kind": "json"
+   },
+   {
+    "name": "evidence_location",
+    "label": "Evidence location",
+    "kind": "text"
+   },
+   {
+    "name": "ncr_id",
+    "label": "NCR",
+    "kind": "ref",
+    "ref": "ncrs"
+   },
+   {
+    "name": "resolution",
+    "label": "Resolution",
+    "kind": "text"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "new",
+     "triaged",
+     "investigating",
+     "awaiting_customer",
+     "resolved",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "channel",
+   "category",
+   "site_id"
+  ],
+  "restricted": false,
+  "getPath": "/complaints/{complaint_id}",
+  "create": {
+   "path": "/complaints",
+   "permission": "customer.complaint.write",
+   "fields": [
+    {
+     "name": "channel",
+     "label": "Channel",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "in_person",
+      "phone",
+      "email",
+      "whatsapp",
+      "social",
+      "other"
+     ]
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "received_at",
+     "label": "Received",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "customer_name",
+     "label": "Customer name",
+     "kind": "text"
+    },
+    {
+     "name": "customer_contact",
+     "label": "Customer contact",
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "food_safety",
+      "foreign_object",
+      "service",
+      "product_quality",
+      "payment",
+      "staff",
+      "facility",
+      "other"
+     ]
+    },
+    {
+     "name": "severity_level",
+     "label": "Severity level",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "pos_transaction_ref",
+     "label": "POS transaction ref",
+     "kind": "text"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "due_at",
+     "label": "Due",
+     "kind": "datetime"
+    },
+    {
+     "name": "food_safety_details",
+     "label": "Food safety details",
+     "kind": "json"
+    },
+    {
+     "name": "evidence_location",
+     "label": "Evidence location",
+     "kind": "text"
+    },
+    {
+     "name": "ncr_id",
+     "label": "NCR",
+     "kind": "ref",
+     "ref": "ncrs"
+    },
+    {
+     "name": "resolution",
+     "label": "Resolution",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/complaints/{complaint_id}",
+   "permission": "customer.complaint.write",
+   "fields": [
+    {
+     "name": "channel",
+     "label": "Channel",
+     "kind": "enum",
+     "options": [
+      "in_person",
+      "phone",
+      "email",
+      "whatsapp",
+      "social",
+      "other"
+     ]
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "received_at",
+     "label": "Received",
+     "kind": "datetime"
+    },
+    {
+     "name": "customer_name",
+     "label": "Customer name",
+     "kind": "text"
+    },
+    {
+     "name": "customer_contact",
+     "label": "Customer contact",
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "kind": "enum",
+     "options": [
+      "food_safety",
+      "foreign_object",
+      "service",
+      "product_quality",
+      "payment",
+      "staff",
+      "facility",
+      "other"
+     ]
+    },
+    {
+     "name": "severity_level",
+     "label": "Severity level",
+     "kind": "number"
+    },
+    {
+     "name": "pos_transaction_ref",
+     "label": "POS transaction ref",
+     "kind": "text"
+    },
+    {
+     "name": "product_id",
+     "label": "Product",
+     "kind": "ref",
+     "ref": "products"
+    },
+    {
+     "name": "batch_id",
+     "label": "Batch",
+     "kind": "ref",
+     "ref": "batches"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "due_at",
+     "label": "Due",
+     "kind": "datetime"
+    },
+    {
+     "name": "food_safety_details",
+     "label": "Food safety details",
+     "kind": "json"
+    },
+    {
+     "name": "evidence_location",
+     "label": "Evidence location",
+     "kind": "text"
+    },
+    {
+     "name": "ncr_id",
+     "label": "NCR",
+     "kind": "ref",
+     "ref": "ncrs"
+    },
+    {
+     "name": "resolution",
+     "label": "Resolution",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "new",
+   "triaged",
+   "investigating",
+   "awaiting_customer",
+   "resolved",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "triage",
+    "label": "Set severity and owner",
+    "path": "/complaints/{complaint_id}/triage",
+    "permission": "customer.complaint.triage",
+    "operationId": "triageComplaint",
+    "from": [
+     "new"
+    ],
+    "fields": [
+     {
+      "name": "severity_level",
+      "label": "Severity level",
+      "required": true,
+      "kind": "number"
+     },
+     {
+      "name": "owner_employee_id",
+      "label": "Owner",
+      "required": true,
+      "kind": "uuid"
+     }
+    ]
+   },
+   {
+    "key": "resolve",
+    "label": "Record resolution",
+    "path": "/complaints/{complaint_id}/resolve",
+    "permission": "customer.complaint.resolve",
+    "operationId": "resolveComplaint",
+    "from": [
+     "new",
+     "triaged",
+     "investigating",
+     "awaiting_customer"
+    ],
+    "fields": [
+     {
+      "name": "resolution",
+      "label": "Resolution",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/complaints/{complaint_id}/close",
+    "permission": "customer.complaint.close",
+    "operationId": "closeComplaint",
+    "from": [
+     "new",
+     "triaged",
+     "investigating",
+     "awaiting_customer",
+     "resolved"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "service-recoveries": {
+  "slug": "service-recoveries",
+  "title": "Service recoveries",
+  "singular": "Service recovery",
+  "about": "Refund, replacement, voucher or compensation within delegated authority.",
+  "group": "Customer Service",
+  "tile": "sales-customer",
+  "listPath": "/complaints/{complaint_id}/remedies",
+  "readPermission": "customer.service_recovery.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "remedy_type",
+    "label": "Remedy type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "remake",
+     "replacement",
+     "refund",
+     "voucher",
+     "compensation"
+    ]
+   },
+   {
+    "name": "value",
+    "label": "Value",
+    "kind": "money"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "customer_agreed",
+    "label": "Customer agreed",
+    "kind": "boolean"
+   },
+   {
+    "name": "pos_reference",
+    "label": "POS reference",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "executed",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "remedy_type",
+   "value",
+   "pos_reference"
+  ],
+  "restricted": false,
+  "getPath": "/complaints/{complaint_id}/remedies/{service_recovery_id}",
+  "create": {
+   "path": "/complaints/{complaint_id}/remedies",
+   "permission": "customer.service_recovery.write",
+   "fields": [
+    {
+     "name": "remedy_type",
+     "label": "Remedy type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "remake",
+      "replacement",
+      "refund",
+      "voucher",
+      "compensation"
+     ]
+    },
+    {
+     "name": "value",
+     "label": "Value",
+     "kind": "money"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "customer_agreed",
+     "label": "Customer agreed",
+     "kind": "boolean"
+    },
+    {
+     "name": "pos_reference",
+     "label": "POS reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "executed",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/complaints/{complaint_id}/remedies/{service_recovery_id}/submit",
+    "permission": "customer.service_recovery.submit",
+    "operationId": "submitServiceRecovery",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "execute",
+    "label": "Record execution",
+    "path": "/complaints/{complaint_id}/remedies/{service_recovery_id}/execute",
+    "permission": "customer.service_recovery.execute",
+    "operationId": "executeServiceRecovery",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved"
+    ],
+    "fields": [
+     {
+      "name": "pos_reference",
+      "label": "POS reference",
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "nestedUnder": "complaints"
+ },
+ "payment-incidents": {
+  "slug": "payment-incidents",
+  "title": "Payment incidents",
+  "singular": "Payment incident",
+  "about": "Wrong currency, wrong amount, duplicate debit, wrong tender or uncertain status. No full card numbers or PINs are stored.",
+  "group": "Payment Exceptions",
+  "tile": "sales-customer",
+  "listPath": "/payment-incidents",
+  "readPermission": "payments.payment_incident.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "occurred_at",
+    "label": "Occurred",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "cashier_employee_id",
+    "label": "Cashier",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "error_type",
+    "label": "Error type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "wrong_currency",
+     "wrong_amount",
+     "duplicate_debit",
+     "wrong_tender",
+     "failed",
+     "pending",
+     "unknown",
+     "other"
+    ]
+   },
+   {
+    "name": "channel",
+    "label": "Channel",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "card",
+     "mobile_money",
+     "other"
+    ]
+   },
+   {
+    "name": "provider",
+    "label": "Provider",
+    "kind": "text"
+   },
+   {
+    "name": "terminal_id",
+    "label": "Terminal",
+    "kind": "text"
+   },
+   {
+    "name": "merchant_id",
+    "label": "Merchant",
+    "kind": "text"
+   },
+   {
+    "name": "transaction_reference",
+    "label": "Transaction reference",
+    "kind": "text"
+   },
+   {
+    "name": "pos_transaction_ref",
+    "label": "POS transaction ref",
+    "kind": "text"
+   },
+   {
+    "name": "intended",
+    "label": "Intended",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "actual",
+    "label": "Actual",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "card_last_four",
+    "label": "Card last four",
+    "kind": "text"
+   },
+   {
+    "name": "customer_contact",
+    "label": "Customer contact",
+    "kind": "text"
+   },
+   {
+    "name": "provider_status",
+    "label": "Provider status",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "authorised",
+     "declined",
+     "pending",
+     "voided",
+     "reversed",
+     "settled",
+     "unknown"
+    ]
+   },
+   {
+    "name": "correction",
+    "label": "Correction",
+    "kind": "text"
+   },
+   {
+    "name": "correction_reference",
+    "label": "Correction reference",
+    "kind": "text"
+   },
+   {
+    "name": "settlement_reconciled",
+    "label": "Settlement reconciled",
+    "readOnly": true,
+    "kind": "boolean"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "verified",
+     "correction_pending",
+     "correction_approved",
+     "reconciling",
+     "closed"
+    ]
+   },
+   {
+    "name": "updates",
+    "label": "Updates",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "site_id",
+      "label": "Site",
+      "kind": "uuid"
+     },
+     {
+      "name": "occurred_at",
+      "label": "Occurred",
+      "kind": "datetime"
+     },
+     {
+      "name": "cashier_employee_id",
+      "label": "Cashier",
+      "kind": "uuid"
+     },
+     {
+      "name": "error_type",
+      "label": "Error type",
+      "kind": "enum",
+      "options": [
+       "wrong_currency",
+       "wrong_amount",
+       "duplicate_debit",
+       "wrong_tender",
+       "failed",
+       "pending",
+       "unknown",
+       "other"
+      ]
+     },
+     {
+      "name": "channel",
+      "label": "Channel",
+      "kind": "enum",
+      "options": [
+       "card",
+       "mobile_money",
+       "other"
+      ]
+     },
+     {
+      "name": "provider",
+      "label": "Provider",
+      "kind": "text"
+     },
+     {
+      "name": "terminal_id",
+      "label": "Terminal",
+      "kind": "text"
+     },
+     {
+      "name": "merchant_id",
+      "label": "Merchant",
+      "kind": "text"
+     },
+     {
+      "name": "transaction_reference",
+      "label": "Transaction reference",
+      "kind": "text"
+     },
+     {
+      "name": "pos_transaction_ref",
+      "label": "POS transaction ref",
+      "kind": "text"
+     },
+     {
+      "name": "intended",
+      "label": "Intended",
+      "kind": "money"
+     },
+     {
+      "name": "actual",
+      "label": "Actual",
+      "kind": "money"
+     },
+     {
+      "name": "card_last_four",
+      "label": "Card last four",
+      "kind": "text"
+     },
+     {
+      "name": "customer_contact",
+      "label": "Customer contact",
+      "kind": "text"
+     },
+     {
+      "name": "correction",
+      "label": "Correction",
+      "kind": "text"
+     },
+     {
+      "name": "correction_reference",
+      "label": "Correction reference",
+      "kind": "text"
+     },
+     {
+      "name": "updates",
+      "label": "Updates",
+      "kind": "list"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "error_type",
+   "channel",
+   "provider_status"
+  ],
+  "restricted": false,
+  "getPath": "/payment-incidents/{payment_incident_id}",
+  "create": {
+   "path": "/payment-incidents",
+   "permission": "payments.payment_incident.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "occurred_at",
+     "label": "Occurred",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "error_type",
+     "label": "Error type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "wrong_currency",
+      "wrong_amount",
+      "duplicate_debit",
+      "wrong_tender",
+      "failed",
+      "pending",
+      "unknown",
+      "other"
+     ]
+    },
+    {
+     "name": "channel",
+     "label": "Channel",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "card",
+      "mobile_money",
+      "other"
+     ]
+    },
+    {
+     "name": "provider",
+     "label": "Provider",
+     "kind": "text"
+    },
+    {
+     "name": "terminal_id",
+     "label": "Terminal",
+     "kind": "text"
+    },
+    {
+     "name": "merchant_id",
+     "label": "Merchant",
+     "kind": "text"
+    },
+    {
+     "name": "transaction_reference",
+     "label": "Transaction reference",
+     "kind": "text"
+    },
+    {
+     "name": "pos_transaction_ref",
+     "label": "POS transaction ref",
+     "kind": "text"
+    },
+    {
+     "name": "intended",
+     "label": "Intended",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "actual",
+     "label": "Actual",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "card_last_four",
+     "label": "Card last four",
+     "kind": "text"
+    },
+    {
+     "name": "customer_contact",
+     "label": "Customer contact",
+     "kind": "text"
+    },
+    {
+     "name": "correction",
+     "label": "Correction",
+     "kind": "text"
+    },
+    {
+     "name": "correction_reference",
+     "label": "Correction reference",
+     "kind": "text"
+    },
+    {
+     "name": "updates",
+     "label": "Updates",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "site_id",
+       "label": "Site",
+       "kind": "uuid"
+      },
+      {
+       "name": "occurred_at",
+       "label": "Occurred",
+       "kind": "datetime"
+      },
+      {
+       "name": "cashier_employee_id",
+       "label": "Cashier",
+       "kind": "uuid"
+      },
+      {
+       "name": "error_type",
+       "label": "Error type",
+       "kind": "enum",
+       "options": [
+        "wrong_currency",
+        "wrong_amount",
+        "duplicate_debit",
+        "wrong_tender",
+        "failed",
+        "pending",
+        "unknown",
+        "other"
+       ]
+      },
+      {
+       "name": "channel",
+       "label": "Channel",
+       "kind": "enum",
+       "options": [
+        "card",
+        "mobile_money",
+        "other"
+       ]
+      },
+      {
+       "name": "provider",
+       "label": "Provider",
+       "kind": "text"
+      },
+      {
+       "name": "terminal_id",
+       "label": "Terminal",
+       "kind": "text"
+      },
+      {
+       "name": "merchant_id",
+       "label": "Merchant",
+       "kind": "text"
+      },
+      {
+       "name": "transaction_reference",
+       "label": "Transaction reference",
+       "kind": "text"
+      },
+      {
+       "name": "pos_transaction_ref",
+       "label": "POS transaction ref",
+       "kind": "text"
+      },
+      {
+       "name": "intended",
+       "label": "Intended",
+       "kind": "money"
+      },
+      {
+       "name": "actual",
+       "label": "Actual",
+       "kind": "money"
+      },
+      {
+       "name": "card_last_four",
+       "label": "Card last four",
+       "kind": "text"
+      },
+      {
+       "name": "customer_contact",
+       "label": "Customer contact",
+       "kind": "text"
+      },
+      {
+       "name": "correction",
+       "label": "Correction",
+       "kind": "text"
+      },
+      {
+       "name": "correction_reference",
+       "label": "Correction reference",
+       "kind": "text"
+      },
+      {
+       "name": "updates",
+       "label": "Updates",
+       "kind": "list"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/payment-incidents/{payment_incident_id}",
+   "permission": "payments.payment_incident.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "occurred_at",
+     "label": "Occurred",
+     "kind": "datetime"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "error_type",
+     "label": "Error type",
+     "kind": "enum",
+     "options": [
+      "wrong_currency",
+      "wrong_amount",
+      "duplicate_debit",
+      "wrong_tender",
+      "failed",
+      "pending",
+      "unknown",
+      "other"
+     ]
+    },
+    {
+     "name": "channel",
+     "label": "Channel",
+     "kind": "enum",
+     "options": [
+      "card",
+      "mobile_money",
+      "other"
+     ]
+    },
+    {
+     "name": "provider",
+     "label": "Provider",
+     "kind": "text"
+    },
+    {
+     "name": "terminal_id",
+     "label": "Terminal",
+     "kind": "text"
+    },
+    {
+     "name": "merchant_id",
+     "label": "Merchant",
+     "kind": "text"
+    },
+    {
+     "name": "transaction_reference",
+     "label": "Transaction reference",
+     "kind": "text"
+    },
+    {
+     "name": "pos_transaction_ref",
+     "label": "POS transaction ref",
+     "kind": "text"
+    },
+    {
+     "name": "intended",
+     "label": "Intended",
+     "kind": "money"
+    },
+    {
+     "name": "actual",
+     "label": "Actual",
+     "kind": "money"
+    },
+    {
+     "name": "card_last_four",
+     "label": "Card last four",
+     "kind": "text"
+    },
+    {
+     "name": "customer_contact",
+     "label": "Customer contact",
+     "kind": "text"
+    },
+    {
+     "name": "correction",
+     "label": "Correction",
+     "kind": "text"
+    },
+    {
+     "name": "correction_reference",
+     "label": "Correction reference",
+     "kind": "text"
+    },
+    {
+     "name": "updates",
+     "label": "Updates",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "site_id",
+       "label": "Site",
+       "kind": "uuid"
+      },
+      {
+       "name": "occurred_at",
+       "label": "Occurred",
+       "kind": "datetime"
+      },
+      {
+       "name": "cashier_employee_id",
+       "label": "Cashier",
+       "kind": "uuid"
+      },
+      {
+       "name": "error_type",
+       "label": "Error type",
+       "kind": "enum",
+       "options": [
+        "wrong_currency",
+        "wrong_amount",
+        "duplicate_debit",
+        "wrong_tender",
+        "failed",
+        "pending",
+        "unknown",
+        "other"
+       ]
+      },
+      {
+       "name": "channel",
+       "label": "Channel",
+       "kind": "enum",
+       "options": [
+        "card",
+        "mobile_money",
+        "other"
+       ]
+      },
+      {
+       "name": "provider",
+       "label": "Provider",
+       "kind": "text"
+      },
+      {
+       "name": "terminal_id",
+       "label": "Terminal",
+       "kind": "text"
+      },
+      {
+       "name": "merchant_id",
+       "label": "Merchant",
+       "kind": "text"
+      },
+      {
+       "name": "transaction_reference",
+       "label": "Transaction reference",
+       "kind": "text"
+      },
+      {
+       "name": "pos_transaction_ref",
+       "label": "POS transaction ref",
+       "kind": "text"
+      },
+      {
+       "name": "intended",
+       "label": "Intended",
+       "kind": "money"
+      },
+      {
+       "name": "actual",
+       "label": "Actual",
+       "kind": "money"
+      },
+      {
+       "name": "card_last_four",
+       "label": "Card last four",
+       "kind": "text"
+      },
+      {
+       "name": "customer_contact",
+       "label": "Customer contact",
+       "kind": "text"
+      },
+      {
+       "name": "correction",
+       "label": "Correction",
+       "kind": "text"
+      },
+      {
+       "name": "correction_reference",
+       "label": "Correction reference",
+       "kind": "text"
+      },
+      {
+       "name": "updates",
+       "label": "Updates",
+       "kind": "list"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "verified",
+   "correction_pending",
+   "correction_approved",
+   "reconciling",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "verify-status",
+    "label": "Record verified status",
+    "path": "/payment-incidents/{payment_incident_id}/verify-status",
+    "permission": "payments.payment_incident.verify_status",
+    "operationId": "verifyStatusPaymentIncident",
+    "from": [
+     "open"
+    ],
+    "fields": [
+     {
+      "name": "provider_status",
+      "label": "Provider status",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "authorised",
+       "declined",
+       "pending",
+       "voided",
+       "reversed",
+       "settled",
+       "unknown"
+      ]
+     },
+     {
+      "name": "evidence_attachment_id",
+      "label": "Evidence attachment",
+      "kind": "uuid"
+     }
+    ]
+   },
+   {
+    "key": "propose-correction",
+    "label": "Propose reversal or refund",
+    "path": "/payment-incidents/{payment_incident_id}/propose-correction",
+    "permission": "payments.payment_incident.propose_correction",
+    "operationId": "proposeCorrectionPaymentIncident",
+    "from": [
+     "verified"
+    ],
+    "fields": [
+     {
+      "name": "correction",
+      "label": "Correction",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "reconcile",
+    "label": "Record settlement reconciliation",
+    "path": "/payment-incidents/{payment_incident_id}/reconcile",
+    "permission": "payments.payment_incident.reconcile",
+    "operationId": "reconcilePaymentIncident",
+    "from": [
+     "correction_approved"
+    ],
+    "fields": [
+     {
+      "name": "note",
+      "label": "Note",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/payment-incidents/{payment_incident_id}/close",
+    "permission": "payments.payment_incident.close",
+    "operationId": "closePaymentIncident",
+    "from": [
+     "open",
+     "verified",
+     "correction_pending",
+     "correction_approved",
+     "reconciling"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "pos-outages": {
+  "slug": "pos-outages",
+  "title": "POS outages",
+  "singular": "POS outage",
+  "about": "POS outage. Manual receipting starts only after authorisation.",
+  "group": "Payment Exceptions",
+  "tile": "sales-customer",
+  "listPath": "/pos-outages",
+  "readPermission": "payments.pos_outage.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "started_at",
+    "label": "Started",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "cause",
+    "label": "Cause",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "affected_systems",
+    "label": "Affected systems",
+    "kind": "list"
+   },
+   {
+    "name": "ict_case",
+    "label": "ICT case",
+    "kind": "text"
+   },
+   {
+    "name": "restoration_estimate",
+    "label": "Restoration estimate",
+    "kind": "datetime"
+   },
+   {
+    "name": "restored_at",
+    "label": "Restored",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "reconciliation_note",
+    "label": "Reconciliation note",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "declared",
+     "pending_authorisation",
+     "authorised",
+     "restored",
+     "reconciled",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "started_at",
+   "restoration_estimate"
+  ],
+  "restricted": false,
+  "getPath": "/pos-outages/{pos_outage_id}",
+  "create": {
+   "path": "/pos-outages",
+   "permission": "payments.pos_outage.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "started_at",
+     "label": "Started",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "cause",
+     "label": "Cause",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "affected_systems",
+     "label": "Affected systems",
+     "kind": "list"
+    },
+    {
+     "name": "ict_case",
+     "label": "ICT case",
+     "kind": "text"
+    },
+    {
+     "name": "restoration_estimate",
+     "label": "Restoration estimate",
+     "kind": "datetime"
+    },
+    {
+     "name": "reconciliation_note",
+     "label": "Reconciliation note",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/pos-outages/{pos_outage_id}",
+   "permission": "payments.pos_outage.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "started_at",
+     "label": "Started",
+     "kind": "datetime"
+    },
+    {
+     "name": "cause",
+     "label": "Cause",
+     "kind": "text"
+    },
+    {
+     "name": "affected_systems",
+     "label": "Affected systems",
+     "kind": "list"
+    },
+    {
+     "name": "ict_case",
+     "label": "ICT case",
+     "kind": "text"
+    },
+    {
+     "name": "restoration_estimate",
+     "label": "Restoration estimate",
+     "kind": "datetime"
+    },
+    {
+     "name": "reconciliation_note",
+     "label": "Reconciliation note",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "declared",
+   "pending_authorisation",
+   "authorised",
+   "restored",
+   "reconciled",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/pos-outages/{pos_outage_id}/submit",
+    "permission": "payments.pos_outage.submit",
+    "operationId": "submitPosOutage",
+    "from": [
+     "declared"
+    ],
+    "fields": []
+   },
+   {
+    "key": "restore",
+    "label": "Record POS restored",
+    "path": "/pos-outages/{pos_outage_id}/restore",
+    "permission": "payments.pos_outage.restore",
+    "operationId": "restorePosOutage",
+    "from": [
+     "declared",
+     "pending_authorisation",
+     "authorised"
+    ],
+    "fields": [
+     {
+      "name": "restored_at",
+      "label": "Restored",
+      "required": true,
+      "kind": "datetime"
+     }
+    ]
+   },
+   {
+    "key": "close",
+    "label": "Close after reconciliation",
+    "path": "/pos-outages/{pos_outage_id}/close",
+    "permission": "payments.pos_outage.close",
+    "operationId": "closePosOutage",
+    "from": [
+     "declared",
+     "pending_authorisation",
+     "authorised",
+     "restored"
+    ],
+    "fields": [
+     {
+      "name": "reconciliation_note",
+      "label": "Reconciliation note",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "receipt-books": {
+  "slug": "receipt-books",
+  "title": "Receipt books",
+  "singular": "Receipt book",
+  "about": "Pre-numbered manual receipt book.",
+  "group": "Payment Exceptions",
+  "tile": "sales-customer",
+  "listPath": "/receipt-books",
+  "readPermission": "payments.receipt_book.read",
+  "fields": [
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "book_number",
+    "label": "Book number",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "first_number",
+    "label": "First number",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "last_number",
+    "label": "Last number",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "custodian_employee_id",
+    "label": "Custodian",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "storage_location",
+    "label": "Storage location",
+    "kind": "text"
+   },
+   {
+    "name": "issued_to_employee_id",
+    "label": "Issued to",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "issued_at",
+    "label": "Issued",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "returned_at",
+    "label": "Returned",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "in_storage",
+     "issued",
+     "returned",
+     "missing"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "site_id",
+   "custodian_employee_id",
+   "issued_to_employee_id",
+   "issued_at"
+  ],
+  "restricted": false,
+  "getPath": "/receipt-books/{receipt_book_id}",
+  "create": {
+   "path": "/receipt-books",
+   "permission": "payments.receipt_book.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "book_number",
+     "label": "Book number",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "first_number",
+     "label": "First number",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "last_number",
+     "label": "Last number",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "custodian_employee_id",
+     "label": "Custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "storage_location",
+     "label": "Storage location",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/receipt-books/{receipt_book_id}",
+   "permission": "payments.receipt_book.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "book_number",
+     "label": "Book number",
+     "kind": "text"
+    },
+    {
+     "name": "first_number",
+     "label": "First number",
+     "kind": "number"
+    },
+    {
+     "name": "last_number",
+     "label": "Last number",
+     "kind": "number"
+    },
+    {
+     "name": "custodian_employee_id",
+     "label": "Custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "storage_location",
+     "label": "Storage location",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "in_storage",
+   "issued",
+   "returned",
+   "missing"
+  ],
+  "actions": [
+   {
+    "key": "issue",
+    "label": "Issue to a cashier",
+    "path": "/receipt-books/{receipt_book_id}/issue",
+    "permission": "payments.receipt_book.issue",
+    "operationId": "issueReceiptBook",
+    "from": [
+     "in_storage"
+    ],
+    "fields": [
+     {
+      "name": "cashier_employee_id",
+      "label": "Cashier",
+      "required": true,
+      "kind": "uuid"
+     },
+     {
+      "name": "pos_outage_id",
+      "label": "POS outage",
+      "required": true,
+      "kind": "uuid"
+     }
+    ]
+   },
+   {
+    "key": "return",
+    "label": "Return and account for numbers",
+    "path": "/receipt-books/{receipt_book_id}/return",
+    "permission": "payments.receipt_book.return",
+    "operationId": "returnReceiptBook",
+    "from": [
+     "in_storage",
+     "issued",
+     "missing"
+    ],
+    "fields": [
+     {
+      "name": "note",
+      "label": "Note",
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "manual-receipts": {
+  "slug": "manual-receipts",
+  "title": "Manual receipts",
+  "singular": "Manual receipt",
+  "about": "One manual sale. Gaps in numbering need investigation; back-capture is duplicate-checked.",
+  "group": "Payment Exceptions",
+  "tile": "sales-customer",
+  "listPath": "/pos-outages/{pos_outage_id}/manual-receipts",
+  "readPermission": "payments.manual_receipt.read",
+  "fields": [
+   {
+    "name": "receipt_book_id",
+    "label": "Receipt book",
+    "required": true,
+    "kind": "ref",
+    "ref": "receipt-books"
+   },
+   {
+    "name": "receipt_number",
+    "label": "Receipt number",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "issued_at",
+    "label": "Issued",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "cashier_employee_id",
+    "label": "Cashier",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "items",
+    "label": "Items",
+    "required": true,
+    "kind": "json"
+   },
+   {
+    "name": "amount",
+    "label": "Amount",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "tender",
+    "label": "Tender",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "cash",
+     "card",
+     "mobile_money",
+     "other"
+    ]
+   },
+   {
+    "name": "order_docket",
+    "label": "Order docket",
+    "kind": "text"
+   },
+   {
+    "name": "cancel_reason",
+    "label": "Cancel reason",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "pos_transaction_ref",
+    "label": "POS transaction ref",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "captured_by",
+    "label": "Captured by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "issued",
+     "cancelled",
+     "missing",
+     "back_captured"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "tender",
+   "receipt_book_id",
+   "cashier_employee_id",
+   "captured_by"
+  ],
+  "restricted": false,
+  "getPath": "/pos-outages/{pos_outage_id}/manual-receipts/{manual_receipt_id}",
+  "create": {
+   "path": "/pos-outages/{pos_outage_id}/manual-receipts",
+   "permission": "payments.manual_receipt.write",
+   "fields": [
+    {
+     "name": "receipt_book_id",
+     "label": "Receipt book",
+     "required": true,
+     "kind": "ref",
+     "ref": "receipt-books"
+    },
+    {
+     "name": "receipt_number",
+     "label": "Receipt number",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "issued_at",
+     "label": "Issued",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "items",
+     "label": "Items",
+     "required": true,
+     "kind": "json"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "tender",
+     "label": "Tender",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "cash",
+      "card",
+      "mobile_money",
+      "other"
+     ]
+    },
+    {
+     "name": "order_docket",
+     "label": "Order docket",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "issued",
+   "cancelled",
+   "missing",
+   "back_captured"
+  ],
+  "actions": [
+   {
+    "key": "cancel",
+    "label": "Cancel and retain",
+    "path": "/pos-outages/{pos_outage_id}/manual-receipts/{manual_receipt_id}/cancel",
+    "permission": "payments.manual_receipt.cancel",
+    "operationId": "cancelManualReceipt",
+    "from": [
+     "issued",
+     "missing",
+     "back_captured"
+    ],
+    "fields": [
+     {
+      "name": "reason",
+      "label": "Reason",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   },
+   {
+    "key": "back-capture",
+    "label": "Link to the POS transaction",
+    "path": "/pos-outages/{pos_outage_id}/manual-receipts/{manual_receipt_id}/back-capture",
+    "permission": "payments.manual_receipt.back_capture",
+    "operationId": "backCaptureManualReceipt",
+    "from": [
+     "issued"
+    ],
+    "fields": [
+     {
+      "name": "pos_transaction_ref",
+      "label": "POS transaction ref",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "nestedUnder": "pos-outages"
+ },
+ "equipment-faults": {
+  "slug": "equipment-faults",
+  "title": "Equipment faults",
+  "singular": "Equipment fault",
+  "about": "Fault on any asset. Critical faults alert the Complex Manager and Maintenance, and the GM when trading is at risk.",
+  "group": "Maintenance",
+  "tile": "equipment-assets",
+  "listPath": "/equipment-faults",
+  "readPermission": "maintenance.equipment_fault.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "asset_id",
+    "label": "Asset",
+    "required": true,
+    "kind": "ref",
+    "ref": "assets"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "reported_at",
+    "label": "Reported",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "symptoms",
+    "label": "Symptoms",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "severity_level",
+    "label": "Severity level",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "trading_impact",
+    "label": "Trading impact",
+    "kind": "boolean"
+   },
+   {
+    "name": "safety_impact",
+    "label": "Safety impact",
+    "kind": "boolean"
+   },
+   {
+    "name": "out_of_service",
+    "label": "Out of service",
+    "kind": "boolean"
+   },
+   {
+    "name": "downtime_started_at",
+    "label": "Downtime started",
+    "kind": "datetime"
+   },
+   {
+    "name": "temporary_control",
+    "label": "Temporary control",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "reported",
+     "assigned",
+     "resolved",
+     "cancelled"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "asset_id",
+   "site_id",
+   "reported_at"
+  ],
+  "restricted": false,
+  "getPath": "/equipment-faults/{equipment_fault_id}",
+  "create": {
+   "path": "/equipment-faults",
+   "permission": "maintenance.equipment_fault.write",
+   "fields": [
+    {
+     "name": "asset_id",
+     "label": "Asset",
+     "required": true,
+     "kind": "ref",
+     "ref": "assets"
+    },
+    {
+     "name": "reported_at",
+     "label": "Reported",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "symptoms",
+     "label": "Symptoms",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "severity_level",
+     "label": "Severity level",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "trading_impact",
+     "label": "Trading impact",
+     "kind": "boolean"
+    },
+    {
+     "name": "safety_impact",
+     "label": "Safety impact",
+     "kind": "boolean"
+    },
+    {
+     "name": "out_of_service",
+     "label": "Out of service",
+     "kind": "boolean"
+    },
+    {
+     "name": "downtime_started_at",
+     "label": "Downtime started",
+     "kind": "datetime"
+    },
+    {
+     "name": "temporary_control",
+     "label": "Temporary control",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/equipment-faults/{equipment_fault_id}",
+   "permission": "maintenance.equipment_fault.write",
+   "fields": [
+    {
+     "name": "asset_id",
+     "label": "Asset",
+     "kind": "ref",
+     "ref": "assets"
+    },
+    {
+     "name": "reported_at",
+     "label": "Reported",
+     "kind": "datetime"
+    },
+    {
+     "name": "symptoms",
+     "label": "Symptoms",
+     "kind": "text"
+    },
+    {
+     "name": "severity_level",
+     "label": "Severity level",
+     "kind": "number"
+    },
+    {
+     "name": "trading_impact",
+     "label": "Trading impact",
+     "kind": "boolean"
+    },
+    {
+     "name": "safety_impact",
+     "label": "Safety impact",
+     "kind": "boolean"
+    },
+    {
+     "name": "out_of_service",
+     "label": "Out of service",
+     "kind": "boolean"
+    },
+    {
+     "name": "downtime_started_at",
+     "label": "Downtime started",
+     "kind": "datetime"
+    },
+    {
+     "name": "temporary_control",
+     "label": "Temporary control",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "reported",
+   "assigned",
+   "resolved",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "convert",
+    "label": "Create a work order",
+    "path": "/equipment-faults/{equipment_fault_id}/convert",
+    "permission": "maintenance.equipment_fault.convert",
+    "operationId": "convertEquipmentFault",
+    "fields": [
+     {
+      "name": "priority",
+      "label": "Priority",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "low",
+       "normal",
+       "high",
+       "critical"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "work-orders": {
+  "slug": "work-orders",
+  "title": "Work orders",
+  "singular": "Work order",
+  "about": "Corrective or preventive work. Critical equipment stays out of service until cleared.",
+  "group": "Maintenance",
+  "tile": "equipment-assets",
+  "listPath": "/work-orders",
+  "readPermission": "maintenance.work_order.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "asset_id",
+    "label": "Asset",
+    "required": true,
+    "kind": "ref",
+    "ref": "assets"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "corrective",
+     "preventive"
+    ]
+   },
+   {
+    "name": "equipment_fault_id",
+    "label": "Equipment fault",
+    "kind": "ref",
+    "ref": "equipment-faults"
+   },
+   {
+    "name": "maintenance_plan_id",
+    "label": "Maintenance plan",
+    "kind": "ref",
+    "ref": "maintenance-plans"
+   },
+   {
+    "name": "priority",
+    "label": "Priority",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "low",
+     "normal",
+     "high",
+     "critical"
+    ]
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "assigned_employee_id",
+    "label": "Assigned",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "contractor",
+    "label": "Contractor",
+    "kind": "text"
+   },
+   {
+    "name": "repair_eta",
+    "label": "Repair eta",
+    "kind": "datetime"
+   },
+   {
+    "name": "parts",
+    "label": "Parts",
+    "kind": "json"
+   },
+   {
+    "name": "service_report_attachment_id",
+    "label": "Service report attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "downtime_ended_at",
+    "label": "Downtime ended",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "cleared_by",
+    "label": "Cleared by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "invoice_id",
+    "label": "Invoice",
+    "kind": "ref",
+    "ref": "supplier-invoices"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "assigned",
+     "in_progress",
+     "pending_clearance",
+     "closed",
+     "cancelled"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "kind",
+   "priority",
+   "asset_id"
+  ],
+  "restricted": false,
+  "getPath": "/work-orders/{work_order_id}",
+  "create": {
+   "path": "/work-orders",
+   "permission": "maintenance.work_order.write",
+   "fields": [
+    {
+     "name": "asset_id",
+     "label": "Asset",
+     "required": true,
+     "kind": "ref",
+     "ref": "assets"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "corrective",
+      "preventive"
+     ]
+    },
+    {
+     "name": "equipment_fault_id",
+     "label": "Equipment fault",
+     "kind": "ref",
+     "ref": "equipment-faults"
+    },
+    {
+     "name": "maintenance_plan_id",
+     "label": "Maintenance plan",
+     "kind": "ref",
+     "ref": "maintenance-plans"
+    },
+    {
+     "name": "priority",
+     "label": "Priority",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "low",
+      "normal",
+      "high",
+      "critical"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "assigned_employee_id",
+     "label": "Assigned",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "contractor",
+     "label": "Contractor",
+     "kind": "text"
+    },
+    {
+     "name": "repair_eta",
+     "label": "Repair eta",
+     "kind": "datetime"
+    },
+    {
+     "name": "parts",
+     "label": "Parts",
+     "kind": "json"
+    },
+    {
+     "name": "service_report_attachment_id",
+     "label": "Service report attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "invoice_id",
+     "label": "Invoice",
+     "kind": "ref",
+     "ref": "supplier-invoices"
+    }
+   ]
+  },
+  "update": {
+   "path": "/work-orders/{work_order_id}",
+   "permission": "maintenance.work_order.write",
+   "fields": [
+    {
+     "name": "asset_id",
+     "label": "Asset",
+     "kind": "ref",
+     "ref": "assets"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "kind": "enum",
+     "options": [
+      "corrective",
+      "preventive"
+     ]
+    },
+    {
+     "name": "equipment_fault_id",
+     "label": "Equipment fault",
+     "kind": "ref",
+     "ref": "equipment-faults"
+    },
+    {
+     "name": "maintenance_plan_id",
+     "label": "Maintenance plan",
+     "kind": "ref",
+     "ref": "maintenance-plans"
+    },
+    {
+     "name": "priority",
+     "label": "Priority",
+     "kind": "enum",
+     "options": [
+      "low",
+      "normal",
+      "high",
+      "critical"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "assigned_employee_id",
+     "label": "Assigned",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "contractor",
+     "label": "Contractor",
+     "kind": "text"
+    },
+    {
+     "name": "repair_eta",
+     "label": "Repair eta",
+     "kind": "datetime"
+    },
+    {
+     "name": "parts",
+     "label": "Parts",
+     "kind": "json"
+    },
+    {
+     "name": "service_report_attachment_id",
+     "label": "Service report attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "invoice_id",
+     "label": "Invoice",
+     "kind": "ref",
+     "ref": "supplier-invoices"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "assigned",
+   "in_progress",
+   "pending_clearance",
+   "closed",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "assign",
+    "label": "Assign",
+    "path": "/work-orders/{work_order_id}/assign",
+    "permission": "maintenance.work_order.assign",
+    "operationId": "assignWorkOrder",
+    "from": [
+     "open"
+    ],
+    "fields": [
+     {
+      "name": "assigned_employee_id",
+      "label": "Assigned",
+      "required": true,
+      "kind": "uuid"
+     }
+    ]
+   },
+   {
+    "key": "start",
+    "label": "Start work",
+    "path": "/work-orders/{work_order_id}/start",
+    "permission": "maintenance.work_order.start",
+    "operationId": "startWorkOrder",
+    "from": [
+     "assigned"
+    ],
+    "fields": []
+   },
+   {
+    "key": "complete",
+    "label": "Submit for clearance",
+    "path": "/work-orders/{work_order_id}/complete",
+    "permission": "maintenance.work_order.complete",
+    "operationId": "completeWorkOrder",
+    "from": [
+     "open",
+     "assigned",
+     "in_progress",
+     "pending_clearance"
+    ],
+    "fields": [
+     {
+      "name": "service_report_attachment_id",
+      "label": "Service report attachment",
+      "kind": "uuid"
+     }
+    ]
+   },
+   {
+    "key": "clear",
+    "label": "Clear return to service",
+    "path": "/work-orders/{work_order_id}/clear",
+    "permission": "maintenance.work_order.clear",
+    "operationId": "clearWorkOrder",
+    "from": [
+     "in_progress"
+    ],
+    "fields": [
+     {
+      "name": "note",
+      "label": "Note",
+      "kind": "text"
+     },
+     {
+      "name": "signature_id",
+      "label": "Your 6-digit PIN",
+      "required": true,
+      "kind": "pin"
+     }
+    ]
+   }
+  ]
+ },
+ "maintenance-plans": {
+  "slug": "maintenance-plans",
+  "title": "Maintenance plans",
+  "singular": "Maintenance plan",
+  "about": "Recurring preventive task for an asset. Frequency comes from a rule or the manufacturer schedule.",
+  "group": "Maintenance",
+  "tile": "equipment-assets",
+  "listPath": "/maintenance-plans",
+  "readPermission": "maintenance.maintenance_plan.read",
+  "fields": [
+   {
+    "name": "asset_id",
+    "label": "Asset",
+    "required": true,
+    "kind": "ref",
+    "ref": "assets"
+   },
+   {
+    "name": "task",
+    "label": "Task",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "frequency_rule_key",
+    "label": "Frequency rule key",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "assigned_role_id",
+    "label": "Assigned role",
+    "kind": "ref",
+    "ref": "roles"
+   },
+   {
+    "name": "next_due_on",
+    "label": "Next due on",
+    "kind": "date"
+   },
+   {
+    "name": "form_template_id",
+    "label": "Form template",
+    "kind": "ref",
+    "ref": "form-templates"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "active",
+     "paused"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "asset_id",
+   "assigned_role_id",
+   "form_template_id",
+   "next_due_on"
+  ],
+  "restricted": false,
+  "getPath": "/maintenance-plans/{maintenance_plan_id}",
+  "create": {
+   "path": "/maintenance-plans",
+   "permission": "maintenance.maintenance_plan.write",
+   "fields": [
+    {
+     "name": "asset_id",
+     "label": "Asset",
+     "required": true,
+     "kind": "ref",
+     "ref": "assets"
+    },
+    {
+     "name": "task",
+     "label": "Task",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "frequency_rule_key",
+     "label": "Frequency rule key",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "assigned_role_id",
+     "label": "Assigned role",
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "next_due_on",
+     "label": "Next due on",
+     "kind": "date"
+    },
+    {
+     "name": "form_template_id",
+     "label": "Form template",
+     "kind": "ref",
+     "ref": "form-templates"
+    }
+   ]
+  },
+  "update": {
+   "path": "/maintenance-plans/{maintenance_plan_id}",
+   "permission": "maintenance.maintenance_plan.write",
+   "fields": [
+    {
+     "name": "asset_id",
+     "label": "Asset",
+     "kind": "ref",
+     "ref": "assets"
+    },
+    {
+     "name": "task",
+     "label": "Task",
+     "kind": "text"
+    },
+    {
+     "name": "frequency_rule_key",
+     "label": "Frequency rule key",
+     "kind": "text"
+    },
+    {
+     "name": "assigned_role_id",
+     "label": "Assigned role",
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "next_due_on",
+     "label": "Next due on",
+     "kind": "date"
+    },
+    {
+     "name": "form_template_id",
+     "label": "Form template",
+     "kind": "ref",
+     "ref": "form-templates"
+    }
+   ]
+  },
+  "statuses": [
+   "active",
+   "paused"
+  ]
+ },
+ "report-definitions": {
+  "slug": "report-definitions",
+  "title": "Report definitions",
+  "singular": "Report definition",
+  "about": "Entry in the reporting calendar.",
+  "group": "Management Reporting",
+  "tile": "general-controls",
+  "listPath": "/report-definitions",
+  "readPermission": "mgmt_reports.report_definition.read",
+  "fields": [
+   {
+    "name": "key",
+    "label": "Key",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "name",
+    "label": "Name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "frequency",
+    "label": "Frequency",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "daily",
+     "weekly",
+     "bi_weekly",
+     "monthly",
+     "ad_hoc"
+    ]
+   },
+   {
+    "name": "due_rule_key",
+    "label": "Due rule key",
+    "required": true,
+    "kind": "text",
+    "hint": "e.g. reports.daily_cash_books_due"
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "submitter_role_id",
+    "label": "Submitter role",
+    "kind": "ref",
+    "ref": "roles"
+   },
+   {
+    "name": "reviewer_role_id",
+    "label": "Reviewer role",
+    "kind": "ref",
+    "ref": "roles"
+   },
+   {
+    "name": "template_id",
+    "label": "Template",
+    "kind": "ref",
+    "ref": "form-templates"
+   },
+   {
+    "name": "shop_pattern",
+    "label": "Shop pattern",
+    "kind": "enum",
+    "options": [
+     "closes_2200",
+     "open_24h"
+    ]
+   }
+  ],
+  "columns": [
+   "name",
+   "key",
+   "frequency",
+   "shop_pattern",
+   "department_id"
+  ],
+  "restricted": false,
+  "getPath": "/report-definitions/{report_definition_id}",
+  "create": {
+   "path": "/report-definitions",
+   "permission": "mgmt_reports.report_definition.write",
+   "fields": [
+    {
+     "name": "key",
+     "label": "Key",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "frequency",
+     "label": "Frequency",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "daily",
+      "weekly",
+      "bi_weekly",
+      "monthly",
+      "ad_hoc"
+     ]
+    },
+    {
+     "name": "due_rule_key",
+     "label": "Due rule key",
+     "required": true,
+     "kind": "text",
+     "hint": "e.g. reports.daily_cash_books_due"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "submitter_role_id",
+     "label": "Submitter role",
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "reviewer_role_id",
+     "label": "Reviewer role",
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "template_id",
+     "label": "Template",
+     "kind": "ref",
+     "ref": "form-templates"
+    },
+    {
+     "name": "shop_pattern",
+     "label": "Shop pattern",
+     "kind": "enum",
+     "options": [
+      "closes_2200",
+      "open_24h"
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/report-definitions/{report_definition_id}",
+   "permission": "mgmt_reports.report_definition.write",
+   "fields": [
+    {
+     "name": "key",
+     "label": "Key",
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "kind": "text"
+    },
+    {
+     "name": "frequency",
+     "label": "Frequency",
+     "kind": "enum",
+     "options": [
+      "daily",
+      "weekly",
+      "bi_weekly",
+      "monthly",
+      "ad_hoc"
+     ]
+    },
+    {
+     "name": "due_rule_key",
+     "label": "Due rule key",
+     "kind": "text",
+     "hint": "e.g. reports.daily_cash_books_due"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "submitter_role_id",
+     "label": "Submitter role",
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "reviewer_role_id",
+     "label": "Reviewer role",
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "template_id",
+     "label": "Template",
+     "kind": "ref",
+     "ref": "form-templates"
+    },
+    {
+     "name": "shop_pattern",
+     "label": "Shop pattern",
+     "kind": "enum",
+     "options": [
+      "closes_2200",
+      "open_24h"
+     ]
+    }
+   ]
+  }
+ },
+ "reports": {
+  "slug": "reports",
+  "title": "Reports",
+  "singular": "Report",
+  "about": "One due report for a period.",
+  "group": "Management Reporting",
+  "tile": "general-controls",
+  "listPath": "/reports",
+  "readPermission": "mgmt_reports.report.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "report_definition_id",
+    "label": "Report definition",
+    "required": true,
+    "kind": "ref",
+    "ref": "report-definitions"
+   },
+   {
+    "name": "period_start",
+    "label": "Period start",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "period_end",
+    "label": "Period end",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "due_at",
+    "label": "Due",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "submitted_at",
+    "label": "Submitted",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "submitted_by",
+    "label": "Submitted by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "deputy_reason",
+    "label": "Deputy reason",
+    "kind": "text"
+   },
+   {
+    "name": "form_submission_id",
+    "label": "Form submission",
+    "kind": "ref",
+    "ref": "form-submissions"
+   },
+   {
+    "name": "late",
+    "label": "Late",
+    "readOnly": true,
+    "kind": "boolean"
+   },
+   {
+    "name": "delay_reason",
+    "label": "Delay reason",
+    "kind": "text"
+   },
+   {
+    "name": "escalated_at",
+    "label": "Escalated",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "pending",
+     "draft",
+     "submitted",
+     "reviewed",
+     "late",
+     "missing"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "report_definition_id",
+   "site_id",
+   "department_id"
+  ],
+  "restricted": false,
+  "getPath": "/reports/{report_id}",
+  "update": {
+   "path": "/reports/{report_id}",
+   "permission": "mgmt_reports.report.write",
+   "fields": [
+    {
+     "name": "report_definition_id",
+     "label": "Report definition",
+     "kind": "ref",
+     "ref": "report-definitions"
+    },
+    {
+     "name": "period_start",
+     "label": "Period start",
+     "kind": "date"
+    },
+    {
+     "name": "period_end",
+     "label": "Period end",
+     "kind": "date"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "deputy_reason",
+     "label": "Deputy reason",
+     "kind": "text"
+    },
+    {
+     "name": "form_submission_id",
+     "label": "Form submission",
+     "kind": "ref",
+     "ref": "form-submissions"
+    },
+    {
+     "name": "delay_reason",
+     "label": "Delay reason",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "pending",
+   "draft",
+   "submitted",
+   "reviewed",
+   "late",
+   "missing"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/reports/{report_id}/submit",
+    "permission": "mgmt_reports.report.submit",
+    "operationId": "submitReport",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "review",
+    "label": "Review",
+    "path": "/reports/{report_id}/review",
+    "permission": "mgmt_reports.report.review",
+    "operationId": "reviewReport",
+    "from": [
+     "pending",
+     "draft",
+     "submitted"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     }
+    ]
+   },
+   {
+    "key": "explain-late",
+    "label": "Record the reason for delay",
+    "path": "/reports/{report_id}/explain-late",
+    "permission": "mgmt_reports.report.explain_late",
+    "operationId": "explainLateReport",
+    "fields": [
+     {
+      "name": "delay_reason",
+      "label": "Delay reason",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "report-deadline-notices": {
+  "slug": "report-deadline-notices",
+  "title": "Report deadline notices",
+  "singular": "Report deadline notice",
+  "about": "A deadline formally communicated by the Managing Director for a period.",
+  "group": "Management Reporting",
+  "tile": "general-controls",
+  "listPath": "/report-deadline-notices",
+  "readPermission": "mgmt_reports.report_deadline_notice.read",
+  "fields": [
+   {
+    "name": "report_definition_id",
+    "label": "Report definition",
+    "required": true,
+    "kind": "ref",
+    "ref": "report-definitions"
+   },
+   {
+    "name": "period_start",
+    "label": "Period start",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "new_due_at",
+    "label": "New due",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "notice_attachment_id",
+    "label": "Notice attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   }
+  ],
+  "columns": [
+   "report_definition_id",
+   "notice_attachment_id",
+   "period_start",
+   "new_due_at"
+  ],
+  "restricted": false,
+  "getPath": "/report-deadline-notices/{report_deadline_notice_id}",
+  "create": {
+   "path": "/report-deadline-notices",
+   "permission": "mgmt_reports.report_deadline_notice.write",
+   "fields": [
+    {
+     "name": "report_definition_id",
+     "label": "Report definition",
+     "required": true,
+     "kind": "ref",
+     "ref": "report-definitions"
+    },
+    {
+     "name": "period_start",
+     "label": "Period start",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "new_due_at",
+     "label": "New due",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "notice_attachment_id",
+     "label": "Notice attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  }
+ },
+ "management-meetings": {
+  "slug": "management-meetings",
+  "title": "Management meetings",
+  "singular": "Management meeting",
+  "about": "Weekly management review.",
+  "group": "Management Reporting",
+  "tile": "general-controls",
+  "listPath": "/management-meetings",
+  "readPermission": "mgmt_reports.management_meeting.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "meeting_at",
+    "label": "Meeting",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "agenda",
+    "label": "Agenda",
+    "kind": "text"
+   },
+   {
+    "name": "attendee_employee_ids",
+    "label": "Attendees",
+    "kind": "list"
+   },
+   {
+    "name": "minutes",
+    "label": "Minutes",
+    "kind": "text"
+   },
+   {
+    "name": "decisions",
+    "label": "Decisions",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "planned",
+     "held"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "meeting_at",
+   "agenda",
+   "minutes"
+  ],
+  "restricted": false,
+  "getPath": "/management-meetings/{management_meeting_id}",
+  "create": {
+   "path": "/management-meetings",
+   "permission": "mgmt_reports.management_meeting.write",
+   "fields": [
+    {
+     "name": "meeting_at",
+     "label": "Meeting",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "agenda",
+     "label": "Agenda",
+     "kind": "text"
+    },
+    {
+     "name": "attendee_employee_ids",
+     "label": "Attendees",
+     "kind": "list"
+    },
+    {
+     "name": "minutes",
+     "label": "Minutes",
+     "kind": "text"
+    },
+    {
+     "name": "decisions",
+     "label": "Decisions",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/management-meetings/{management_meeting_id}",
+   "permission": "mgmt_reports.management_meeting.write",
+   "fields": [
+    {
+     "name": "meeting_at",
+     "label": "Meeting",
+     "kind": "datetime"
+    },
+    {
+     "name": "agenda",
+     "label": "Agenda",
+     "kind": "text"
+    },
+    {
+     "name": "attendee_employee_ids",
+     "label": "Attendees",
+     "kind": "list"
+    },
+    {
+     "name": "minutes",
+     "label": "Minutes",
+     "kind": "text"
+    },
+    {
+     "name": "decisions",
+     "label": "Decisions",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "planned",
+   "held"
+  ]
+ },
+ "compliance-obligations": {
+  "slug": "compliance-obligations",
+  "title": "Compliance obligations",
+  "singular": "Compliance obligation",
+  "about": "Dated obligation: tax, statutory, certificate, contract, licence, calibration or food-handler medical status.",
+  "group": "Compliance Calendar",
+  "tile": "general-controls",
+  "listPath": "/compliance-obligations",
+  "readPermission": "compliance.compliance_obligation.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "tax",
+     "statutory",
+     "certificate",
+     "contract",
+     "licence",
+     "insurance",
+     "calibration",
+     "medical"
+    ]
+   },
+   {
+    "name": "title",
+    "label": "Title",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "authority",
+    "label": "Authority",
+    "kind": "text",
+    "hint": "e.g. ZIMRA, NSSA"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "subject_type",
+    "label": "Subject type",
+    "kind": "text"
+   },
+   {
+    "name": "subject_id",
+    "label": "Subject",
+    "kind": "uuid"
+   },
+   {
+    "name": "owner_employee_id",
+    "label": "Owner",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "due_on",
+    "label": "Due on",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "recurrence_rule_key",
+    "label": "Recurrence rule key",
+    "kind": "text"
+   },
+   {
+    "name": "reminder_days",
+    "label": "Reminder days",
+    "kind": "number"
+   },
+   {
+    "name": "completed_at",
+    "label": "Completed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "evidence_attachment_id",
+    "label": "Evidence attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "upcoming",
+     "due",
+     "overdue",
+     "completed",
+     "cancelled"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "title",
+   "status",
+   "kind",
+   "site_id"
+  ],
+  "restricted": false,
+  "getPath": "/compliance-obligations/{compliance_obligation_id}",
+  "create": {
+   "path": "/compliance-obligations",
+   "permission": "compliance.compliance_obligation.write",
+   "fields": [
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "tax",
+      "statutory",
+      "certificate",
+      "contract",
+      "licence",
+      "insurance",
+      "calibration",
+      "medical"
+     ]
+    },
+    {
+     "name": "title",
+     "label": "Title",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "authority",
+     "label": "Authority",
+     "kind": "text",
+     "hint": "e.g. ZIMRA, NSSA"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "subject_type",
+     "label": "Subject type",
+     "kind": "text"
+    },
+    {
+     "name": "subject_id",
+     "label": "Subject",
+     "kind": "uuid"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "due_on",
+     "label": "Due on",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "recurrence_rule_key",
+     "label": "Recurrence rule key",
+     "kind": "text"
+    },
+    {
+     "name": "reminder_days",
+     "label": "Reminder days",
+     "kind": "number"
+    },
+    {
+     "name": "evidence_attachment_id",
+     "label": "Evidence attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "update": {
+   "path": "/compliance-obligations/{compliance_obligation_id}",
+   "permission": "compliance.compliance_obligation.write",
+   "fields": [
+    {
+     "name": "kind",
+     "label": "Kind",
+     "kind": "enum",
+     "options": [
+      "tax",
+      "statutory",
+      "certificate",
+      "contract",
+      "licence",
+      "insurance",
+      "calibration",
+      "medical"
+     ]
+    },
+    {
+     "name": "title",
+     "label": "Title",
+     "kind": "text"
+    },
+    {
+     "name": "authority",
+     "label": "Authority",
+     "kind": "text",
+     "hint": "e.g. ZIMRA, NSSA"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "subject_type",
+     "label": "Subject type",
+     "kind": "text"
+    },
+    {
+     "name": "subject_id",
+     "label": "Subject",
+     "kind": "uuid"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "due_on",
+     "label": "Due on",
+     "kind": "date"
+    },
+    {
+     "name": "recurrence_rule_key",
+     "label": "Recurrence rule key",
+     "kind": "text"
+    },
+    {
+     "name": "reminder_days",
+     "label": "Reminder days",
+     "kind": "number"
+    },
+    {
+     "name": "evidence_attachment_id",
+     "label": "Evidence attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "statuses": [
+   "upcoming",
+   "due",
+   "overdue",
+   "completed",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "complete",
+    "label": "Complete with evidence",
+    "path": "/compliance-obligations/{compliance_obligation_id}/complete",
+    "permission": "compliance.compliance_obligation.complete",
+    "operationId": "completeComplianceObligation",
+    "from": [
+     "upcoming",
+     "due",
+     "overdue"
+    ],
+    "fields": [
+     {
+      "name": "evidence_attachment_id",
+      "label": "Evidence attachment",
+      "required": true,
+      "kind": "uuid"
+     }
+    ]
+   }
+  ]
+ },
+ "asset-classes": {
+  "slug": "asset-classes",
+  "title": "Asset classes",
+  "singular": "Asset class",
+  "about": "Asset class and depreciation policy.",
+  "group": "Assets",
+  "tile": "equipment-assets",
+  "listPath": "/asset-classes",
+  "readPermission": "assets.asset_class.read",
+  "fields": [
+   {
+    "name": "code",
+    "label": "Code",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "name",
+    "label": "Name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "depreciation_rate_percent",
+    "label": "Depreciation rate percent",
+    "kind": "decimal"
+   },
+   {
+    "name": "useful_life_years",
+    "label": "Useful life years",
+    "kind": "number"
+   },
+   {
+    "name": "capitalise",
+    "label": "Capitalise",
+    "kind": "boolean"
+   }
+  ],
+  "columns": [
+   "code",
+   "name",
+   "depreciation_rate_percent",
+   "useful_life_years",
+   "capitalise"
+  ],
+  "restricted": false,
+  "getPath": "/asset-classes/{asset_class_id}",
+  "create": {
+   "path": "/asset-classes",
+   "permission": "assets.asset_class.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "depreciation_rate_percent",
+     "label": "Depreciation rate percent",
+     "kind": "decimal"
+    },
+    {
+     "name": "useful_life_years",
+     "label": "Useful life years",
+     "kind": "number"
+    },
+    {
+     "name": "capitalise",
+     "label": "Capitalise",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/asset-classes/{asset_class_id}",
+   "permission": "assets.asset_class.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "kind": "text"
+    },
+    {
+     "name": "depreciation_rate_percent",
+     "label": "Depreciation rate percent",
+     "kind": "decimal"
+    },
+    {
+     "name": "useful_life_years",
+     "label": "Useful life years",
+     "kind": "number"
+    },
+    {
+     "name": "capitalise",
+     "label": "Capitalise",
+     "kind": "boolean"
+    }
+   ]
+  }
+ },
+ "assets": {
+  "slug": "assets",
+  "title": "Assets",
+  "singular": "Asset",
+  "about": "Single identity across the fixed asset register, maintenance and faults. Depreciation runs in SAP Business One.",
+  "group": "Assets",
+  "tile": "equipment-assets",
+  "listPath": "/assets",
+  "readPermission": "assets.asset.read",
+  "fields": [
+   {
+    "name": "tag",
+    "label": "Tag",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "asset_class_id",
+    "label": "Asset class",
+    "required": true,
+    "kind": "ref",
+    "ref": "asset-classes"
+   },
+   {
+    "name": "serial_number",
+    "label": "Serial number",
+    "kind": "text"
+   },
+   {
+    "name": "make_model",
+    "label": "Make model",
+    "kind": "text"
+   },
+   {
+    "name": "acquisition_date",
+    "label": "Acquisition date",
+    "kind": "date"
+   },
+   {
+    "name": "supplier_id",
+    "label": "Supplier",
+    "kind": "ref",
+    "ref": "suppliers"
+   },
+   {
+    "name": "purchase_order_id",
+    "label": "Purchase order",
+    "kind": "ref",
+    "ref": "purchase-orders"
+   },
+   {
+    "name": "goods_receipt_id",
+    "label": "Goods receipt",
+    "kind": "ref",
+    "ref": "goods-receipts"
+   },
+   {
+    "name": "invoice_id",
+    "label": "Invoice",
+    "kind": "ref",
+    "ref": "supplier-invoices"
+   },
+   {
+    "name": "cost",
+    "label": "Cost",
+    "kind": "money"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "cost_centre_id",
+    "label": "Cost centre",
+    "kind": "ref",
+    "ref": "cost-centres"
+   },
+   {
+    "name": "custodian_employee_id",
+    "label": "Custodian",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "condition",
+    "label": "Condition",
+    "kind": "enum",
+    "options": [
+     "good",
+     "fair",
+     "poor",
+     "out_of_service"
+    ]
+   },
+   {
+    "name": "useful_life_years",
+    "label": "Useful life years",
+    "kind": "number"
+   },
+   {
+    "name": "residual_value",
+    "label": "Residual value",
+    "kind": "money"
+   },
+   {
+    "name": "critical",
+    "label": "Critical",
+    "kind": "boolean"
+   },
+   {
+    "name": "authorised_operator_ids",
+    "label": "Authorised operators",
+    "kind": "list"
+   },
+   {
+    "name": "sap_asset_ref",
+    "label": "SAP asset ref",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "wip",
+     "active",
+     "out_of_service",
+     "disposed"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "condition",
+   "asset_class_id",
+   "supplier_id",
+   "purchase_order_id"
+  ],
+  "restricted": false,
+  "getPath": "/assets/{asset_id}",
+  "create": {
+   "path": "/assets",
+   "permission": "assets.asset.write",
+   "fields": [
+    {
+     "name": "tag",
+     "label": "Tag",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "asset_class_id",
+     "label": "Asset class",
+     "required": true,
+     "kind": "ref",
+     "ref": "asset-classes"
+    },
+    {
+     "name": "serial_number",
+     "label": "Serial number",
+     "kind": "text"
+    },
+    {
+     "name": "make_model",
+     "label": "Make model",
+     "kind": "text"
+    },
+    {
+     "name": "acquisition_date",
+     "label": "Acquisition date",
+     "kind": "date"
+    },
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "purchase_order_id",
+     "label": "Purchase order",
+     "kind": "ref",
+     "ref": "purchase-orders"
+    },
+    {
+     "name": "goods_receipt_id",
+     "label": "Goods receipt",
+     "kind": "ref",
+     "ref": "goods-receipts"
+    },
+    {
+     "name": "invoice_id",
+     "label": "Invoice",
+     "kind": "ref",
+     "ref": "supplier-invoices"
+    },
+    {
+     "name": "cost",
+     "label": "Cost",
+     "kind": "money"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "cost_centre_id",
+     "label": "Cost centre",
+     "kind": "ref",
+     "ref": "cost-centres"
+    },
+    {
+     "name": "custodian_employee_id",
+     "label": "Custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "condition",
+     "label": "Condition",
+     "kind": "enum",
+     "options": [
+      "good",
+      "fair",
+      "poor",
+      "out_of_service"
+     ]
+    },
+    {
+     "name": "useful_life_years",
+     "label": "Useful life years",
+     "kind": "number"
+    },
+    {
+     "name": "residual_value",
+     "label": "Residual value",
+     "kind": "money"
+    },
+    {
+     "name": "critical",
+     "label": "Critical",
+     "kind": "boolean"
+    },
+    {
+     "name": "authorised_operator_ids",
+     "label": "Authorised operators",
+     "kind": "list"
+    },
+    {
+     "name": "sap_asset_ref",
+     "label": "SAP asset ref",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/assets/{asset_id}",
+   "permission": "assets.asset.write",
+   "fields": [
+    {
+     "name": "tag",
+     "label": "Tag",
+     "kind": "text"
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "asset_class_id",
+     "label": "Asset class",
+     "kind": "ref",
+     "ref": "asset-classes"
+    },
+    {
+     "name": "serial_number",
+     "label": "Serial number",
+     "kind": "text"
+    },
+    {
+     "name": "make_model",
+     "label": "Make model",
+     "kind": "text"
+    },
+    {
+     "name": "acquisition_date",
+     "label": "Acquisition date",
+     "kind": "date"
+    },
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "purchase_order_id",
+     "label": "Purchase order",
+     "kind": "ref",
+     "ref": "purchase-orders"
+    },
+    {
+     "name": "goods_receipt_id",
+     "label": "Goods receipt",
+     "kind": "ref",
+     "ref": "goods-receipts"
+    },
+    {
+     "name": "invoice_id",
+     "label": "Invoice",
+     "kind": "ref",
+     "ref": "supplier-invoices"
+    },
+    {
+     "name": "cost",
+     "label": "Cost",
+     "kind": "money"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "cost_centre_id",
+     "label": "Cost centre",
+     "kind": "ref",
+     "ref": "cost-centres"
+    },
+    {
+     "name": "custodian_employee_id",
+     "label": "Custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "condition",
+     "label": "Condition",
+     "kind": "enum",
+     "options": [
+      "good",
+      "fair",
+      "poor",
+      "out_of_service"
+     ]
+    },
+    {
+     "name": "useful_life_years",
+     "label": "Useful life years",
+     "kind": "number"
+    },
+    {
+     "name": "residual_value",
+     "label": "Residual value",
+     "kind": "money"
+    },
+    {
+     "name": "critical",
+     "label": "Critical",
+     "kind": "boolean"
+    },
+    {
+     "name": "authorised_operator_ids",
+     "label": "Authorised operators",
+     "kind": "list"
+    },
+    {
+     "name": "sap_asset_ref",
+     "label": "SAP asset ref",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "wip",
+   "active",
+   "out_of_service",
+   "disposed"
+  ]
+ },
+ "capex-requests": {
+  "slug": "capex-requests",
+  "title": "Capex requests",
+  "singular": "Capex request",
+  "about": "CAPEX request linked through PO, GRV and capitalisation.",
+  "group": "Assets",
+  "tile": "equipment-assets",
+  "listPath": "/capex-requests",
+  "readPermission": "assets.capex_request.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "required": true,
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "justification",
+    "label": "Justification",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "amount",
+    "label": "Amount",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "budgeted",
+    "label": "Budgeted",
+    "kind": "boolean"
+   },
+   {
+    "name": "risk_assessment",
+    "label": "Risk assessment",
+    "kind": "text"
+   },
+   {
+    "name": "classification",
+    "label": "Classification",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "capex",
+     "opex"
+    ]
+   },
+   {
+    "name": "purchase_requisition_id",
+    "label": "Purchase requisition",
+    "kind": "ref",
+    "ref": "purchase-requisitions"
+   },
+   {
+    "name": "asset_id",
+    "label": "Asset",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "assets"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "rejected",
+     "ordered",
+     "capitalised"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "classification",
+   "site_id",
+   "department_id"
+  ],
+  "restricted": false,
+  "getPath": "/capex-requests/{capex_request_id}",
+  "create": {
+   "path": "/capex-requests",
+   "permission": "assets.capex_request.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "required": true,
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "justification",
+     "label": "Justification",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "budgeted",
+     "label": "Budgeted",
+     "kind": "boolean"
+    },
+    {
+     "name": "risk_assessment",
+     "label": "Risk assessment",
+     "kind": "text"
+    },
+    {
+     "name": "purchase_requisition_id",
+     "label": "Purchase requisition",
+     "kind": "ref",
+     "ref": "purchase-requisitions"
+    }
+   ]
+  },
+  "update": {
+   "path": "/capex-requests/{capex_request_id}",
+   "permission": "assets.capex_request.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "justification",
+     "label": "Justification",
+     "kind": "text"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "kind": "money"
+    },
+    {
+     "name": "budgeted",
+     "label": "Budgeted",
+     "kind": "boolean"
+    },
+    {
+     "name": "risk_assessment",
+     "label": "Risk assessment",
+     "kind": "text"
+    },
+    {
+     "name": "purchase_requisition_id",
+     "label": "Purchase requisition",
+     "kind": "ref",
+     "ref": "purchase-requisitions"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "rejected",
+   "ordered",
+   "capitalised"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/capex-requests/{capex_request_id}/submit",
+    "permission": "assets.capex_request.submit",
+    "operationId": "submitCapexRequest",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "asset-transfers": {
+  "slug": "asset-transfers",
+  "title": "Asset transfers",
+  "singular": "Asset transfer",
+  "about": "Move an asset between sites or custodians with receiving acknowledgement.",
+  "group": "Assets",
+  "tile": "equipment-assets",
+  "listPath": "/asset-transfers",
+  "readPermission": "assets.asset_transfer.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "asset_id",
+    "label": "Asset",
+    "required": true,
+    "kind": "ref",
+    "ref": "assets"
+   },
+   {
+    "name": "to_site_id",
+    "label": "To site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "to_custodian_employee_id",
+    "label": "To custodian",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "to_cost_centre_id",
+    "label": "To cost centre",
+    "kind": "ref",
+    "ref": "cost-centres"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "received_at",
+    "label": "Received",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "received",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "asset_id",
+   "to_site_id",
+   "to_custodian_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/asset-transfers/{asset_transfer_id}",
+  "create": {
+   "path": "/asset-transfers",
+   "permission": "assets.asset_transfer.write",
+   "fields": [
+    {
+     "name": "asset_id",
+     "label": "Asset",
+     "required": true,
+     "kind": "ref",
+     "ref": "assets"
+    },
+    {
+     "name": "to_site_id",
+     "label": "To site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "to_custodian_employee_id",
+     "label": "To custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "to_cost_centre_id",
+     "label": "To cost centre",
+     "kind": "ref",
+     "ref": "cost-centres"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "received",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/asset-transfers/{asset_transfer_id}/submit",
+    "permission": "assets.asset_transfer.submit",
+    "operationId": "submitAssetTransfer",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "receive",
+    "label": "Acknowledge receipt",
+    "path": "/asset-transfers/{asset_transfer_id}/receive",
+    "permission": "assets.asset_transfer.receive",
+    "operationId": "receiveAssetTransfer",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "asset-verifications": {
+  "slug": "asset-verifications",
+  "title": "Asset verifications",
+  "singular": "Asset verification",
+  "about": "Annual physical verification with count sheets.",
+  "group": "Assets",
+  "tile": "equipment-assets",
+  "listPath": "/asset-verifications",
+  "readPermission": "assets.asset_verification.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "verification_year",
+    "label": "Verification year",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "completed_at",
+    "label": "Completed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "planned",
+     "in_progress",
+     "submitted",
+     "reviewed"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "asset_id",
+      "label": "Asset",
+      "required": true,
+      "kind": "ref",
+      "ref": "assets"
+     },
+     {
+      "name": "found",
+      "label": "Found",
+      "required": true,
+      "kind": "boolean"
+     },
+     {
+      "name": "condition",
+      "label": "Condition",
+      "kind": "text"
+     },
+     {
+      "name": "location_correct",
+      "label": "Location correct",
+      "kind": "boolean"
+     },
+     {
+      "name": "note",
+      "label": "Note",
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "completed_at",
+   "verification_year"
+  ],
+  "restricted": false,
+  "getPath": "/asset-verifications/{asset_verification_id}",
+  "create": {
+   "path": "/asset-verifications",
+   "permission": "assets.asset_verification.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "verification_year",
+     "label": "Verification year",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "asset_id",
+       "label": "Asset",
+       "required": true,
+       "kind": "ref",
+       "ref": "assets"
+      },
+      {
+       "name": "found",
+       "label": "Found",
+       "required": true,
+       "kind": "boolean"
+      },
+      {
+       "name": "condition",
+       "label": "Condition",
+       "kind": "text"
+      },
+      {
+       "name": "location_correct",
+       "label": "Location correct",
+       "kind": "boolean"
+      },
+      {
+       "name": "note",
+       "label": "Note",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/asset-verifications/{asset_verification_id}",
+   "permission": "assets.asset_verification.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "verification_year",
+     "label": "Verification year",
+     "kind": "number"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "asset_id",
+       "label": "Asset",
+       "required": true,
+       "kind": "ref",
+       "ref": "assets"
+      },
+      {
+       "name": "found",
+       "label": "Found",
+       "required": true,
+       "kind": "boolean"
+      },
+      {
+       "name": "condition",
+       "label": "Condition",
+       "kind": "text"
+      },
+      {
+       "name": "location_correct",
+       "label": "Location correct",
+       "kind": "boolean"
+      },
+      {
+       "name": "note",
+       "label": "Note",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "planned",
+   "in_progress",
+   "submitted",
+   "reviewed"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/asset-verifications/{asset_verification_id}/submit",
+    "permission": "assets.asset_verification.submit",
+    "operationId": "submitAssetVerification",
+    "from": [
+     "planned"
+    ],
+    "fields": []
+   },
+   {
+    "key": "review",
+    "label": "Review",
+    "path": "/asset-verifications/{asset_verification_id}/review",
+    "permission": "assets.asset_verification.review",
+    "operationId": "reviewAssetVerification",
+    "from": [
+     "planned",
+     "in_progress",
+     "submitted"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "asset-disposals": {
+  "slug": "asset-disposals",
+  "title": "Asset disposals",
+  "singular": "Asset disposal",
+  "about": "Disposal request, physical removal and proceeds.",
+  "group": "Assets",
+  "tile": "equipment-assets",
+  "listPath": "/asset-disposals",
+  "readPermission": "assets.asset_disposal.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "asset_id",
+    "label": "Asset",
+    "required": true,
+    "kind": "ref",
+    "ref": "assets"
+   },
+   {
+    "name": "method",
+    "label": "Method",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "sale",
+     "auction",
+     "scrap",
+     "write_off",
+     "insurance_claim"
+    ]
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "proceeds",
+    "label": "Proceeds",
+    "kind": "money"
+   },
+   {
+    "name": "removal_confirmed_at",
+    "label": "Removal confirmed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "invoice_reference",
+    "label": "Invoice reference",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "removed",
+     "completed",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "method",
+   "asset_id",
+   "proceeds"
+  ],
+  "restricted": false,
+  "getPath": "/asset-disposals/{asset_disposal_id}",
+  "create": {
+   "path": "/asset-disposals",
+   "permission": "assets.asset_disposal.write",
+   "fields": [
+    {
+     "name": "asset_id",
+     "label": "Asset",
+     "required": true,
+     "kind": "ref",
+     "ref": "assets"
+    },
+    {
+     "name": "method",
+     "label": "Method",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "sale",
+      "auction",
+      "scrap",
+      "write_off",
+      "insurance_claim"
+     ]
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "proceeds",
+     "label": "Proceeds",
+     "kind": "money"
+    },
+    {
+     "name": "invoice_reference",
+     "label": "Invoice reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/asset-disposals/{asset_disposal_id}",
+   "permission": "assets.asset_disposal.write",
+   "fields": [
+    {
+     "name": "asset_id",
+     "label": "Asset",
+     "kind": "ref",
+     "ref": "assets"
+    },
+    {
+     "name": "method",
+     "label": "Method",
+     "kind": "enum",
+     "options": [
+      "sale",
+      "auction",
+      "scrap",
+      "write_off",
+      "insurance_claim"
+     ]
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "proceeds",
+     "label": "Proceeds",
+     "kind": "money"
+    },
+    {
+     "name": "invoice_reference",
+     "label": "Invoice reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "removed",
+   "completed",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/asset-disposals/{asset_disposal_id}/submit",
+    "permission": "assets.asset_disposal.submit",
+    "operationId": "submitAssetDisposal",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "confirm-removal",
+    "label": "Confirm physical removal",
+    "path": "/asset-disposals/{asset_disposal_id}/confirm-removal",
+    "permission": "assets.asset_disposal.confirm_removal",
+    "operationId": "confirmRemovalAssetDisposal",
+    "from": [
+     "approved"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "key-items": {
+  "slug": "key-items",
+  "title": "Key items",
+  "singular": "Key item",
+  "about": "Key or alarm remote. Labels are non-identifying; alarm codes are never stored or shown.",
+  "group": "Keys",
+  "tile": "store-operations",
+  "listPath": "/keys",
+  "readPermission": "keys.key_item.read",
+  "fields": [
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "label",
+    "label": "Label",
+    "required": true,
+    "kind": "text",
+    "hint": "Non-identifying"
+   },
+   {
+    "name": "key_type",
+    "label": "Key type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "store",
+     "storeroom",
+     "office_safe",
+     "back_door",
+     "alarm_remote",
+     "other"
+    ]
+   },
+   {
+    "name": "areas_secured",
+    "label": "Areas secured",
+    "kind": "text"
+   },
+   {
+    "name": "primary_custodian_employee_id",
+    "label": "Primary custodian",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "backup_location",
+    "label": "Backup location",
+    "kind": "text"
+   },
+   {
+    "name": "master_location",
+    "label": "Master location",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "active",
+     "in_use",
+     "lost",
+     "faulty",
+     "retired"
+    ]
+   }
+  ],
+  "columns": [
+   "label",
+   "status",
+   "key_type",
+   "site_id",
+   "primary_custodian_employee_id"
+  ],
+  "restricted": true,
+  "getPath": "/keys/{key_item_id}",
+  "create": {
+   "path": "/keys",
+   "permission": "keys.key_item.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "label",
+     "label": "Label",
+     "required": true,
+     "kind": "text",
+     "hint": "Non-identifying"
+    },
+    {
+     "name": "key_type",
+     "label": "Key type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "store",
+      "storeroom",
+      "office_safe",
+      "back_door",
+      "alarm_remote",
+      "other"
+     ]
+    },
+    {
+     "name": "areas_secured",
+     "label": "Areas secured",
+     "kind": "text"
+    },
+    {
+     "name": "primary_custodian_employee_id",
+     "label": "Primary custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "backup_location",
+     "label": "Backup location",
+     "kind": "text"
+    },
+    {
+     "name": "master_location",
+     "label": "Master location",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/keys/{key_item_id}",
+   "permission": "keys.key_item.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "label",
+     "label": "Label",
+     "kind": "text",
+     "hint": "Non-identifying"
+    },
+    {
+     "name": "key_type",
+     "label": "Key type",
+     "kind": "enum",
+     "options": [
+      "store",
+      "storeroom",
+      "office_safe",
+      "back_door",
+      "alarm_remote",
+      "other"
+     ]
+    },
+    {
+     "name": "areas_secured",
+     "label": "Areas secured",
+     "kind": "text"
+    },
+    {
+     "name": "primary_custodian_employee_id",
+     "label": "Primary custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "backup_location",
+     "label": "Backup location",
+     "kind": "text"
+    },
+    {
+     "name": "master_location",
+     "label": "Master location",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "active",
+   "in_use",
+   "lost",
+   "faulty",
+   "retired"
+  ]
+ },
+ "key-movements": {
+  "slug": "key-movements",
+  "title": "Key movements",
+  "singular": "Key movement",
+  "about": "Sign-out and sign-in.",
+  "group": "Keys",
+  "tile": "store-operations",
+  "listPath": "/key-movements",
+  "readPermission": "keys.key_movement.read",
+  "fields": [
+   {
+    "name": "key_item_id",
+    "label": "Key item",
+    "required": true,
+    "kind": "ref",
+    "ref": "key-items"
+   },
+   {
+    "name": "holder_employee_id",
+    "label": "Holder",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "purpose",
+    "label": "Purpose",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "issued_at",
+    "label": "Issued",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "returned_at",
+    "label": "Returned",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "condition",
+    "label": "Condition",
+    "kind": "text"
+   },
+   {
+    "name": "movement_kind",
+    "label": "Movement kind",
+    "kind": "enum",
+    "options": [
+     "daily",
+     "emergency",
+     "backup_collection"
+    ]
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "out",
+     "returned",
+     "overdue"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "movement_kind",
+   "key_item_id",
+   "holder_employee_id",
+   "issued_at"
+  ],
+  "restricted": false,
+  "getPath": "/key-movements/{key_movement_id}",
+  "create": {
+   "path": "/key-movements",
+   "permission": "keys.key_movement.write",
+   "fields": [
+    {
+     "name": "key_item_id",
+     "label": "Key item",
+     "required": true,
+     "kind": "ref",
+     "ref": "key-items"
+    },
+    {
+     "name": "holder_employee_id",
+     "label": "Holder",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "purpose",
+     "label": "Purpose",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "issued_at",
+     "label": "Issued",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "condition",
+     "label": "Condition",
+     "kind": "text"
+    },
+    {
+     "name": "movement_kind",
+     "label": "Movement kind",
+     "kind": "enum",
+     "options": [
+      "daily",
+      "emergency",
+      "backup_collection"
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "out",
+   "returned",
+   "overdue"
+  ],
+  "actions": [
+   {
+    "key": "return",
+    "label": "Sign back in",
+    "path": "/key-movements/{key_movement_id}/return",
+    "permission": "keys.key_movement.return",
+    "operationId": "returnKeyMovement",
+    "from": [
+     "out",
+     "overdue"
+    ],
+    "fields": [
+     {
+      "name": "condition",
+      "label": "Condition",
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "key-duplication-requests": {
+  "slug": "key-duplication-requests",
+  "title": "Key duplication requests",
+  "singular": "Key duplication request",
+  "about": "Blocked until written Chairman approval and the signed memo are recorded.",
+  "group": "Keys",
+  "tile": "store-operations",
+  "listPath": "/key-duplication-requests",
+  "readPermission": "keys.key_duplication_request.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "key_type",
+    "label": "Key type",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "quantity",
+    "label": "Quantity",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "risk_assessment",
+    "label": "Risk assessment",
+    "kind": "text"
+   },
+   {
+    "name": "memo_attachment_id",
+    "label": "Memo attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "locksmith",
+    "label": "Locksmith",
+    "kind": "text"
+   },
+   {
+    "name": "cut_on",
+    "label": "Cut on",
+    "kind": "date"
+   },
+   {
+    "name": "issued_key_ids",
+    "label": "Issued keys",
+    "kind": "list"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "cut",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "memo_attachment_id",
+   "cut_on"
+  ],
+  "restricted": false,
+  "getPath": "/key-duplication-requests/{key_duplication_request_id}",
+  "create": {
+   "path": "/key-duplication-requests",
+   "permission": "keys.key_duplication_request.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "key_type",
+     "label": "Key type",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "risk_assessment",
+     "label": "Risk assessment",
+     "kind": "text"
+    },
+    {
+     "name": "memo_attachment_id",
+     "label": "Memo attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "locksmith",
+     "label": "Locksmith",
+     "kind": "text"
+    },
+    {
+     "name": "cut_on",
+     "label": "Cut on",
+     "kind": "date"
+    },
+    {
+     "name": "issued_key_ids",
+     "label": "Issued keys",
+     "kind": "list"
+    }
+   ]
+  },
+  "update": {
+   "path": "/key-duplication-requests/{key_duplication_request_id}",
+   "permission": "keys.key_duplication_request.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "key_type",
+     "label": "Key type",
+     "kind": "text"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "quantity",
+     "label": "Quantity",
+     "kind": "number"
+    },
+    {
+     "name": "risk_assessment",
+     "label": "Risk assessment",
+     "kind": "text"
+    },
+    {
+     "name": "memo_attachment_id",
+     "label": "Memo attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "locksmith",
+     "label": "Locksmith",
+     "kind": "text"
+    },
+    {
+     "name": "cut_on",
+     "label": "Cut on",
+     "kind": "date"
+    },
+    {
+     "name": "issued_key_ids",
+     "label": "Issued keys",
+     "kind": "list"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "cut",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/key-duplication-requests/{key_duplication_request_id}/submit",
+    "permission": "keys.key_duplication_request.submit",
+    "operationId": "submitKeyDuplicationRequest",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "key-audits": {
+  "slug": "key-audits",
+  "title": "Key audits",
+  "singular": "Key audit",
+  "about": "Monthly audit and annual 100% reconciliation.",
+  "group": "Keys",
+  "tile": "store-operations",
+  "listPath": "/key-audits",
+  "readPermission": "keys.key_audit.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "monthly",
+     "annual"
+    ]
+   },
+   {
+    "name": "period",
+    "label": "Period",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "auditor_employee_id",
+    "label": "Auditor",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "planned",
+     "in_progress",
+     "completed"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "key_item_id",
+      "label": "Key item",
+      "required": true,
+      "kind": "ref",
+      "ref": "key-items"
+     },
+     {
+      "name": "expected_custodian_employee_id",
+      "label": "Expected custodian",
+      "kind": "ref",
+      "ref": "employees"
+     },
+     {
+      "name": "verified",
+      "label": "Verified",
+      "required": true,
+      "kind": "boolean"
+     },
+     {
+      "name": "discrepancy",
+      "label": "Discrepancy",
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "kind",
+   "site_id",
+   "auditor_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/key-audits/{key_audit_id}",
+  "create": {
+   "path": "/key-audits",
+   "permission": "keys.key_audit.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "monthly",
+      "annual"
+     ]
+    },
+    {
+     "name": "period",
+     "label": "Period",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "auditor_employee_id",
+     "label": "Auditor",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "key_item_id",
+       "label": "Key item",
+       "required": true,
+       "kind": "ref",
+       "ref": "key-items"
+      },
+      {
+       "name": "expected_custodian_employee_id",
+       "label": "Expected custodian",
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "verified",
+       "label": "Verified",
+       "required": true,
+       "kind": "boolean"
+      },
+      {
+       "name": "discrepancy",
+       "label": "Discrepancy",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/key-audits/{key_audit_id}",
+   "permission": "keys.key_audit.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "kind": "enum",
+     "options": [
+      "monthly",
+      "annual"
+     ]
+    },
+    {
+     "name": "period",
+     "label": "Period",
+     "kind": "text"
+    },
+    {
+     "name": "auditor_employee_id",
+     "label": "Auditor",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "key_item_id",
+       "label": "Key item",
+       "required": true,
+       "kind": "ref",
+       "ref": "key-items"
+      },
+      {
+       "name": "expected_custodian_employee_id",
+       "label": "Expected custodian",
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "verified",
+       "label": "Verified",
+       "required": true,
+       "kind": "boolean"
+      },
+      {
+       "name": "discrepancy",
+       "label": "Discrepancy",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "planned",
+   "in_progress",
+   "completed"
+  ],
+  "actions": [
+   {
+    "key": "complete",
+    "label": "Sign off",
+    "path": "/key-audits/{key_audit_id}/complete",
+    "permission": "keys.key_audit.complete",
+    "operationId": "completeKeyAudit",
+    "from": [
+     "planned",
+     "in_progress"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "visitor-entries": {
+  "slug": "visitor-entries",
+  "title": "Visitor entries",
+  "singular": "Visitor entry",
+  "about": "Digital visitors book, including contractors.",
+  "group": "Visitors & Contractors",
+  "tile": "security",
+  "listPath": "/visitor-entries",
+  "readPermission": "visitors.visitor_entry.read",
+  "fields": [
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "visitor",
+     "contractor"
+    ]
+   },
+   {
+    "name": "full_name",
+    "label": "Full name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "organisation",
+    "label": "Organisation",
+    "kind": "text"
+   },
+   {
+    "name": "contact",
+    "label": "Contact",
+    "kind": "text"
+   },
+   {
+    "name": "id_reference",
+    "label": "ID reference",
+    "kind": "text"
+   },
+   {
+    "name": "purpose",
+    "label": "Purpose",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "host_employee_id",
+    "label": "Host",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "work_order_id",
+    "label": "Work order",
+    "kind": "ref",
+    "ref": "work-orders"
+   },
+   {
+    "name": "work_area",
+    "label": "Work area",
+    "kind": "text"
+   },
+   {
+    "name": "induction_done",
+    "label": "Induction done",
+    "kind": "boolean"
+   },
+   {
+    "name": "badge",
+    "label": "Badge",
+    "kind": "text"
+   },
+   {
+    "name": "arrived_at",
+    "label": "Arrived",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "departed_at",
+    "label": "Departed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "on_site",
+     "departed"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "kind",
+   "site_id",
+   "host_employee_id",
+   "work_order_id"
+  ],
+  "restricted": false,
+  "getPath": "/visitor-entries/{visitor_entry_id}",
+  "create": {
+   "path": "/visitor-entries",
+   "permission": "visitors.visitor_entry.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "visitor",
+      "contractor"
+     ]
+    },
+    {
+     "name": "full_name",
+     "label": "Full name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "organisation",
+     "label": "Organisation",
+     "kind": "text"
+    },
+    {
+     "name": "contact",
+     "label": "Contact",
+     "kind": "text"
+    },
+    {
+     "name": "id_reference",
+     "label": "ID reference",
+     "kind": "text"
+    },
+    {
+     "name": "purpose",
+     "label": "Purpose",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "host_employee_id",
+     "label": "Host",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "work_order_id",
+     "label": "Work order",
+     "kind": "ref",
+     "ref": "work-orders"
+    },
+    {
+     "name": "work_area",
+     "label": "Work area",
+     "kind": "text"
+    },
+    {
+     "name": "induction_done",
+     "label": "Induction done",
+     "kind": "boolean"
+    },
+    {
+     "name": "badge",
+     "label": "Badge",
+     "kind": "text"
+    },
+    {
+     "name": "arrived_at",
+     "label": "Arrived",
+     "required": true,
+     "kind": "datetime"
+    }
+   ]
+  },
+  "update": {
+   "path": "/visitor-entries/{visitor_entry_id}",
+   "permission": "visitors.visitor_entry.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "kind": "enum",
+     "options": [
+      "visitor",
+      "contractor"
+     ]
+    },
+    {
+     "name": "full_name",
+     "label": "Full name",
+     "kind": "text"
+    },
+    {
+     "name": "organisation",
+     "label": "Organisation",
+     "kind": "text"
+    },
+    {
+     "name": "contact",
+     "label": "Contact",
+     "kind": "text"
+    },
+    {
+     "name": "id_reference",
+     "label": "ID reference",
+     "kind": "text"
+    },
+    {
+     "name": "purpose",
+     "label": "Purpose",
+     "kind": "text"
+    },
+    {
+     "name": "host_employee_id",
+     "label": "Host",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "work_order_id",
+     "label": "Work order",
+     "kind": "ref",
+     "ref": "work-orders"
+    },
+    {
+     "name": "work_area",
+     "label": "Work area",
+     "kind": "text"
+    },
+    {
+     "name": "induction_done",
+     "label": "Induction done",
+     "kind": "boolean"
+    },
+    {
+     "name": "badge",
+     "label": "Badge",
+     "kind": "text"
+    },
+    {
+     "name": "arrived_at",
+     "label": "Arrived",
+     "kind": "datetime"
+    }
+   ]
+  },
+  "statuses": [
+   "on_site",
+   "departed"
+  ],
+  "actions": [
+   {
+    "key": "sign-out",
+    "label": "Record departure",
+    "path": "/visitor-entries/{visitor_entry_id}/sign-out",
+    "permission": "visitors.visitor_entry.sign_out",
+    "operationId": "signOutVisitorEntry",
+    "from": [
+     "on_site"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "lost-property-items": {
+  "slug": "lost-property-items",
+  "title": "Lost property items",
+  "singular": "Lost property item",
+  "about": "Found item. Bank cards follow a 30-day path and personal items a 90-day path.",
+  "group": "Lost Property",
+  "tile": "sales-customer",
+  "listPath": "/lost-property",
+  "readPermission": "lost_property.lost_property_item.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "item_type",
+    "label": "Item type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "bank_card",
+     "personal_item"
+    ]
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "found_at",
+    "label": "Found",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "found_location",
+    "label": "Found location",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "finder_employee_id",
+    "label": "Finder",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "custodian_employee_id",
+    "label": "Custodian",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "storage_location",
+    "label": "Storage location",
+    "kind": "text"
+   },
+   {
+    "name": "issuer_if_visible",
+    "label": "Issuer if visible",
+    "kind": "text"
+   },
+   {
+    "name": "name_if_visible",
+    "label": "Name if visible",
+    "kind": "text"
+   },
+   {
+    "name": "disposition_due",
+    "label": "Disposition due",
+    "readOnly": true,
+    "kind": "date"
+   },
+   {
+    "name": "contact_attempts",
+    "label": "Contact attempts",
+    "kind": "json"
+   },
+   {
+    "name": "claimant_name",
+    "label": "Claimant name",
+    "kind": "text"
+   },
+   {
+    "name": "claimant_evidence",
+    "label": "Claimant evidence",
+    "kind": "text"
+   },
+   {
+    "name": "released_at",
+    "label": "Released",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "disposition",
+    "label": "Disposition",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "returned",
+     "bank_surrendered",
+     "destroyed",
+     "unclaimed_disposed"
+    ]
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "in_custody",
+     "returned",
+     "disposed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "item_type",
+   "disposition",
+   "site_id"
+  ],
+  "restricted": false,
+  "getPath": "/lost-property/{lost_property_item_id}",
+  "create": {
+   "path": "/lost-property",
+   "permission": "lost_property.lost_property_item.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "item_type",
+     "label": "Item type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "bank_card",
+      "personal_item"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "found_at",
+     "label": "Found",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "found_location",
+     "label": "Found location",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "finder_employee_id",
+     "label": "Finder",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "custodian_employee_id",
+     "label": "Custodian",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "storage_location",
+     "label": "Storage location",
+     "kind": "text"
+    },
+    {
+     "name": "issuer_if_visible",
+     "label": "Issuer if visible",
+     "kind": "text"
+    },
+    {
+     "name": "name_if_visible",
+     "label": "Name if visible",
+     "kind": "text"
+    },
+    {
+     "name": "contact_attempts",
+     "label": "Contact attempts",
+     "kind": "json"
+    },
+    {
+     "name": "claimant_name",
+     "label": "Claimant name",
+     "kind": "text"
+    },
+    {
+     "name": "claimant_evidence",
+     "label": "Claimant evidence",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/lost-property/{lost_property_item_id}",
+   "permission": "lost_property.lost_property_item.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "item_type",
+     "label": "Item type",
+     "kind": "enum",
+     "options": [
+      "bank_card",
+      "personal_item"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "found_at",
+     "label": "Found",
+     "kind": "datetime"
+    },
+    {
+     "name": "found_location",
+     "label": "Found location",
+     "kind": "text"
+    },
+    {
+     "name": "finder_employee_id",
+     "label": "Finder",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "custodian_employee_id",
+     "label": "Custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "storage_location",
+     "label": "Storage location",
+     "kind": "text"
+    },
+    {
+     "name": "issuer_if_visible",
+     "label": "Issuer if visible",
+     "kind": "text"
+    },
+    {
+     "name": "name_if_visible",
+     "label": "Name if visible",
+     "kind": "text"
+    },
+    {
+     "name": "contact_attempts",
+     "label": "Contact attempts",
+     "kind": "json"
+    },
+    {
+     "name": "claimant_name",
+     "label": "Claimant name",
+     "kind": "text"
+    },
+    {
+     "name": "claimant_evidence",
+     "label": "Claimant evidence",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "in_custody",
+   "returned",
+   "disposed"
+  ],
+  "actions": [
+   {
+    "key": "return",
+    "label": "Release to a verified claimant",
+    "path": "/lost-property/{lost_property_item_id}/return",
+    "permission": "lost_property.lost_property_item.return",
+    "operationId": "returnLostPropertyItem",
+    "from": [
+     "in_custody",
+     "disposed"
+    ],
+    "fields": [
+     {
+      "name": "claimant_name",
+      "label": "Claimant name",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "claimant_evidence",
+      "label": "Claimant evidence",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "dispose",
+    "label": "Dispose at the due date",
+    "path": "/lost-property/{lost_property_item_id}/dispose",
+    "permission": "lost_property.lost_property_item.dispose",
+    "operationId": "disposeLostPropertyItem",
+    "from": [
+     "in_custody"
+    ],
+    "fields": [
+     {
+      "name": "disposition",
+      "label": "Disposition",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "bank_surrendered",
+       "destroyed",
+       "unclaimed_disposed"
+      ]
+     },
+     {
+      "name": "note",
+      "label": "Note",
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "documents": {
+  "slug": "documents",
+  "title": "Documents",
+  "singular": "Document",
+  "about": "Controlled document in the SOP library. The Master Document Register is a view of this table.",
+  "group": "Documents",
+  "tile": "sops",
+  "listPath": "/documents",
+  "readPermission": "documents.document.read",
+  "fields": [
+   {
+    "name": "document_number",
+    "label": "Document number",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "title",
+    "label": "Title",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "document_type",
+    "label": "Document type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "policy",
+     "sop",
+     "work_instruction",
+     "form",
+     "register",
+     "manual",
+     "guideline",
+     "objective"
+    ]
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "required": true,
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "owner_employee_id",
+    "label": "Owner",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "current_revision_id",
+    "label": "Current revision",
+    "readOnly": true,
+    "kind": "uuid"
+   },
+   {
+    "name": "issue_date",
+    "label": "Issue date",
+    "readOnly": true,
+    "kind": "date"
+   },
+   {
+    "name": "next_review_on",
+    "label": "Next review on",
+    "kind": "date"
+   },
+   {
+    "name": "storage_location",
+    "label": "Storage location",
+    "kind": "text"
+   },
+   {
+    "name": "applicable_site_ids",
+    "label": "Applicable sites",
+    "kind": "list"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "in_review",
+     "approved",
+     "issued",
+     "obsolete"
+    ]
+   }
+  ],
+  "columns": [
+   "title",
+   "status",
+   "document_type",
+   "department_id",
+   "owner_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/documents/{document_id}",
+  "create": {
+   "path": "/documents",
+   "permission": "documents.document.write",
+   "fields": [
+    {
+     "name": "document_number",
+     "label": "Document number",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "title",
+     "label": "Title",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "document_type",
+     "label": "Document type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "policy",
+      "sop",
+      "work_instruction",
+      "form",
+      "register",
+      "manual",
+      "guideline",
+      "objective"
+     ]
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "required": true,
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "next_review_on",
+     "label": "Next review on",
+     "kind": "date"
+    },
+    {
+     "name": "storage_location",
+     "label": "Storage location",
+     "kind": "text"
+    },
+    {
+     "name": "applicable_site_ids",
+     "label": "Applicable sites",
+     "kind": "list"
+    }
+   ]
+  },
+  "update": {
+   "path": "/documents/{document_id}",
+   "permission": "documents.document.write",
+   "fields": [
+    {
+     "name": "document_number",
+     "label": "Document number",
+     "kind": "text"
+    },
+    {
+     "name": "title",
+     "label": "Title",
+     "kind": "text"
+    },
+    {
+     "name": "document_type",
+     "label": "Document type",
+     "kind": "enum",
+     "options": [
+      "policy",
+      "sop",
+      "work_instruction",
+      "form",
+      "register",
+      "manual",
+      "guideline",
+      "objective"
+     ]
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "owner_employee_id",
+     "label": "Owner",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "next_review_on",
+     "label": "Next review on",
+     "kind": "date"
+    },
+    {
+     "name": "storage_location",
+     "label": "Storage location",
+     "kind": "text"
+    },
+    {
+     "name": "applicable_site_ids",
+     "label": "Applicable sites",
+     "kind": "list"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "in_review",
+   "approved",
+   "issued",
+   "obsolete"
+  ]
+ },
+ "document-revisions": {
+  "slug": "document-revisions",
+  "title": "Document revisions",
+  "singular": "Document revision",
+  "about": "One revision with review and approval. Issuing a revision withdraws the last.",
+  "group": "Documents",
+  "tile": "sops",
+  "listPath": "/documents/{document_id}/revisions",
+  "readPermission": "documents.document_revision.read",
+  "fields": [
+   {
+    "name": "revision",
+    "label": "Revision",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "revision_date",
+    "label": "Revision date",
+    "kind": "date"
+   },
+   {
+    "name": "summary_of_change",
+    "label": "Summary of change",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "file_attachment_id",
+    "label": "File attachment",
+    "required": true,
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "prepared_by",
+    "label": "Prepared by",
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "reviewed_by",
+    "label": "Reviewed by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "temporary",
+    "label": "Temporary",
+    "kind": "boolean"
+   },
+   {
+    "name": "expires_on",
+    "label": "Expires on",
+    "kind": "date"
+   },
+   {
+    "name": "requires_acknowledgement",
+    "label": "Requires acknowledgement",
+    "kind": "boolean"
+   },
+   {
+    "name": "training_required",
+    "label": "Training required",
+    "kind": "boolean"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "in_review",
+     "qms_review",
+     "pending_approval",
+     "approved",
+     "issued",
+     "withdrawn"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "file_attachment_id",
+   "prepared_by",
+   "reviewed_by",
+   "revision_date"
+  ],
+  "restricted": false,
+  "getPath": "/documents/{document_id}/revisions/{document_revision_id}",
+  "create": {
+   "path": "/documents/{document_id}/revisions",
+   "permission": "documents.document_revision.write",
+   "fields": [
+    {
+     "name": "revision",
+     "label": "Revision",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "revision_date",
+     "label": "Revision date",
+     "kind": "date"
+    },
+    {
+     "name": "summary_of_change",
+     "label": "Summary of change",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "file_attachment_id",
+     "label": "File attachment",
+     "required": true,
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "prepared_by",
+     "label": "Prepared by",
+     "kind": "ref",
+     "ref": "users"
+    },
+    {
+     "name": "temporary",
+     "label": "Temporary",
+     "kind": "boolean"
+    },
+    {
+     "name": "expires_on",
+     "label": "Expires on",
+     "kind": "date"
+    },
+    {
+     "name": "requires_acknowledgement",
+     "label": "Requires acknowledgement",
+     "kind": "boolean"
+    },
+    {
+     "name": "training_required",
+     "label": "Training required",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/documents/{document_id}/revisions/{document_revision_id}",
+   "permission": "documents.document_revision.write",
+   "fields": [
+    {
+     "name": "revision",
+     "label": "Revision",
+     "kind": "text"
+    },
+    {
+     "name": "revision_date",
+     "label": "Revision date",
+     "kind": "date"
+    },
+    {
+     "name": "summary_of_change",
+     "label": "Summary of change",
+     "kind": "text"
+    },
+    {
+     "name": "file_attachment_id",
+     "label": "File attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "prepared_by",
+     "label": "Prepared by",
+     "kind": "ref",
+     "ref": "users"
+    },
+    {
+     "name": "temporary",
+     "label": "Temporary",
+     "kind": "boolean"
+    },
+    {
+     "name": "expires_on",
+     "label": "Expires on",
+     "kind": "date"
+    },
+    {
+     "name": "requires_acknowledgement",
+     "label": "Requires acknowledgement",
+     "kind": "boolean"
+    },
+    {
+     "name": "training_required",
+     "label": "Training required",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "in_review",
+   "qms_review",
+   "pending_approval",
+   "approved",
+   "issued",
+   "withdrawn"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/documents/{document_id}/revisions/{document_revision_id}/submit",
+    "permission": "documents.document_revision.submit",
+    "operationId": "submitDocumentRevision",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "issue",
+    "label": "Issue and notify affected people",
+    "path": "/documents/{document_id}/revisions/{document_revision_id}/issue",
+    "permission": "documents.document_revision.issue",
+    "operationId": "issueDocumentRevision",
+    "from": [
+     "draft",
+     "in_review",
+     "qms_review",
+     "pending_approval",
+     "approved"
+    ],
+    "fields": []
+   },
+   {
+    "key": "withdraw",
+    "label": "Withdraw",
+    "path": "/documents/{document_id}/revisions/{document_revision_id}/withdraw",
+    "permission": "documents.document_revision.withdraw",
+    "operationId": "withdrawDocumentRevision",
+    "from": [
+     "issued",
+     "approved"
+    ],
+    "fields": []
+   }
+  ],
+  "nestedUnder": "documents"
+ },
+ "document-requests": {
+  "slug": "document-requests",
+  "title": "Document requests",
+  "singular": "Document request",
+  "about": "Process gap or documentation request. Starts the five-working-day clock.",
+  "group": "Documents",
+  "tile": "sops",
+  "listPath": "/document-requests",
+  "readPermission": "documents.document_request.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "raised_by_employee_id",
+    "label": "Raised by",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "required": true,
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "process",
+    "label": "Process",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "gap",
+    "label": "Gap",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "trigger",
+    "label": "Trigger",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "new_process",
+     "audit_finding",
+     "nonconformance",
+     "corrective_action",
+     "legal_change",
+     "customer_change",
+     "improvement",
+     "other"
+    ]
+   },
+   {
+    "name": "proposed_type",
+    "label": "Proposed type",
+    "kind": "text"
+   },
+   {
+    "name": "target_on",
+    "label": "Target on",
+    "readOnly": true,
+    "kind": "date"
+   },
+   {
+    "name": "extension_reason",
+    "label": "Extension reason",
+    "kind": "text"
+   },
+   {
+    "name": "document_id",
+    "label": "Document",
+    "kind": "ref",
+    "ref": "documents"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "raised",
+     "classified",
+     "drafting",
+     "in_review",
+     "approved",
+     "closed",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "trigger",
+   "raised_by_employee_id",
+   "department_id"
+  ],
+  "restricted": false,
+  "getPath": "/document-requests/{document_request_id}",
+  "create": {
+   "path": "/document-requests",
+   "permission": "documents.document_request.write",
+   "fields": [
+    {
+     "name": "raised_by_employee_id",
+     "label": "Raised by",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "required": true,
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "process",
+     "label": "Process",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "gap",
+     "label": "Gap",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "trigger",
+     "label": "Trigger",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "new_process",
+      "audit_finding",
+      "nonconformance",
+      "corrective_action",
+      "legal_change",
+      "customer_change",
+      "improvement",
+      "other"
+     ]
+    },
+    {
+     "name": "proposed_type",
+     "label": "Proposed type",
+     "kind": "text"
+    },
+    {
+     "name": "extension_reason",
+     "label": "Extension reason",
+     "kind": "text"
+    },
+    {
+     "name": "document_id",
+     "label": "Document",
+     "kind": "ref",
+     "ref": "documents"
+    }
+   ]
+  },
+  "update": {
+   "path": "/document-requests/{document_request_id}",
+   "permission": "documents.document_request.write",
+   "fields": [
+    {
+     "name": "raised_by_employee_id",
+     "label": "Raised by",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "process",
+     "label": "Process",
+     "kind": "text"
+    },
+    {
+     "name": "gap",
+     "label": "Gap",
+     "kind": "text"
+    },
+    {
+     "name": "trigger",
+     "label": "Trigger",
+     "kind": "enum",
+     "options": [
+      "new_process",
+      "audit_finding",
+      "nonconformance",
+      "corrective_action",
+      "legal_change",
+      "customer_change",
+      "improvement",
+      "other"
+     ]
+    },
+    {
+     "name": "proposed_type",
+     "label": "Proposed type",
+     "kind": "text"
+    },
+    {
+     "name": "extension_reason",
+     "label": "Extension reason",
+     "kind": "text"
+    },
+    {
+     "name": "document_id",
+     "label": "Document",
+     "kind": "ref",
+     "ref": "documents"
+    }
+   ]
+  },
+  "statuses": [
+   "raised",
+   "classified",
+   "drafting",
+   "in_review",
+   "approved",
+   "closed",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/document-requests/{document_request_id}/close",
+    "permission": "documents.document_request.close",
+    "operationId": "closeDocumentRequest",
+    "from": [
+     "raised",
+     "classified",
+     "drafting",
+     "in_review",
+     "approved"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "document-acknowledgements": {
+  "slug": "document-acknowledgements",
+  "title": "Document acknowledgements",
+  "singular": "Document acknowledgement",
+  "about": "Employee has read and understood a revision.",
+  "group": "Documents",
+  "tile": "sops",
+  "listPath": "/document-acknowledgements",
+  "readPermission": "documents.document_acknowledgement.read",
+  "fields": [
+   {
+    "name": "document_revision_id",
+    "label": "Document revision",
+    "required": true,
+    "kind": "uuid"
+   },
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "due_on",
+    "label": "Due on",
+    "kind": "date"
+   },
+   {
+    "name": "acknowledged_at",
+    "label": "Acknowledged",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "signature_id",
+    "label": "Your 6-digit PIN",
+    "kind": "pin",
+    "ref": "signature-requests"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "pending",
+     "acknowledged",
+     "overdue"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "employee_id",
+   "due_on",
+   "acknowledged_at"
+  ],
+  "restricted": false,
+  "getPath": "/document-acknowledgements/{document_acknowledgement_id}",
+  "statuses": [
+   "pending",
+   "acknowledged",
+   "overdue"
+  ],
+  "actions": [
+   {
+    "key": "acknowledge",
+    "label": "Acknowledge",
+    "path": "/document-acknowledgements/{document_acknowledgement_id}/acknowledge",
+    "permission": "documents.document_acknowledgement.acknowledge",
+    "operationId": "acknowledgeDocumentAcknowledgement",
+    "from": [
+     "pending"
+    ],
+    "fields": [
+     {
+      "name": "signature_id",
+      "label": "Your 6-digit PIN",
+      "required": true,
+      "kind": "pin"
+     }
+    ]
+   }
+  ]
+ },
+ "courses": {
+  "slug": "courses",
+  "title": "Courses",
+  "singular": "Course",
+  "about": "Training programme or topic, linked to the SOP versions it covers.",
+  "group": "Training",
+  "tile": "training",
+  "listPath": "/training/courses",
+  "readPermission": "training.course.read",
+  "fields": [
+   {
+    "name": "code",
+    "label": "Code",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "title",
+    "label": "Title",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "category",
+    "label": "Category",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "induction",
+     "food_safety",
+     "she",
+     "security",
+     "operational",
+     "customer_service",
+     "supervisory",
+     "product_knowledge",
+     "other"
+    ]
+   },
+   {
+    "name": "objective",
+    "label": "Objective",
+    "kind": "text"
+   },
+   {
+    "name": "document_ids",
+    "label": "Documents",
+    "kind": "list"
+   },
+   {
+    "name": "pass_mark",
+    "label": "Pass mark",
+    "kind": "number"
+   },
+   {
+    "name": "requires_practical",
+    "label": "Requires practical",
+    "kind": "boolean"
+   },
+   {
+    "name": "refresher_rule_key",
+    "label": "Refresher rule key",
+    "kind": "text"
+   },
+   {
+    "name": "material_attachment_ids",
+    "label": "Material attachments",
+    "kind": "list"
+   }
+  ],
+  "columns": [
+   "code",
+   "title",
+   "category",
+   "objective",
+   "pass_mark"
+  ],
+  "restricted": false,
+  "getPath": "/training/courses/{course_id}",
+  "create": {
+   "path": "/training/courses",
+   "permission": "training.course.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "title",
+     "label": "Title",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "induction",
+      "food_safety",
+      "she",
+      "security",
+      "operational",
+      "customer_service",
+      "supervisory",
+      "product_knowledge",
+      "other"
+     ]
+    },
+    {
+     "name": "objective",
+     "label": "Objective",
+     "kind": "text"
+    },
+    {
+     "name": "document_ids",
+     "label": "Documents",
+     "kind": "list"
+    },
+    {
+     "name": "pass_mark",
+     "label": "Pass mark",
+     "kind": "number"
+    },
+    {
+     "name": "requires_practical",
+     "label": "Requires practical",
+     "kind": "boolean"
+    },
+    {
+     "name": "refresher_rule_key",
+     "label": "Refresher rule key",
+     "kind": "text"
+    },
+    {
+     "name": "material_attachment_ids",
+     "label": "Material attachments",
+     "kind": "list"
+    }
+   ]
+  },
+  "update": {
+   "path": "/training/courses/{course_id}",
+   "permission": "training.course.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "kind": "text"
+    },
+    {
+     "name": "title",
+     "label": "Title",
+     "kind": "text"
+    },
+    {
+     "name": "category",
+     "label": "Category",
+     "kind": "enum",
+     "options": [
+      "induction",
+      "food_safety",
+      "she",
+      "security",
+      "operational",
+      "customer_service",
+      "supervisory",
+      "product_knowledge",
+      "other"
+     ]
+    },
+    {
+     "name": "objective",
+     "label": "Objective",
+     "kind": "text"
+    },
+    {
+     "name": "document_ids",
+     "label": "Documents",
+     "kind": "list"
+    },
+    {
+     "name": "pass_mark",
+     "label": "Pass mark",
+     "kind": "number"
+    },
+    {
+     "name": "requires_practical",
+     "label": "Requires practical",
+     "kind": "boolean"
+    },
+    {
+     "name": "refresher_rule_key",
+     "label": "Refresher rule key",
+     "kind": "text"
+    },
+    {
+     "name": "material_attachment_ids",
+     "label": "Material attachments",
+     "kind": "list"
+    }
+   ]
+  }
+ },
+ "training-requirements": {
+  "slug": "training-requirements",
+  "title": "Training requirements",
+  "singular": "Training requirement",
+  "about": "Training matrix row: course required for a role. The compliance view joins this to employees.",
+  "group": "Training",
+  "tile": "training",
+  "listPath": "/training/requirements",
+  "readPermission": "training.training_requirement.read",
+  "fields": [
+   {
+    "name": "role_id",
+    "label": "Role",
+    "required": true,
+    "kind": "ref",
+    "ref": "roles"
+   },
+   {
+    "name": "course_id",
+    "label": "Course",
+    "required": true,
+    "kind": "ref",
+    "ref": "courses"
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "mandatory",
+    "label": "Mandatory",
+    "required": true,
+    "kind": "boolean"
+   },
+   {
+    "name": "refresher_months",
+    "label": "Refresher months",
+    "kind": "number"
+   }
+  ],
+  "columns": [
+   "role_id",
+   "course_id",
+   "department_id",
+   "refresher_months",
+   "mandatory"
+  ],
+  "restricted": false,
+  "getPath": "/training/requirements/{training_requirement_id}",
+  "create": {
+   "path": "/training/requirements",
+   "permission": "training.training_requirement.write",
+   "fields": [
+    {
+     "name": "role_id",
+     "label": "Role",
+     "required": true,
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "course_id",
+     "label": "Course",
+     "required": true,
+     "kind": "ref",
+     "ref": "courses"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "mandatory",
+     "label": "Mandatory",
+     "required": true,
+     "kind": "boolean"
+    },
+    {
+     "name": "refresher_months",
+     "label": "Refresher months",
+     "kind": "number"
+    }
+   ]
+  },
+  "update": {
+   "path": "/training/requirements/{training_requirement_id}",
+   "permission": "training.training_requirement.write",
+   "fields": [
+    {
+     "name": "role_id",
+     "label": "Role",
+     "kind": "ref",
+     "ref": "roles"
+    },
+    {
+     "name": "course_id",
+     "label": "Course",
+     "kind": "ref",
+     "ref": "courses"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "mandatory",
+     "label": "Mandatory",
+     "kind": "boolean"
+    },
+    {
+     "name": "refresher_months",
+     "label": "Refresher months",
+     "kind": "number"
+    }
+   ]
+  }
+ },
+ "training-sessions": {
+  "slug": "training-sessions",
+  "title": "Training sessions",
+  "singular": "Training session",
+  "about": "Scheduled session avoiding coverage gaps.",
+  "group": "Training",
+  "tile": "training",
+  "listPath": "/training/sessions",
+  "readPermission": "training.training_session.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "course_id",
+    "label": "Course",
+    "required": true,
+    "kind": "ref",
+    "ref": "courses"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "venue",
+    "label": "Venue",
+    "kind": "text"
+   },
+   {
+    "name": "starts_at",
+    "label": "Starts",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "ends_at",
+    "label": "Ends",
+    "kind": "datetime"
+   },
+   {
+    "name": "shift",
+    "label": "Shift",
+    "kind": "text"
+   },
+   {
+    "name": "trainer_employee_id",
+    "label": "Trainer",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "external_trainer",
+    "label": "External trainer",
+    "kind": "text"
+   },
+   {
+    "name": "capacity",
+    "label": "Capacity",
+    "kind": "number"
+   },
+   {
+    "name": "cost",
+    "label": "Cost",
+    "kind": "money"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "planned",
+     "held",
+     "cancelled"
+    ]
+   },
+   {
+    "name": "participants",
+    "label": "Participants",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "employee_id",
+      "label": "Employee",
+      "required": true,
+      "kind": "ref",
+      "ref": "employees"
+     },
+     {
+      "name": "attendance",
+      "label": "Attendance",
+      "kind": "enum",
+      "options": [
+       "invited",
+       "attended",
+       "absent",
+       "excused"
+      ]
+     },
+     {
+      "name": "checked_in_at",
+      "label": "Checked in",
+      "kind": "datetime"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "course_id",
+   "site_id",
+   "trainer_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/training/sessions/{training_session_id}",
+  "create": {
+   "path": "/training/sessions",
+   "permission": "training.training_session.write",
+   "fields": [
+    {
+     "name": "course_id",
+     "label": "Course",
+     "required": true,
+     "kind": "ref",
+     "ref": "courses"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "venue",
+     "label": "Venue",
+     "kind": "text"
+    },
+    {
+     "name": "starts_at",
+     "label": "Starts",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "ends_at",
+     "label": "Ends",
+     "kind": "datetime"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "kind": "text"
+    },
+    {
+     "name": "trainer_employee_id",
+     "label": "Trainer",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "external_trainer",
+     "label": "External trainer",
+     "kind": "text"
+    },
+    {
+     "name": "capacity",
+     "label": "Capacity",
+     "kind": "number"
+    },
+    {
+     "name": "cost",
+     "label": "Cost",
+     "kind": "money"
+    },
+    {
+     "name": "participants",
+     "label": "Participants",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "employee_id",
+       "label": "Employee",
+       "required": true,
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "attendance",
+       "label": "Attendance",
+       "kind": "enum",
+       "options": [
+        "invited",
+        "attended",
+        "absent",
+        "excused"
+       ]
+      },
+      {
+       "name": "checked_in_at",
+       "label": "Checked in",
+       "kind": "datetime"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/training/sessions/{training_session_id}",
+   "permission": "training.training_session.write",
+   "fields": [
+    {
+     "name": "course_id",
+     "label": "Course",
+     "kind": "ref",
+     "ref": "courses"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "venue",
+     "label": "Venue",
+     "kind": "text"
+    },
+    {
+     "name": "starts_at",
+     "label": "Starts",
+     "kind": "datetime"
+    },
+    {
+     "name": "ends_at",
+     "label": "Ends",
+     "kind": "datetime"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "kind": "text"
+    },
+    {
+     "name": "trainer_employee_id",
+     "label": "Trainer",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "external_trainer",
+     "label": "External trainer",
+     "kind": "text"
+    },
+    {
+     "name": "capacity",
+     "label": "Capacity",
+     "kind": "number"
+    },
+    {
+     "name": "cost",
+     "label": "Cost",
+     "kind": "money"
+    },
+    {
+     "name": "participants",
+     "label": "Participants",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "employee_id",
+       "label": "Employee",
+       "required": true,
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "attendance",
+       "label": "Attendance",
+       "kind": "enum",
+       "options": [
+        "invited",
+        "attended",
+        "absent",
+        "excused"
+       ]
+      },
+      {
+       "name": "checked_in_at",
+       "label": "Checked in",
+       "kind": "datetime"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "planned",
+   "held",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "close",
+    "label": "Close attendance",
+    "path": "/training/sessions/{training_session_id}/close",
+    "permission": "training.training_session.close",
+    "operationId": "closeTrainingSession",
+    "from": [
+     "planned"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "training-assessments": {
+  "slug": "training-assessments",
+  "title": "Training assessments",
+  "singular": "Training assessment",
+  "about": "Knowledge or practical assessment result.",
+  "group": "Training",
+  "tile": "training",
+  "listPath": "/training/assessments",
+  "readPermission": "training.training_assessment.read",
+  "fields": [
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "course_id",
+    "label": "Course",
+    "required": true,
+    "kind": "ref",
+    "ref": "courses"
+   },
+   {
+    "name": "training_session_id",
+    "label": "Training session",
+    "kind": "ref",
+    "ref": "training-sessions"
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "knowledge",
+     "practical"
+    ]
+   },
+   {
+    "name": "score",
+    "label": "Score",
+    "kind": "number"
+   },
+   {
+    "name": "attempt",
+    "label": "Attempt",
+    "kind": "number"
+   },
+   {
+    "name": "result",
+    "label": "Result",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "pass",
+     "fail",
+     "not_yet_competent"
+    ]
+   },
+   {
+    "name": "assessor_employee_id",
+    "label": "Assessor",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "assessed_on",
+    "label": "Assessed on",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "evidence_attachment_id",
+    "label": "Evidence attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   }
+  ],
+  "columns": [
+   "kind",
+   "result",
+   "employee_id",
+   "course_id",
+   "training_session_id"
+  ],
+  "restricted": false,
+  "getPath": "/training/assessments/{training_assessment_id}",
+  "create": {
+   "path": "/training/assessments",
+   "permission": "training.training_assessment.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "course_id",
+     "label": "Course",
+     "required": true,
+     "kind": "ref",
+     "ref": "courses"
+    },
+    {
+     "name": "training_session_id",
+     "label": "Training session",
+     "kind": "ref",
+     "ref": "training-sessions"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "knowledge",
+      "practical"
+     ]
+    },
+    {
+     "name": "score",
+     "label": "Score",
+     "kind": "number"
+    },
+    {
+     "name": "attempt",
+     "label": "Attempt",
+     "kind": "number"
+    },
+    {
+     "name": "result",
+     "label": "Result",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "pass",
+      "fail",
+      "not_yet_competent"
+     ]
+    },
+    {
+     "name": "assessor_employee_id",
+     "label": "Assessor",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "assessed_on",
+     "label": "Assessed on",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "evidence_attachment_id",
+     "label": "Evidence attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  }
+ },
+ "competencies": {
+  "slug": "competencies",
+  "title": "Competencies",
+  "singular": "Competency",
+  "about": "Employee competency status, including expiry and restrictions.",
+  "group": "Training",
+  "tile": "training",
+  "listPath": "/training/competencies",
+  "readPermission": "training.competency.read",
+  "fields": [
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "course_id",
+    "label": "Course",
+    "required": true,
+    "kind": "ref",
+    "ref": "courses"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "not_started",
+     "in_progress",
+     "competent",
+     "expired",
+     "restricted"
+    ]
+   },
+   {
+    "name": "achieved_on",
+    "label": "Achieved on",
+    "kind": "date"
+   },
+   {
+    "name": "expires_on",
+    "label": "Expires on",
+    "kind": "date"
+   },
+   {
+    "name": "assessor_employee_id",
+    "label": "Assessor",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "restriction",
+    "label": "Restriction",
+    "kind": "text"
+   }
+  ],
+  "columns": [
+   "status",
+   "employee_id",
+   "course_id",
+   "assessor_employee_id",
+   "achieved_on"
+  ],
+  "restricted": false,
+  "getPath": "/training/competencies/{competency_id}",
+  "create": {
+   "path": "/training/competencies",
+   "permission": "training.competency.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "course_id",
+     "label": "Course",
+     "required": true,
+     "kind": "ref",
+     "ref": "courses"
+    },
+    {
+     "name": "status",
+     "label": "Status",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "not_started",
+      "in_progress",
+      "competent",
+      "expired",
+      "restricted"
+     ]
+    },
+    {
+     "name": "achieved_on",
+     "label": "Achieved on",
+     "kind": "date"
+    },
+    {
+     "name": "expires_on",
+     "label": "Expires on",
+     "kind": "date"
+    },
+    {
+     "name": "assessor_employee_id",
+     "label": "Assessor",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "restriction",
+     "label": "Restriction",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/training/competencies/{competency_id}",
+   "permission": "training.competency.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "course_id",
+     "label": "Course",
+     "kind": "ref",
+     "ref": "courses"
+    },
+    {
+     "name": "status",
+     "label": "Status",
+     "kind": "enum",
+     "options": [
+      "not_started",
+      "in_progress",
+      "competent",
+      "expired",
+      "restricted"
+     ]
+    },
+    {
+     "name": "achieved_on",
+     "label": "Achieved on",
+     "kind": "date"
+    },
+    {
+     "name": "expires_on",
+     "label": "Expires on",
+     "kind": "date"
+    },
+    {
+     "name": "assessor_employee_id",
+     "label": "Assessor",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "restriction",
+     "label": "Restriction",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "not_started",
+   "in_progress",
+   "competent",
+   "expired",
+   "restricted"
+  ]
+ },
+ "certificates": {
+  "slug": "certificates",
+  "title": "Certificates",
+  "singular": "Certificate",
+  "about": "External certificate with expiry alert.",
+  "group": "Training",
+  "tile": "training",
+  "listPath": "/training/certificates",
+  "readPermission": "training.certificate.read",
+  "fields": [
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "course_name",
+    "label": "Course name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "provider",
+    "label": "Provider",
+    "kind": "text"
+   },
+   {
+    "name": "certificate_number",
+    "label": "Certificate number",
+    "kind": "text"
+   },
+   {
+    "name": "issued_on",
+    "label": "Issued on",
+    "kind": "date"
+   },
+   {
+    "name": "expires_on",
+    "label": "Expires on",
+    "kind": "date"
+   },
+   {
+    "name": "attachment_id",
+    "label": "Attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   }
+  ],
+  "columns": [
+   "employee_id",
+   "attachment_id",
+   "issued_on",
+   "expires_on",
+   "course_name"
+  ],
+  "restricted": false,
+  "getPath": "/training/certificates/{certificate_id}",
+  "create": {
+   "path": "/training/certificates",
+   "permission": "training.certificate.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "course_name",
+     "label": "Course name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "provider",
+     "label": "Provider",
+     "kind": "text"
+    },
+    {
+     "name": "certificate_number",
+     "label": "Certificate number",
+     "kind": "text"
+    },
+    {
+     "name": "issued_on",
+     "label": "Issued on",
+     "kind": "date"
+    },
+    {
+     "name": "expires_on",
+     "label": "Expires on",
+     "kind": "date"
+    },
+    {
+     "name": "attachment_id",
+     "label": "Attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "update": {
+   "path": "/training/certificates/{certificate_id}",
+   "permission": "training.certificate.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "course_name",
+     "label": "Course name",
+     "kind": "text"
+    },
+    {
+     "name": "provider",
+     "label": "Provider",
+     "kind": "text"
+    },
+    {
+     "name": "certificate_number",
+     "label": "Certificate number",
+     "kind": "text"
+    },
+    {
+     "name": "issued_on",
+     "label": "Issued on",
+     "kind": "date"
+    },
+    {
+     "name": "expires_on",
+     "label": "Expires on",
+     "kind": "date"
+    },
+    {
+     "name": "attachment_id",
+     "label": "Attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  }
+ },
+ "training-requests": {
+  "slug": "training-requests",
+  "title": "Training requests",
+  "singular": "Training request",
+  "about": "Ad hoc, corrective, new-product or refresher request.",
+  "group": "Training",
+  "tile": "training",
+  "listPath": "/training/requests",
+  "readPermission": "training.training_request.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "topic",
+    "label": "Topic",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "target_group",
+    "label": "Target group",
+    "kind": "text"
+   },
+   {
+    "name": "estimated_cost",
+    "label": "Estimated cost",
+    "kind": "money"
+   },
+   {
+    "name": "proposed_date",
+    "label": "Proposed date",
+    "kind": "date"
+   },
+   {
+    "name": "source_type",
+    "label": "Source type",
+    "kind": "text"
+   },
+   {
+    "name": "source_id",
+    "label": "Source",
+    "kind": "uuid"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "scheduled",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "estimated_cost",
+   "proposed_date"
+  ],
+  "restricted": false,
+  "getPath": "/training/requests/{training_request_id}",
+  "create": {
+   "path": "/training/requests",
+   "permission": "training.training_request.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "topic",
+     "label": "Topic",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "target_group",
+     "label": "Target group",
+     "kind": "text"
+    },
+    {
+     "name": "estimated_cost",
+     "label": "Estimated cost",
+     "kind": "money"
+    },
+    {
+     "name": "proposed_date",
+     "label": "Proposed date",
+     "kind": "date"
+    },
+    {
+     "name": "source_type",
+     "label": "Source type",
+     "kind": "text"
+    },
+    {
+     "name": "source_id",
+     "label": "Source",
+     "kind": "uuid"
+    }
+   ]
+  },
+  "update": {
+   "path": "/training/requests/{training_request_id}",
+   "permission": "training.training_request.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "topic",
+     "label": "Topic",
+     "kind": "text"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "target_group",
+     "label": "Target group",
+     "kind": "text"
+    },
+    {
+     "name": "estimated_cost",
+     "label": "Estimated cost",
+     "kind": "money"
+    },
+    {
+     "name": "proposed_date",
+     "label": "Proposed date",
+     "kind": "date"
+    },
+    {
+     "name": "source_type",
+     "label": "Source type",
+     "kind": "text"
+    },
+    {
+     "name": "source_id",
+     "label": "Source",
+     "kind": "uuid"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "scheduled",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/training/requests/{training_request_id}/submit",
+    "permission": "training.training_request.submit",
+    "operationId": "submitTrainingRequest",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "leave-types": {
+  "slug": "leave-types",
+  "title": "Leave types",
+  "singular": "Leave type",
+  "about": "Leave type. Entitlements come from the approved leave policy.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/leave/types",
+  "readPermission": "hr.leave_type.read",
+  "fields": [
+   {
+    "name": "code",
+    "label": "Code",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "name",
+    "label": "Name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "accrual_rule_key",
+    "label": "Accrual rule key",
+    "kind": "text"
+   },
+   {
+    "name": "requires_document",
+    "label": "Requires document",
+    "kind": "boolean"
+   },
+   {
+    "name": "restricted",
+    "label": "Restricted",
+    "kind": "boolean"
+   },
+   {
+    "name": "active",
+    "label": "Active",
+    "kind": "boolean"
+   }
+  ],
+  "columns": [
+   "code",
+   "name",
+   "accrual_rule_key",
+   "requires_document",
+   "restricted"
+  ],
+  "restricted": false,
+  "getPath": "/leave/types/{leave_type_id}",
+  "create": {
+   "path": "/leave/types",
+   "permission": "hr.leave_type.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "accrual_rule_key",
+     "label": "Accrual rule key",
+     "kind": "text"
+    },
+    {
+     "name": "requires_document",
+     "label": "Requires document",
+     "kind": "boolean"
+    },
+    {
+     "name": "restricted",
+     "label": "Restricted",
+     "kind": "boolean"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/leave/types/{leave_type_id}",
+   "permission": "hr.leave_type.write",
+   "fields": [
+    {
+     "name": "code",
+     "label": "Code",
+     "kind": "text"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "kind": "text"
+    },
+    {
+     "name": "accrual_rule_key",
+     "label": "Accrual rule key",
+     "kind": "text"
+    },
+    {
+     "name": "requires_document",
+     "label": "Requires document",
+     "kind": "boolean"
+    },
+    {
+     "name": "restricted",
+     "label": "Restricted",
+     "kind": "boolean"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  }
+ },
+ "leave-balances": {
+  "slug": "leave-balances",
+  "title": "Leave balances",
+  "singular": "Leave balance",
+  "about": "Balance per employee, type and period.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/leave/balances",
+  "readPermission": "hr.leave_balance.read",
+  "fields": [
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "leave_type_id",
+    "label": "Leave type",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "leave-types"
+   },
+   {
+    "name": "period",
+    "label": "Period",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "opening",
+    "label": "Opening",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "accrued",
+    "label": "Accrued",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "taken",
+    "label": "Taken",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "adjusted",
+    "label": "Adjusted",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "closing",
+    "label": "Closing",
+    "readOnly": true,
+    "kind": "decimal"
+   }
+  ],
+  "columns": [
+   "employee_id",
+   "leave_type_id",
+   "period",
+   "opening",
+   "accrued"
+  ],
+  "restricted": false,
+  "getPath": "/leave/balances/{leave_balance_id}"
+ },
+ "leave-requests": {
+  "slug": "leave-requests",
+  "title": "Leave requests",
+  "singular": "Leave request",
+  "about": "Employee self-service. Shows branch coverage to the approver; blocks where balance is short.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/leave/requests",
+  "readPermission": "hr.leave_request.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "leave_type_id",
+    "label": "Leave type",
+    "required": true,
+    "kind": "ref",
+    "ref": "leave-types"
+   },
+   {
+    "name": "start_date",
+    "label": "Start date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "end_date",
+    "label": "End date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "working_days",
+    "label": "Working days",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "kind": "textarea"
+   },
+   {
+    "name": "document_attachment_id",
+    "label": "Document attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "coverage_gap",
+    "label": "Coverage gap",
+    "readOnly": true,
+    "kind": "boolean"
+   },
+   {
+    "name": "coverage_plan",
+    "label": "Coverage plan",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "rejected",
+     "cancelled",
+     "taken"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "employee_id",
+   "leave_type_id",
+   "document_attachment_id"
+  ],
+  "restricted": false,
+  "getPath": "/leave/requests/{leave_request_id}",
+  "create": {
+   "path": "/leave/requests",
+   "permission": "hr.leave_request.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "leave_type_id",
+     "label": "Leave type",
+     "required": true,
+     "kind": "ref",
+     "ref": "leave-types"
+    },
+    {
+     "name": "start_date",
+     "label": "Start date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "end_date",
+     "label": "End date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "document_attachment_id",
+     "label": "Document attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "coverage_plan",
+     "label": "Coverage plan",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/leave/requests/{leave_request_id}",
+   "permission": "hr.leave_request.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "leave_type_id",
+     "label": "Leave type",
+     "kind": "ref",
+     "ref": "leave-types"
+    },
+    {
+     "name": "start_date",
+     "label": "Start date",
+     "kind": "date"
+    },
+    {
+     "name": "end_date",
+     "label": "End date",
+     "kind": "date"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "document_attachment_id",
+     "label": "Document attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "coverage_plan",
+     "label": "Coverage plan",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "rejected",
+   "cancelled",
+   "taken"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/leave/requests/{leave_request_id}/submit",
+    "permission": "hr.leave_request.submit",
+    "operationId": "submitLeaveRequest",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "cancel",
+    "label": "Cancel",
+    "path": "/leave/requests/{leave_request_id}/cancel",
+    "permission": "hr.leave_request.cancel",
+    "operationId": "cancelLeaveRequest",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "taken"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "exit-clearances": {
+  "slug": "exit-clearances",
+  "title": "Exit clearances",
+  "singular": "Exit clearance",
+  "about": "Separation checklist. Keys, uniforms, cash and access all clear before final handover to payroll.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/exit-clearances",
+  "readPermission": "hr.exit_clearance.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "exit_type",
+    "label": "Exit type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "resignation",
+     "termination",
+     "retirement",
+     "other"
+    ]
+   },
+   {
+    "name": "notice_date",
+    "label": "Notice date",
+    "kind": "date"
+   },
+   {
+    "name": "last_working_day",
+    "label": "Last working day",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "reason_category",
+    "label": "Reason category",
+    "kind": "text"
+   },
+   {
+    "name": "hr_officer_employee_id",
+    "label": "HR officer",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "access_revoked_at",
+    "label": "Access revoked",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "payroll_handover_at",
+    "label": "Payroll handover",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "exit_interview_notes",
+    "label": "Exit interview notes",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "initiated",
+     "in_clearance",
+     "cleared",
+     "completed",
+     "cancelled"
+    ]
+   },
+   {
+    "name": "sections",
+    "label": "Sections",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "section",
+      "label": "Section",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "stores",
+       "finance",
+       "ict",
+       "security",
+       "uniform",
+       "department",
+       "keys"
+      ]
+     },
+     {
+      "name": "outstanding_items",
+      "label": "Outstanding items",
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "exit_type",
+   "employee_id",
+   "hr_officer_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/exit-clearances/{exit_clearance_id}",
+  "create": {
+   "path": "/exit-clearances",
+   "permission": "hr.exit_clearance.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "exit_type",
+     "label": "Exit type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "resignation",
+      "termination",
+      "retirement",
+      "other"
+     ]
+    },
+    {
+     "name": "notice_date",
+     "label": "Notice date",
+     "kind": "date"
+    },
+    {
+     "name": "last_working_day",
+     "label": "Last working day",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "reason_category",
+     "label": "Reason category",
+     "kind": "text"
+    },
+    {
+     "name": "hr_officer_employee_id",
+     "label": "HR officer",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "exit_interview_notes",
+     "label": "Exit interview notes",
+     "kind": "text"
+    },
+    {
+     "name": "sections",
+     "label": "Sections",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "section",
+       "label": "Section",
+       "required": true,
+       "kind": "enum",
+       "options": [
+        "stores",
+        "finance",
+        "ict",
+        "security",
+        "uniform",
+        "department",
+        "keys"
+       ]
+      },
+      {
+       "name": "outstanding_items",
+       "label": "Outstanding items",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/exit-clearances/{exit_clearance_id}",
+   "permission": "hr.exit_clearance.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "exit_type",
+     "label": "Exit type",
+     "kind": "enum",
+     "options": [
+      "resignation",
+      "termination",
+      "retirement",
+      "other"
+     ]
+    },
+    {
+     "name": "notice_date",
+     "label": "Notice date",
+     "kind": "date"
+    },
+    {
+     "name": "last_working_day",
+     "label": "Last working day",
+     "kind": "date"
+    },
+    {
+     "name": "reason_category",
+     "label": "Reason category",
+     "kind": "text"
+    },
+    {
+     "name": "hr_officer_employee_id",
+     "label": "HR officer",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "exit_interview_notes",
+     "label": "Exit interview notes",
+     "kind": "text"
+    },
+    {
+     "name": "sections",
+     "label": "Sections",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "section",
+       "label": "Section",
+       "required": true,
+       "kind": "enum",
+       "options": [
+        "stores",
+        "finance",
+        "ict",
+        "security",
+        "uniform",
+        "department",
+        "keys"
+       ]
+      },
+      {
+       "name": "outstanding_items",
+       "label": "Outstanding items",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "initiated",
+   "in_clearance",
+   "cleared",
+   "completed",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "sign-section",
+    "label": "Sign off a department section",
+    "path": "/exit-clearances/{exit_clearance_id}/sign-section",
+    "permission": "hr.exit_clearance.sign_section",
+    "operationId": "signSectionExitClearance",
+    "fields": [
+     {
+      "name": "section",
+      "label": "Section",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "outstanding",
+      "label": "Outstanding",
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "complete",
+    "label": "Hand over to payroll",
+    "path": "/exit-clearances/{exit_clearance_id}/complete",
+    "permission": "hr.exit_clearance.complete",
+    "operationId": "completeExitClearance",
+    "from": [
+     "initiated",
+     "in_clearance",
+     "cleared"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "rosters": {
+  "slug": "rosters",
+  "title": "Rosters",
+  "singular": "Roster",
+  "about": "Shift roster for a site and period.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/rosters",
+  "readPermission": "hr.roster.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "period_start",
+    "label": "Period start",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "period_end",
+    "label": "Period end",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "published"
+    ]
+   },
+   {
+    "name": "shifts",
+    "label": "Shifts",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "employee_id",
+      "label": "Employee",
+      "required": true,
+      "kind": "ref",
+      "ref": "employees"
+     },
+     {
+      "name": "shift_date",
+      "label": "Shift date",
+      "required": true,
+      "kind": "date"
+     },
+     {
+      "name": "starts_at",
+      "label": "Starts",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "ends_at",
+      "label": "Ends",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "role",
+      "label": "Role",
+      "kind": "text"
+     },
+     {
+      "name": "swapped_with_employee_id",
+      "label": "Swapped with",
+      "kind": "ref",
+      "ref": "employees"
+     },
+     {
+      "name": "swap_reason",
+      "label": "Swap reason",
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "period_start",
+   "period_end"
+  ],
+  "restricted": false,
+  "getPath": "/rosters/{roster_id}",
+  "create": {
+   "path": "/rosters",
+   "permission": "hr.roster.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "period_start",
+     "label": "Period start",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "period_end",
+     "label": "Period end",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "shifts",
+     "label": "Shifts",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "employee_id",
+       "label": "Employee",
+       "required": true,
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "shift_date",
+       "label": "Shift date",
+       "required": true,
+       "kind": "date"
+      },
+      {
+       "name": "starts_at",
+       "label": "Starts",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "ends_at",
+       "label": "Ends",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "role",
+       "label": "Role",
+       "kind": "text"
+      },
+      {
+       "name": "swapped_with_employee_id",
+       "label": "Swapped with",
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "swap_reason",
+       "label": "Swap reason",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/rosters/{roster_id}",
+   "permission": "hr.roster.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "period_start",
+     "label": "Period start",
+     "kind": "date"
+    },
+    {
+     "name": "period_end",
+     "label": "Period end",
+     "kind": "date"
+    },
+    {
+     "name": "shifts",
+     "label": "Shifts",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "employee_id",
+       "label": "Employee",
+       "required": true,
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "shift_date",
+       "label": "Shift date",
+       "required": true,
+       "kind": "date"
+      },
+      {
+       "name": "starts_at",
+       "label": "Starts",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "ends_at",
+       "label": "Ends",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "role",
+       "label": "Role",
+       "kind": "text"
+      },
+      {
+       "name": "swapped_with_employee_id",
+       "label": "Swapped with",
+       "kind": "ref",
+       "ref": "employees"
+      },
+      {
+       "name": "swap_reason",
+       "label": "Swap reason",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "published"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/rosters/{roster_id}/submit",
+    "permission": "hr.roster.submit",
+    "operationId": "submitRoster",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "attendance-records": {
+  "slug": "attendance-records",
+  "title": "Attendance records",
+  "singular": "Attendance record",
+  "about": "Daily attendance, lateness and absence.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/attendance-records",
+  "readPermission": "hr.attendance_record.read",
+  "fields": [
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "work_date",
+    "label": "Work date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "clock_in",
+    "label": "Clock in",
+    "kind": "datetime"
+   },
+   {
+    "name": "clock_out",
+    "label": "Clock out",
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "present",
+     "late",
+     "absent",
+     "no_show",
+     "leave"
+    ]
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "kind": "textarea"
+   }
+  ],
+  "columns": [
+   "status",
+   "employee_id",
+   "site_id",
+   "work_date",
+   "clock_in"
+  ],
+  "restricted": false,
+  "getPath": "/attendance-records/{attendance_record_id}",
+  "create": {
+   "path": "/attendance-records",
+   "permission": "hr.attendance_record.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "work_date",
+     "label": "Work date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "clock_in",
+     "label": "Clock in",
+     "kind": "datetime"
+    },
+    {
+     "name": "clock_out",
+     "label": "Clock out",
+     "kind": "datetime"
+    },
+    {
+     "name": "status",
+     "label": "Status",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "present",
+      "late",
+      "absent",
+      "no_show",
+      "leave"
+     ]
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    }
+   ]
+  },
+  "update": {
+   "path": "/attendance-records/{attendance_record_id}",
+   "permission": "hr.attendance_record.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "work_date",
+     "label": "Work date",
+     "kind": "date"
+    },
+    {
+     "name": "clock_in",
+     "label": "Clock in",
+     "kind": "datetime"
+    },
+    {
+     "name": "clock_out",
+     "label": "Clock out",
+     "kind": "datetime"
+    },
+    {
+     "name": "status",
+     "label": "Status",
+     "kind": "enum",
+     "options": [
+      "present",
+      "late",
+      "absent",
+      "no_show",
+      "leave"
+     ]
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    }
+   ]
+  },
+  "statuses": [
+   "present",
+   "late",
+   "absent",
+   "no_show",
+   "leave"
+  ]
+ },
+ "uniform-issues": {
+  "slug": "uniform-issues",
+  "title": "Uniform issues",
+  "singular": "Uniform issue",
+  "about": "Uniform issue, six-month replacement and return. Stock lives in the item master.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/uniform-issues",
+  "readPermission": "hr.uniform_issue.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "initial",
+     "six_month",
+     "early_replacement",
+     "return"
+    ]
+   },
+   {
+    "name": "items",
+    "label": "Items",
+    "required": true,
+    "kind": "json"
+   },
+   {
+    "name": "sizes",
+    "label": "Sizes",
+    "kind": "json"
+   },
+   {
+    "name": "issued_on",
+    "label": "Issued on",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "next_replacement_due",
+    "label": "Next replacement due",
+    "readOnly": true,
+    "kind": "date"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "kind": "textarea"
+   },
+   {
+    "name": "old_pair_returned",
+    "label": "Old pair returned",
+    "kind": "boolean"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "issued",
+     "returned",
+     "cancelled"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "kind",
+   "employee_id",
+   "site_id"
+  ],
+  "restricted": false,
+  "getPath": "/uniform-issues/{uniform_issue_id}",
+  "create": {
+   "path": "/uniform-issues",
+   "permission": "hr.uniform_issue.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "initial",
+      "six_month",
+      "early_replacement",
+      "return"
+     ]
+    },
+    {
+     "name": "items",
+     "label": "Items",
+     "required": true,
+     "kind": "json"
+    },
+    {
+     "name": "sizes",
+     "label": "Sizes",
+     "kind": "json"
+    },
+    {
+     "name": "issued_on",
+     "label": "Issued on",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "old_pair_returned",
+     "label": "Old pair returned",
+     "kind": "boolean"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    }
+   ]
+  },
+  "update": {
+   "path": "/uniform-issues/{uniform_issue_id}",
+   "permission": "hr.uniform_issue.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "kind": "enum",
+     "options": [
+      "initial",
+      "six_month",
+      "early_replacement",
+      "return"
+     ]
+    },
+    {
+     "name": "items",
+     "label": "Items",
+     "kind": "json"
+    },
+    {
+     "name": "sizes",
+     "label": "Sizes",
+     "kind": "json"
+    },
+    {
+     "name": "issued_on",
+     "label": "Issued on",
+     "kind": "date"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "old_pair_returned",
+     "label": "Old pair returned",
+     "kind": "boolean"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    }
+   ]
+  },
+  "statuses": [
+   "issued",
+   "returned",
+   "cancelled"
+  ]
+ },
+ "recruitment-requisitions": {
+  "slug": "recruitment-requisitions",
+  "title": "Recruitment requisitions",
+  "singular": "Recruitment requisition",
+  "about": "Manpower requisition and vacancy.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/recruitment/requisitions",
+  "readPermission": "hr.recruitment_requisition.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "required": true,
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "job_title",
+    "label": "Job title",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "headcount",
+    "label": "Headcount",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "open",
+     "filled",
+     "cancelled"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "department_id",
+   "site_id",
+   "job_title"
+  ],
+  "restricted": false,
+  "getPath": "/recruitment/requisitions/{recruitment_requisition_id}",
+  "create": {
+   "path": "/recruitment/requisitions",
+   "permission": "hr.recruitment_requisition.write",
+   "fields": [
+    {
+     "name": "department_id",
+     "label": "Department",
+     "required": true,
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "job_title",
+     "label": "Job title",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "headcount",
+     "label": "Headcount",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    }
+   ]
+  },
+  "update": {
+   "path": "/recruitment/requisitions/{recruitment_requisition_id}",
+   "permission": "hr.recruitment_requisition.write",
+   "fields": [
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "job_title",
+     "label": "Job title",
+     "kind": "text"
+    },
+    {
+     "name": "headcount",
+     "label": "Headcount",
+     "kind": "number"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "open",
+   "filled",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/recruitment/requisitions/{recruitment_requisition_id}/submit",
+    "permission": "hr.recruitment_requisition.submit",
+    "operationId": "submitRecruitmentRequisition",
+    "from": [
+     "draft",
+     "open"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "candidates": {
+  "slug": "candidates",
+  "title": "Candidates",
+  "singular": "Candidate",
+  "about": "Applicant through shortlist, interview and offer.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/recruitment/candidates",
+  "readPermission": "hr.candidate.read",
+  "fields": [
+   {
+    "name": "recruitment_requisition_id",
+    "label": "Recruitment requisition",
+    "required": true,
+    "kind": "ref",
+    "ref": "recruitment-requisitions"
+   },
+   {
+    "name": "full_name",
+    "label": "Full name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "contact",
+    "label": "Contact",
+    "kind": "text"
+   },
+   {
+    "name": "cv_attachment_id",
+    "label": "Cv attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "assessment",
+    "label": "Assessment",
+    "kind": "text"
+   },
+   {
+    "name": "offer_status",
+    "label": "Offer status",
+    "kind": "enum",
+    "options": [
+     "none",
+     "issued",
+     "accepted",
+     "declined"
+    ]
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "applied",
+     "shortlisted",
+     "interviewed",
+     "offered",
+     "hired",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "offer_status",
+   "recruitment_requisition_id",
+   "cv_attachment_id",
+   "full_name"
+  ],
+  "restricted": true,
+  "getPath": "/recruitment/candidates/{candidate_id}",
+  "create": {
+   "path": "/recruitment/candidates",
+   "permission": "hr.candidate.write",
+   "fields": [
+    {
+     "name": "recruitment_requisition_id",
+     "label": "Recruitment requisition",
+     "required": true,
+     "kind": "ref",
+     "ref": "recruitment-requisitions"
+    },
+    {
+     "name": "full_name",
+     "label": "Full name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "contact",
+     "label": "Contact",
+     "kind": "text"
+    },
+    {
+     "name": "cv_attachment_id",
+     "label": "Cv attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "assessment",
+     "label": "Assessment",
+     "kind": "text"
+    },
+    {
+     "name": "offer_status",
+     "label": "Offer status",
+     "kind": "enum",
+     "options": [
+      "none",
+      "issued",
+      "accepted",
+      "declined"
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/recruitment/candidates/{candidate_id}",
+   "permission": "hr.candidate.write",
+   "fields": [
+    {
+     "name": "recruitment_requisition_id",
+     "label": "Recruitment requisition",
+     "kind": "ref",
+     "ref": "recruitment-requisitions"
+    },
+    {
+     "name": "full_name",
+     "label": "Full name",
+     "kind": "text"
+    },
+    {
+     "name": "contact",
+     "label": "Contact",
+     "kind": "text"
+    },
+    {
+     "name": "cv_attachment_id",
+     "label": "Cv attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "assessment",
+     "label": "Assessment",
+     "kind": "text"
+    },
+    {
+     "name": "offer_status",
+     "label": "Offer status",
+     "kind": "enum",
+     "options": [
+      "none",
+      "issued",
+      "accepted",
+      "declined"
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "applied",
+   "shortlisted",
+   "interviewed",
+   "offered",
+   "hired",
+   "rejected"
+  ]
+ },
+ "performance-reviews": {
+  "slug": "performance-reviews",
+  "title": "Performance reviews",
+  "singular": "Performance review",
+  "about": "Objectives, periodic review and improvement plan.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/performance/reviews",
+  "readPermission": "hr.performance_review.read",
+  "fields": [
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "reviewer_employee_id",
+    "label": "Reviewer",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "period",
+    "label": "Period",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "objectives",
+    "label": "Objectives",
+    "kind": "json"
+   },
+   {
+    "name": "rating",
+    "label": "Rating",
+    "kind": "text"
+   },
+   {
+    "name": "comments",
+    "label": "Comments",
+    "kind": "text"
+   },
+   {
+    "name": "improvement_plan",
+    "label": "Improvement plan",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "in_review",
+     "completed"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "employee_id",
+   "reviewer_employee_id",
+   "period",
+   "rating"
+  ],
+  "restricted": true,
+  "getPath": "/performance/reviews/{performance_review_id}",
+  "create": {
+   "path": "/performance/reviews",
+   "permission": "hr.performance_review.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "reviewer_employee_id",
+     "label": "Reviewer",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "period",
+     "label": "Period",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "objectives",
+     "label": "Objectives",
+     "kind": "json"
+    },
+    {
+     "name": "rating",
+     "label": "Rating",
+     "kind": "text"
+    },
+    {
+     "name": "comments",
+     "label": "Comments",
+     "kind": "text"
+    },
+    {
+     "name": "improvement_plan",
+     "label": "Improvement plan",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/performance/reviews/{performance_review_id}",
+   "permission": "hr.performance_review.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "reviewer_employee_id",
+     "label": "Reviewer",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "period",
+     "label": "Period",
+     "kind": "text"
+    },
+    {
+     "name": "objectives",
+     "label": "Objectives",
+     "kind": "json"
+    },
+    {
+     "name": "rating",
+     "label": "Rating",
+     "kind": "text"
+    },
+    {
+     "name": "comments",
+     "label": "Comments",
+     "kind": "text"
+    },
+    {
+     "name": "improvement_plan",
+     "label": "Improvement plan",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "in_review",
+   "completed"
+  ],
+  "actions": [
+   {
+    "key": "complete",
+    "label": "Complete",
+    "path": "/performance/reviews/{performance_review_id}/complete",
+    "permission": "hr.performance_review.complete",
+    "operationId": "completePerformanceReview",
+    "from": [
+     "draft",
+     "in_review"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "disciplinary-cases": {
+  "slug": "disciplinary-cases",
+  "title": "Disciplinary cases",
+  "singular": "Disciplinary case",
+  "about": "Tracks the approved process. Foodies never decides a sanction.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/disciplinary-cases",
+  "readPermission": "hr.disciplinary_case.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "allegation",
+    "label": "Allegation",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "source_type",
+    "label": "Source type",
+    "kind": "text"
+   },
+   {
+    "name": "source_id",
+    "label": "Source",
+    "kind": "uuid"
+   },
+   {
+    "name": "stage",
+    "label": "Stage",
+    "kind": "text"
+   },
+   {
+    "name": "hearing_on",
+    "label": "Hearing on",
+    "kind": "date"
+   },
+   {
+    "name": "outcome",
+    "label": "Outcome",
+    "kind": "text"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "registered",
+     "investigating",
+     "hearing",
+     "decided",
+     "appeal",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "employee_id",
+   "hearing_on",
+   "closed_at"
+  ],
+  "restricted": true,
+  "getPath": "/disciplinary-cases/{disciplinary_case_id}",
+  "create": {
+   "path": "/disciplinary-cases",
+   "permission": "hr.disciplinary_case.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "allegation",
+     "label": "Allegation",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "source_type",
+     "label": "Source type",
+     "kind": "text"
+    },
+    {
+     "name": "source_id",
+     "label": "Source",
+     "kind": "uuid"
+    },
+    {
+     "name": "stage",
+     "label": "Stage",
+     "kind": "text"
+    },
+    {
+     "name": "hearing_on",
+     "label": "Hearing on",
+     "kind": "date"
+    },
+    {
+     "name": "outcome",
+     "label": "Outcome",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/disciplinary-cases/{disciplinary_case_id}",
+   "permission": "hr.disciplinary_case.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "allegation",
+     "label": "Allegation",
+     "kind": "text"
+    },
+    {
+     "name": "source_type",
+     "label": "Source type",
+     "kind": "text"
+    },
+    {
+     "name": "source_id",
+     "label": "Source",
+     "kind": "uuid"
+    },
+    {
+     "name": "stage",
+     "label": "Stage",
+     "kind": "text"
+    },
+    {
+     "name": "hearing_on",
+     "label": "Hearing on",
+     "kind": "date"
+    },
+    {
+     "name": "outcome",
+     "label": "Outcome",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "registered",
+   "investigating",
+   "hearing",
+   "decided",
+   "appeal",
+   "closed"
+  ]
+ },
+ "grievances": {
+  "slug": "grievances",
+  "title": "Grievances",
+  "singular": "Grievance",
+  "about": "Confidential employee grievance.",
+  "group": "HR",
+  "tile": "human-resources",
+  "listPath": "/grievances",
+  "readPermission": "hr.grievance.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "employee_id",
+    "label": "Employee",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "subject",
+    "label": "Subject",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "investigator_employee_id",
+    "label": "Investigator",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "outcome",
+    "label": "Outcome",
+    "kind": "text"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "received",
+     "investigating",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "employee_id",
+   "investigator_employee_id",
+   "closed_at"
+  ],
+  "restricted": true,
+  "getPath": "/grievances/{grievance_id}",
+  "create": {
+   "path": "/grievances",
+   "permission": "hr.grievance.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "subject",
+     "label": "Subject",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "investigator_employee_id",
+     "label": "Investigator",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "outcome",
+     "label": "Outcome",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/grievances/{grievance_id}",
+   "permission": "hr.grievance.write",
+   "fields": [
+    {
+     "name": "employee_id",
+     "label": "Employee",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "subject",
+     "label": "Subject",
+     "kind": "text"
+    },
+    {
+     "name": "investigator_employee_id",
+     "label": "Investigator",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "outcome",
+     "label": "Outcome",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "received",
+   "investigating",
+   "closed"
+  ]
+ },
+ "store-openings": {
+  "slug": "store-openings",
+  "title": "Store openings",
+  "singular": "Store opening",
+  "about": "GO / NO-GO gate. Control results come from opening checklists; a recorded decision is needed before doors open.",
+  "group": "Store Operations",
+  "tile": "store-operations",
+  "listPath": "/store-openings",
+  "readPermission": "store_ops.store_opening.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "business_date",
+    "label": "Business date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "scheduled_at",
+    "label": "Scheduled",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status_colour",
+    "label": "Status colour",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "red",
+     "amber",
+     "green"
+    ]
+   },
+   {
+    "name": "critical_controls",
+    "label": "Critical controls",
+    "readOnly": true,
+    "kind": "json"
+   },
+   {
+    "name": "amber_issue",
+    "label": "Amber issue",
+    "kind": "text"
+   },
+   {
+    "name": "rationale",
+    "label": "Rationale",
+    "kind": "text"
+   },
+   {
+    "name": "corrective_action",
+    "label": "Corrective action",
+    "kind": "text"
+   },
+   {
+    "name": "decided_by",
+    "label": "Decided by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "decided_at",
+    "label": "Decided",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "actual_opened_at",
+    "label": "Actual opened",
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "in_progress",
+     "no_go",
+     "management_decision",
+     "go",
+     "opened"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "status_colour",
+   "site_id",
+   "decided_by"
+  ],
+  "restricted": false,
+  "getPath": "/store-openings/{store_opening_id}",
+  "create": {
+   "path": "/store-openings",
+   "permission": "store_ops.store_opening.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "business_date",
+     "label": "Business date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "amber_issue",
+     "label": "Amber issue",
+     "kind": "text"
+    },
+    {
+     "name": "rationale",
+     "label": "Rationale",
+     "kind": "text"
+    },
+    {
+     "name": "corrective_action",
+     "label": "Corrective action",
+     "kind": "text"
+    },
+    {
+     "name": "actual_opened_at",
+     "label": "Actual opened",
+     "kind": "datetime"
+    }
+   ]
+  },
+  "update": {
+   "path": "/store-openings/{store_opening_id}",
+   "permission": "store_ops.store_opening.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "business_date",
+     "label": "Business date",
+     "kind": "date"
+    },
+    {
+     "name": "amber_issue",
+     "label": "Amber issue",
+     "kind": "text"
+    },
+    {
+     "name": "rationale",
+     "label": "Rationale",
+     "kind": "text"
+    },
+    {
+     "name": "corrective_action",
+     "label": "Corrective action",
+     "kind": "text"
+    },
+    {
+     "name": "actual_opened_at",
+     "label": "Actual opened",
+     "kind": "datetime"
+    }
+   ]
+  },
+  "statuses": [
+   "in_progress",
+   "no_go",
+   "management_decision",
+   "go",
+   "opened"
+  ],
+  "actions": [
+   {
+    "key": "decide",
+    "label": "Record GO or NO-GO",
+    "path": "/store-openings/{store_opening_id}/decide",
+    "permission": "store_ops.store_opening.decide",
+    "operationId": "decideStoreOpening",
+    "fields": [
+     {
+      "name": "decision",
+      "label": "Decision",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "go",
+       "no_go"
+      ]
+     },
+     {
+      "name": "rationale",
+      "label": "Rationale",
+      "kind": "text"
+     },
+     {
+      "name": "signature_id",
+      "label": "Your 6-digit PIN",
+      "required": true,
+      "kind": "pin"
+     }
+    ]
+   },
+   {
+    "key": "record-opened",
+    "label": "Record actual opening",
+    "path": "/store-openings/{store_opening_id}/record-opened",
+    "permission": "store_ops.store_opening.record_opened",
+    "operationId": "recordOpenedStoreOpening",
+    "from": [
+     "go"
+    ],
+    "fields": [
+     {
+      "name": "actual_opened_at",
+      "label": "Actual opened",
+      "required": true,
+      "kind": "datetime"
+     }
+    ]
+   }
+  ]
+ },
+ "occurrence-entries": {
+  "slug": "occurrence-entries",
+  "title": "Occurrence entries",
+  "singular": "Occurrence entry",
+  "about": "Electronic Occurrence Book. Append-only and tamper-evident.",
+  "group": "Security",
+  "tile": "security",
+  "listPath": "/security/occurrence-entries",
+  "readPermission": "security.occurrence_entry.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "post",
+    "label": "Post",
+    "kind": "text"
+   },
+   {
+    "name": "occurred_at",
+    "label": "Occurred",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "officer_employee_id",
+    "label": "Officer",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "action_taken",
+    "label": "Action taken",
+    "kind": "text"
+   },
+   {
+    "name": "persons_involved",
+    "label": "Persons involved",
+    "kind": "text"
+   },
+   {
+    "name": "open_item",
+    "label": "Open item",
+    "kind": "boolean"
+   },
+   {
+    "name": "incident_id",
+    "label": "Incident",
+    "kind": "ref",
+    "ref": "incidents"
+   }
+  ],
+  "columns": [
+   "reference",
+   "site_id",
+   "officer_employee_id",
+   "incident_id",
+   "occurred_at"
+  ],
+  "restricted": false,
+  "getPath": "/security/occurrence-entries/{occurrence_entry_id}",
+  "create": {
+   "path": "/security/occurrence-entries",
+   "permission": "security.occurrence_entry.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "post",
+     "label": "Post",
+     "kind": "text"
+    },
+    {
+     "name": "occurred_at",
+     "label": "Occurred",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "officer_employee_id",
+     "label": "Officer",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "action_taken",
+     "label": "Action taken",
+     "kind": "text"
+    },
+    {
+     "name": "persons_involved",
+     "label": "Persons involved",
+     "kind": "text"
+    },
+    {
+     "name": "open_item",
+     "label": "Open item",
+     "kind": "boolean"
+    },
+    {
+     "name": "incident_id",
+     "label": "Incident",
+     "kind": "ref",
+     "ref": "incidents"
+    }
+   ]
+  }
+ },
+ "patrol-routes": {
+  "slug": "patrol-routes",
+  "title": "Patrol routes",
+  "singular": "Patrol route",
+  "about": "Site patrol route with checkpoints. Frequency comes from `security.patrol_frequency`.",
+  "group": "Security",
+  "tile": "security",
+  "listPath": "/security/patrol-routes",
+  "readPermission": "security.patrol_route.read",
+  "fields": [
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "name",
+    "label": "Name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "frequency_rule_key",
+    "label": "Frequency rule key",
+    "kind": "text"
+   },
+   {
+    "name": "active",
+    "label": "Active",
+    "kind": "boolean"
+   },
+   {
+    "name": "checkpoints",
+    "label": "Checkpoints",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "sequence",
+      "label": "Sequence",
+      "required": true,
+      "kind": "number"
+     },
+     {
+      "name": "name",
+      "label": "Name",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "risk_category",
+      "label": "Risk category",
+      "kind": "text"
+     },
+     {
+      "name": "qr_code",
+      "label": "Qr code",
+      "kind": "text"
+     },
+     {
+      "name": "blind_spot",
+      "label": "Blind spot",
+      "kind": "boolean"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "name",
+   "site_id",
+   "frequency_rule_key",
+   "active"
+  ],
+  "restricted": false,
+  "getPath": "/security/patrol-routes/{patrol_route_id}",
+  "create": {
+   "path": "/security/patrol-routes",
+   "permission": "security.patrol_route.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "frequency_rule_key",
+     "label": "Frequency rule key",
+     "kind": "text"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    },
+    {
+     "name": "checkpoints",
+     "label": "Checkpoints",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "sequence",
+       "label": "Sequence",
+       "required": true,
+       "kind": "number"
+      },
+      {
+       "name": "name",
+       "label": "Name",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "risk_category",
+       "label": "Risk category",
+       "kind": "text"
+      },
+      {
+       "name": "qr_code",
+       "label": "Qr code",
+       "kind": "text"
+      },
+      {
+       "name": "blind_spot",
+       "label": "Blind spot",
+       "kind": "boolean"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/security/patrol-routes/{patrol_route_id}",
+   "permission": "security.patrol_route.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "name",
+     "label": "Name",
+     "kind": "text"
+    },
+    {
+     "name": "frequency_rule_key",
+     "label": "Frequency rule key",
+     "kind": "text"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    },
+    {
+     "name": "checkpoints",
+     "label": "Checkpoints",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "sequence",
+       "label": "Sequence",
+       "required": true,
+       "kind": "number"
+      },
+      {
+       "name": "name",
+       "label": "Name",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "risk_category",
+       "label": "Risk category",
+       "kind": "text"
+      },
+      {
+       "name": "qr_code",
+       "label": "Qr code",
+       "kind": "text"
+      },
+      {
+       "name": "blind_spot",
+       "label": "Blind spot",
+       "kind": "boolean"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "patrol-rounds": {
+  "slug": "patrol-rounds",
+  "title": "Patrol rounds",
+  "singular": "Patrol round",
+  "about": "One completed patrol.",
+  "group": "Security",
+  "tile": "security",
+  "listPath": "/security/patrol-rounds",
+  "readPermission": "security.patrol_round.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "patrol_route_id",
+    "label": "Patrol route",
+    "required": true,
+    "kind": "ref",
+    "ref": "patrol-routes"
+   },
+   {
+    "name": "officer_employee_id",
+    "label": "Officer",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "started_at",
+    "label": "Started",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "finished_at",
+    "label": "Finished",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "missed_checkpoints",
+    "label": "Missed checkpoints",
+    "readOnly": true,
+    "kind": "number"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "in_progress",
+     "completed",
+     "incomplete"
+    ]
+   },
+   {
+    "name": "visits",
+    "label": "Visits",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "checkpoint_id",
+      "label": "Checkpoint",
+      "required": true,
+      "kind": "uuid"
+     },
+     {
+      "name": "visited_at",
+      "label": "Visited",
+      "required": true,
+      "kind": "datetime"
+     },
+     {
+      "name": "observation",
+      "label": "Observation",
+      "kind": "text"
+     },
+     {
+      "name": "attachment_id",
+      "label": "Attachment",
+      "kind": "ref",
+      "ref": "attachments"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "patrol_route_id",
+   "officer_employee_id",
+   "started_at"
+  ],
+  "restricted": false,
+  "getPath": "/security/patrol-rounds/{patrol_round_id}",
+  "create": {
+   "path": "/security/patrol-rounds",
+   "permission": "security.patrol_round.write",
+   "fields": [
+    {
+     "name": "patrol_route_id",
+     "label": "Patrol route",
+     "required": true,
+     "kind": "ref",
+     "ref": "patrol-routes"
+    },
+    {
+     "name": "officer_employee_id",
+     "label": "Officer",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "started_at",
+     "label": "Started",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "visits",
+     "label": "Visits",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "checkpoint_id",
+       "label": "Checkpoint",
+       "required": true,
+       "kind": "uuid"
+      },
+      {
+       "name": "visited_at",
+       "label": "Visited",
+       "required": true,
+       "kind": "datetime"
+      },
+      {
+       "name": "observation",
+       "label": "Observation",
+       "kind": "text"
+      },
+      {
+       "name": "attachment_id",
+       "label": "Attachment",
+       "kind": "ref",
+       "ref": "attachments"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/security/patrol-rounds/{patrol_round_id}",
+   "permission": "security.patrol_round.write",
+   "fields": [
+    {
+     "name": "patrol_route_id",
+     "label": "Patrol route",
+     "kind": "ref",
+     "ref": "patrol-routes"
+    },
+    {
+     "name": "officer_employee_id",
+     "label": "Officer",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "started_at",
+     "label": "Started",
+     "kind": "datetime"
+    },
+    {
+     "name": "visits",
+     "label": "Visits",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "checkpoint_id",
+       "label": "Checkpoint",
+       "required": true,
+       "kind": "uuid"
+      },
+      {
+       "name": "visited_at",
+       "label": "Visited",
+       "required": true,
+       "kind": "datetime"
+      },
+      {
+       "name": "observation",
+       "label": "Observation",
+       "kind": "text"
+      },
+      {
+       "name": "attachment_id",
+       "label": "Attachment",
+       "kind": "ref",
+       "ref": "attachments"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "in_progress",
+   "completed",
+   "incomplete"
+  ],
+  "actions": [
+   {
+    "key": "complete",
+    "label": "Complete the round",
+    "path": "/security/patrol-rounds/{patrol_round_id}/complete",
+    "permission": "security.patrol_round.complete",
+    "operationId": "completePatrolRound",
+    "from": [
+     "in_progress"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "cameras": {
+  "slug": "cameras",
+  "title": "Cameras",
+  "singular": "Camera",
+  "about": "Camera and recorder inventory.",
+  "group": "CCTV",
+  "tile": "store-operations",
+  "listPath": "/cctv/cameras",
+  "readPermission": "cctv.camera.read",
+  "fields": [
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "label",
+    "label": "Label",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "location",
+    "label": "Location",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "critical_area",
+    "label": "Critical area",
+    "kind": "boolean"
+   },
+   {
+    "name": "recorder",
+    "label": "Recorder",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "kind": "enum",
+    "options": [
+     "ok",
+     "fault",
+     "offline"
+    ]
+   }
+  ],
+  "columns": [
+   "label",
+   "status",
+   "site_id",
+   "location",
+   "recorder"
+  ],
+  "restricted": false,
+  "getPath": "/cctv/cameras/{camera_id}",
+  "create": {
+   "path": "/cctv/cameras",
+   "permission": "cctv.camera.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "label",
+     "label": "Label",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "location",
+     "label": "Location",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "critical_area",
+     "label": "Critical area",
+     "kind": "boolean"
+    },
+    {
+     "name": "recorder",
+     "label": "Recorder",
+     "kind": "text"
+    },
+    {
+     "name": "status",
+     "label": "Status",
+     "kind": "enum",
+     "options": [
+      "ok",
+      "fault",
+      "offline"
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/cctv/cameras/{camera_id}",
+   "permission": "cctv.camera.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "label",
+     "label": "Label",
+     "kind": "text"
+    },
+    {
+     "name": "location",
+     "label": "Location",
+     "kind": "text"
+    },
+    {
+     "name": "critical_area",
+     "label": "Critical area",
+     "kind": "boolean"
+    },
+    {
+     "name": "recorder",
+     "label": "Recorder",
+     "kind": "text"
+    },
+    {
+     "name": "status",
+     "label": "Status",
+     "kind": "enum",
+     "options": [
+      "ok",
+      "fault",
+      "offline"
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "ok",
+   "fault",
+   "offline"
+  ]
+ },
+ "cctv-outages": {
+  "slug": "cctv-outages",
+  "title": "CCTV outages",
+  "singular": "CCTV outage",
+  "about": "Outage with compensating security measures.",
+  "group": "CCTV",
+  "tile": "store-operations",
+  "listPath": "/cctv/outages",
+  "readPermission": "cctv.cctv_outage.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "camera_ids",
+    "label": "Cameras",
+    "required": true,
+    "kind": "list"
+   },
+   {
+    "name": "started_at",
+    "label": "Started",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "ended_at",
+    "label": "Ended",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "cause",
+    "label": "Cause",
+    "kind": "text"
+   },
+   {
+    "name": "alternative_measures",
+    "label": "Alternative measures",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "ict_case",
+    "label": "ICT case",
+    "kind": "text"
+   },
+   {
+    "name": "test_outcome",
+    "label": "Test outcome",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "restored",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "started_at",
+   "ended_at"
+  ],
+  "restricted": false,
+  "getPath": "/cctv/outages/{cctv_outage_id}",
+  "create": {
+   "path": "/cctv/outages",
+   "permission": "cctv.cctv_outage.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "camera_ids",
+     "label": "Cameras",
+     "required": true,
+     "kind": "list"
+    },
+    {
+     "name": "started_at",
+     "label": "Started",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "cause",
+     "label": "Cause",
+     "kind": "text"
+    },
+    {
+     "name": "alternative_measures",
+     "label": "Alternative measures",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "ict_case",
+     "label": "ICT case",
+     "kind": "text"
+    },
+    {
+     "name": "test_outcome",
+     "label": "Test outcome",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cctv/outages/{cctv_outage_id}",
+   "permission": "cctv.cctv_outage.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "camera_ids",
+     "label": "Cameras",
+     "kind": "list"
+    },
+    {
+     "name": "started_at",
+     "label": "Started",
+     "kind": "datetime"
+    },
+    {
+     "name": "cause",
+     "label": "Cause",
+     "kind": "text"
+    },
+    {
+     "name": "alternative_measures",
+     "label": "Alternative measures",
+     "kind": "text"
+    },
+    {
+     "name": "ict_case",
+     "label": "ICT case",
+     "kind": "text"
+    },
+    {
+     "name": "test_outcome",
+     "label": "Test outcome",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "restored",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "restore",
+    "label": "Record restoration",
+    "path": "/cctv/outages/{cctv_outage_id}/restore",
+    "permission": "cctv.cctv_outage.restore",
+    "operationId": "restoreCctvOutage",
+    "from": [
+     "open"
+    ],
+    "fields": [
+     {
+      "name": "ended_at",
+      "label": "Ended",
+      "required": true,
+      "kind": "datetime"
+     },
+     {
+      "name": "test_outcome",
+      "label": "Test outcome",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "footage-requests": {
+  "slug": "footage-requests",
+  "title": "Footage requests",
+  "singular": "Footage request",
+  "about": "Footage access, preservation and export with chain of custody. Foodies holds the register, not the video. A requester cannot approve their own request.",
+  "group": "CCTV",
+  "tile": "store-operations",
+  "listPath": "/cctv/footage-requests",
+  "readPermission": "cctv.footage_request.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "requester_employee_id",
+    "label": "Requester",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "purpose",
+    "label": "Purpose",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "camera_ids",
+    "label": "Cameras",
+    "required": true,
+    "kind": "list"
+   },
+   {
+    "name": "window_start",
+    "label": "Window start",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "window_end",
+    "label": "Window end",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "incident_id",
+    "label": "Incident",
+    "kind": "ref",
+    "ref": "incidents"
+   },
+   {
+    "name": "hold_until",
+    "label": "Hold until",
+    "kind": "date"
+   },
+   {
+    "name": "export_filename",
+    "label": "Export filename",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "export_location",
+    "label": "Export location",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "file_hash",
+    "label": "File hash",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "exported_by",
+    "label": "Exported by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "preserved",
+     "exported",
+     "closed",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "requester_employee_id",
+   "site_id",
+   "incident_id"
+  ],
+  "restricted": true,
+  "getPath": "/cctv/footage-requests/{footage_request_id}",
+  "create": {
+   "path": "/cctv/footage-requests",
+   "permission": "cctv.footage_request.write",
+   "fields": [
+    {
+     "name": "requester_employee_id",
+     "label": "Requester",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "purpose",
+     "label": "Purpose",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "camera_ids",
+     "label": "Cameras",
+     "required": true,
+     "kind": "list"
+    },
+    {
+     "name": "window_start",
+     "label": "Window start",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "window_end",
+     "label": "Window end",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "incident_id",
+     "label": "Incident",
+     "kind": "ref",
+     "ref": "incidents"
+    },
+    {
+     "name": "hold_until",
+     "label": "Hold until",
+     "kind": "date"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cctv/footage-requests/{footage_request_id}",
+   "permission": "cctv.footage_request.write",
+   "fields": [
+    {
+     "name": "requester_employee_id",
+     "label": "Requester",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "purpose",
+     "label": "Purpose",
+     "kind": "text"
+    },
+    {
+     "name": "camera_ids",
+     "label": "Cameras",
+     "kind": "list"
+    },
+    {
+     "name": "window_start",
+     "label": "Window start",
+     "kind": "datetime"
+    },
+    {
+     "name": "window_end",
+     "label": "Window end",
+     "kind": "datetime"
+    },
+    {
+     "name": "incident_id",
+     "label": "Incident",
+     "kind": "ref",
+     "ref": "incidents"
+    },
+    {
+     "name": "hold_until",
+     "label": "Hold until",
+     "kind": "date"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "preserved",
+   "exported",
+   "closed",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cctv/footage-requests/{footage_request_id}/submit",
+    "permission": "cctv.footage_request.submit",
+    "operationId": "submitFootageRequest",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "record-export",
+    "label": "Record export details",
+    "path": "/cctv/footage-requests/{footage_request_id}/record-export",
+    "permission": "cctv.footage_request.record_export",
+    "operationId": "recordExportFootageRequest",
+    "from": [
+     "approved",
+     "preserved"
+    ],
+    "fields": [
+     {
+      "name": "export_filename",
+      "label": "Export filename",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "export_location",
+      "label": "Export location",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "file_hash",
+      "label": "File hash",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "add-custody-entry",
+    "label": "Add a chain-of-custody entry",
+    "path": "/cctv/footage-requests/{footage_request_id}/add-custody-entry",
+    "permission": "cctv.footage_request.add_custody_entry",
+    "operationId": "addCustodyEntryFootageRequest",
+    "fields": [
+     {
+      "name": "from_party",
+      "label": "From party",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "to_party",
+      "label": "To party",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "note",
+      "label": "Note",
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/cctv/footage-requests/{footage_request_id}/close",
+    "permission": "cctv.footage_request.close",
+    "operationId": "closeFootageRequest",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "preserved",
+     "exported"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "external-visits": {
+  "slug": "external-visits",
+  "title": "External visits",
+  "singular": "External visit",
+  "about": "Visit by a school or organisation, from request to close-out.",
+  "group": "External Visits",
+  "tile": "quality-compliance",
+  "listPath": "/external-visits",
+  "readPermission": "external_visits.external_visit.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "organisation",
+    "label": "Organisation",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "group_leader",
+    "label": "Group leader",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "contact",
+    "label": "Contact",
+    "kind": "text"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "requested_on",
+    "label": "Requested on",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "attendee_count",
+    "label": "Attendee count",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "includes_minors",
+    "label": "Includes minors",
+    "kind": "boolean"
+   },
+   {
+    "name": "special_requirements",
+    "label": "Special requirements",
+    "kind": "text"
+   },
+   {
+    "name": "risk_notes",
+    "label": "Risk notes",
+    "kind": "text"
+   },
+   {
+    "name": "disclaimer_attachment_id",
+    "label": "Disclaimer attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "nda_required",
+    "label": "Nda required",
+    "kind": "boolean"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "requested",
+     "screening",
+     "pending_approval",
+     "approved",
+     "held",
+     "cancelled",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "disclaimer_attachment_id",
+   "requested_on"
+  ],
+  "restricted": false,
+  "getPath": "/external-visits/{external_visit_id}",
+  "create": {
+   "path": "/external-visits",
+   "permission": "external_visits.external_visit.write",
+   "fields": [
+    {
+     "name": "organisation",
+     "label": "Organisation",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "group_leader",
+     "label": "Group leader",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "contact",
+     "label": "Contact",
+     "kind": "text"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "requested_on",
+     "label": "Requested on",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "attendee_count",
+     "label": "Attendee count",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "includes_minors",
+     "label": "Includes minors",
+     "kind": "boolean"
+    },
+    {
+     "name": "special_requirements",
+     "label": "Special requirements",
+     "kind": "text"
+    },
+    {
+     "name": "risk_notes",
+     "label": "Risk notes",
+     "kind": "text"
+    },
+    {
+     "name": "disclaimer_attachment_id",
+     "label": "Disclaimer attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "nda_required",
+     "label": "Nda required",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/external-visits/{external_visit_id}",
+   "permission": "external_visits.external_visit.write",
+   "fields": [
+    {
+     "name": "organisation",
+     "label": "Organisation",
+     "kind": "text"
+    },
+    {
+     "name": "group_leader",
+     "label": "Group leader",
+     "kind": "text"
+    },
+    {
+     "name": "contact",
+     "label": "Contact",
+     "kind": "text"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "requested_on",
+     "label": "Requested on",
+     "kind": "date"
+    },
+    {
+     "name": "attendee_count",
+     "label": "Attendee count",
+     "kind": "number"
+    },
+    {
+     "name": "includes_minors",
+     "label": "Includes minors",
+     "kind": "boolean"
+    },
+    {
+     "name": "special_requirements",
+     "label": "Special requirements",
+     "kind": "text"
+    },
+    {
+     "name": "risk_notes",
+     "label": "Risk notes",
+     "kind": "text"
+    },
+    {
+     "name": "disclaimer_attachment_id",
+     "label": "Disclaimer attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "nda_required",
+     "label": "Nda required",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "statuses": [
+   "requested",
+   "screening",
+   "pending_approval",
+   "approved",
+   "held",
+   "cancelled",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/external-visits/{external_visit_id}/submit",
+    "permission": "external_visits.external_visit.submit",
+    "operationId": "submitExternalVisit",
+    "from": [
+     "requested"
+    ],
+    "fields": []
+   },
+   {
+    "key": "close",
+    "label": "Close out",
+    "path": "/external-visits/{external_visit_id}/close",
+    "permission": "external_visits.external_visit.close",
+    "operationId": "closeExternalVisit",
+    "from": [
+     "requested",
+     "screening",
+     "pending_approval",
+     "approved",
+     "held"
+    ],
+    "fields": [
+     {
+      "name": "note",
+      "label": "Note",
+      "kind": "text"
+     }
+    ]
    }
   ]
  }

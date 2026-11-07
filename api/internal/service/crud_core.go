@@ -64,12 +64,18 @@ func (s *Service) GetRuleVersion(ctx context.Context, id uuid.UUID) (db.RuleVers
 // CreateRuleVersion adds one row to rule versions.
 func (s *Service) CreateRuleVersion(ctx context.Context, p db.CreateRuleVersionParams) (db.RuleVersion, error) {
 	var zero db.RuleVersion
+	if err := s.guard(ctx, "CreateRuleVersion", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateRuleVersion(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create rule versions")
 	}
-	return row, s.audit(ctx, "rules.rule_version.write", "rule_versions", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "rules.rule_version.write", "rule_versions", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateRuleVersion", row)
 }
 
 // ListWorkflowActivation returns a page of workflow activations.
@@ -96,6 +102,9 @@ func (s *Service) SuspendWorkflowActivation(ctx context.Context, p db.ActSuspend
 	if err := s.checkSod(ctx, "rules.workflow_activation.suspend", "workflow_activations", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SuspendWorkflowActivation", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSuspendWorkflowActivation(ctx, p)
 	if err != nil {
@@ -104,7 +113,7 @@ func (s *Service) SuspendWorkflowActivation(ctx context.Context, p db.ActSuspend
 	if err := s.audit(ctx, "rules.workflow_activation.suspend", "workflow_activations", row.ID, &row.SiteID, before, row); err != nil {
 		return row, err
 	}
-	return row, nil
+	return row, s.effect(ctx, "SuspendWorkflowActivation", row)
 }
 
 // ListApprovalPolicy returns a page of approval policies.
@@ -124,12 +133,18 @@ func (s *Service) GetApprovalPolicy(ctx context.Context, id uuid.UUID) (db.Appro
 // CreateApprovalPolicy adds one row to approval policies.
 func (s *Service) CreateApprovalPolicy(ctx context.Context, p db.CreateApprovalPolicyParams) (db.ApprovalPolicy, error) {
 	var zero db.ApprovalPolicy
+	if err := s.guard(ctx, "CreateApprovalPolicy", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateApprovalPolicy(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create approval policies")
 	}
-	return row, s.audit(ctx, "approvals.approval_policy.write", "approval_policies", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "approvals.approval_policy.write", "approval_policies", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateApprovalPolicy", row)
 }
 
 // UpdateApprovalPolicy changes one row of approval policies.
@@ -161,6 +176,9 @@ func (s *Service) SubmitApprovalPolicy(ctx context.Context, p db.ActSubmitApprov
 	if err := s.checkSod(ctx, "approvals.approval_policy.submit", "approval_policies", p.ID); err != nil {
 		return before, err
 	}
+	if err := s.guard(ctx, "SubmitApprovalPolicy", before); err != nil {
+		return before, err
+	}
 	p.UpdatedBy = actorID(ctx)
 	row, err := s.q(ctx).ActSubmitApprovalPolicy(ctx, p)
 	if err != nil {
@@ -169,7 +187,10 @@ func (s *Service) SubmitApprovalPolicy(ctx context.Context, p db.ActSubmitApprov
 	if err := s.audit(ctx, "approvals.approval_policy.submit", "approval_policies", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "approval_policies", row.ID, nil, row)
+	if err := s.startApproval(ctx, "approval_policies", row.ID, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "SubmitApprovalPolicy", row)
 }
 
 // ApprovalPolicyChildren returns the rows of a record's child tables, by API field.
@@ -286,12 +307,18 @@ func (s *Service) GetComment(ctx context.Context, id uuid.UUID) (db.Comment, err
 // CreateComment adds one row to comments.
 func (s *Service) CreateComment(ctx context.Context, p db.CreateCommentParams) (db.Comment, error) {
 	var zero db.Comment
+	if err := s.guard(ctx, "CreateComment", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateComment(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create comments")
 	}
-	return row, s.audit(ctx, "evidence.comment.write", "comments", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "evidence.comment.write", "comments", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateComment", row)
 }
 
 // ListRecordLink returns a page of record links.
@@ -311,12 +338,18 @@ func (s *Service) GetRecordLink(ctx context.Context, id uuid.UUID) (db.RecordLin
 // CreateRecordLink adds one row to record links.
 func (s *Service) CreateRecordLink(ctx context.Context, p db.CreateRecordLinkParams) (db.RecordLink, error) {
 	var zero db.RecordLink
+	if err := s.guard(ctx, "CreateRecordLink", &p); err != nil {
+		return zero, err
+	}
 	p.CreatedBy = actorID(ctx)
 	row, err := s.q(ctx).CreateRecordLink(ctx, p)
 	if err != nil {
 		return zero, wrap(err, "create record links")
 	}
-	return row, s.audit(ctx, "evidence.record_link.write", "record_links", row.ID, nil, nil, row)
+	if err := s.audit(ctx, "evidence.record_link.write", "record_links", row.ID, nil, nil, row); err != nil {
+		return row, err
+	}
+	return row, s.effect(ctx, "CreateRecordLink", row)
 }
 
 // DeleteRecordLink removes one row of record links.

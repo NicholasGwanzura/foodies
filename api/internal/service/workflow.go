@@ -52,6 +52,15 @@ func (s *Service) RequirePin(ctx context.Context, pin string) error {
 	return s.CheckPin(ctx, auth.From(ctx).UserID, pin)
 }
 
+// RequireSigned confirms a signature the caller made on this record. Any action
+// that takes a signature_id comes through here.
+func (s *Service) RequireSigned(ctx context.Context, table string, id uuid.UUID, signature *uuid.UUID) error {
+	if signature == nil {
+		return Fail(http.StatusUnprocessableEntity, "signature_required", "Sign first", "Confirm with your PIN first.")
+	}
+	return s.signedOn(ctx, table, id, *signature)
+}
+
 // childRows folds child rows for an API response.
 func childRows[T any](rows []T) []map[string]any {
 	out := make([]map[string]any, 0, len(rows))
