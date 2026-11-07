@@ -16,7 +16,7 @@ import (
 const actReviewPettyCashReconciliation = `-- name: ActReviewPettyCashReconciliation :one
 UPDATE petty_cash_reconciliations
 SET status = 'reviewed', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('draft', 'submitted')
+WHERE id = $2 AND status IN ('submitted', 'reviewed')
 RETURNING id, reference, account_id, kind, business_date, opening_balance_amount, opening_balance_currency, receipts_amount, receipts_currency, disbursements_amount, disbursements_currency, expected_closing_amount, expected_closing_currency, physical_closing_amount, physical_closing_currency, variance_amount, variance_currency, explanation, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

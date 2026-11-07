@@ -15,7 +15,7 @@ import (
 const actReviewRecallReconciliation = `-- name: ActReviewRecallReconciliation :one
 UPDATE recall_reconciliations
 SET status = 'reviewed', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('draft')
+WHERE id = $2 AND status IN ('reviewed')
 RETURNING id, recall_id, produced_received, remaining_stock, distributed, sold, returned, disposed, variance, explanation, independent_reviewer_id, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

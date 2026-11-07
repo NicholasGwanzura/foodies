@@ -40,7 +40,7 @@ func run(ctx context.Context, demo bool) error {
 
 	names := []string{"reference.sql", "rules.sql"}
 	if demo {
-		names = append(names, "demo.sql")
+		names = append(names, "demo.sql", "pilot.sql")
 	}
 	conn, err := pool.Acquire(ctx)
 	if err != nil {

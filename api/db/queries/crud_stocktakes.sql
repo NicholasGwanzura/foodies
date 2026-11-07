@@ -53,7 +53,7 @@ RETURNING *;
 -- name: ActApproveStocktake :one
 UPDATE stocktakes
 SET status = 'approved', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('planned', 'counting', 'submitted', 'reviewed')
+WHERE id = sqlc.arg(id) AND status IN ('submitted', 'reviewed')
 RETURNING *;
 
 -- name: ActRequestSkipStocktake :one

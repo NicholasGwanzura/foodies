@@ -55,11 +55,11 @@ RETURNING *;
 -- name: ActApproveCashUp :one
 UPDATE cash_ups
 SET status = 'approved', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('draft', 'counted', 'pending_signatures', 'pending_review')
+WHERE id = sqlc.arg(id) AND status IN ('counted', 'pending_signatures', 'pending_review')
 RETURNING *;
 
 -- name: ActReturnCashUp :one
 UPDATE cash_ups
 SET status = 'returned', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('draft', 'counted', 'pending_signatures', 'pending_review', 'approved', 'exception')
+WHERE id = sqlc.arg(id) AND status IN ('counted', 'pending_signatures', 'pending_review')
 RETURNING *;

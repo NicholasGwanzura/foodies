@@ -39,5 +39,5 @@ RETURNING *;
 -- name: ActReturnReceiptBook :one
 UPDATE receipt_books
 SET returned_at = now(), status = 'returned', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('in_storage', 'issued', 'missing')
+WHERE id = sqlc.arg(id) AND status IN ('in_storage', 'issued')
 RETURNING *;

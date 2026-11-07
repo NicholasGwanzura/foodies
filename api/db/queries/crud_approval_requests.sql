@@ -42,13 +42,13 @@ RETURNING *;
 -- name: ActRejectApprovalRequest :one
 UPDATE approval_requests
 SET status = 'rejected', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('pending', 'approved', 'returned')
+WHERE id = sqlc.arg(id) AND status IN ('pending')
 RETURNING *;
 
 -- name: ActReturnApprovalRequest :one
 UPDATE approval_requests
 SET status = 'returned', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('pending', 'approved')
+WHERE id = sqlc.arg(id) AND status IN ('pending')
 RETURNING *;
 
 -- name: ActReassignApprovalRequest :one

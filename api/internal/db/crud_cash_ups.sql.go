@@ -16,7 +16,7 @@ import (
 const actApproveCashUp = `-- name: ActApproveCashUp :one
 UPDATE cash_ups
 SET status = 'approved', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('draft', 'counted', 'pending_signatures', 'pending_review')
+WHERE id = $2 AND status IN ('counted', 'pending_signatures', 'pending_review')
 RETURNING id, reference, site_id, till_id, cashier_employee_id, supervisor_employee_id, witness_employee_id, business_date, shift, kind, x_read_id, z_report_id, fx_rate_id, fx_rate_value, variance_base_amount, variance_base_currency, safe_id, safe_deposit_seal, closed_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
 
@@ -61,7 +61,7 @@ func (q *Queries) ActApproveCashUp(ctx context.Context, arg ActApproveCashUpPara
 const actReturnCashUp = `-- name: ActReturnCashUp :one
 UPDATE cash_ups
 SET status = 'returned', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('draft', 'counted', 'pending_signatures', 'pending_review', 'approved', 'exception')
+WHERE id = $2 AND status IN ('counted', 'pending_signatures', 'pending_review')
 RETURNING id, reference, site_id, till_id, cashier_employee_id, supervisor_employee_id, witness_employee_id, business_date, shift, kind, x_read_id, z_report_id, fx_rate_id, fx_rate_value, variance_base_amount, variance_base_currency, safe_id, safe_deposit_seal, closed_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

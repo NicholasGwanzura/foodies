@@ -90,7 +90,7 @@ func (q *Queries) ActReassignApprovalRequest(ctx context.Context, arg ActReassig
 const actRejectApprovalRequest = `-- name: ActRejectApprovalRequest :one
 UPDATE approval_requests
 SET status = 'rejected', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('pending', 'approved', 'returned')
+WHERE id = $2 AND status IN ('pending')
 RETURNING id, subject_type, subject_id, workflow_key, policy_id, site_id, amount_amount, amount_currency, current_step, summary, decided_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
 
@@ -127,7 +127,7 @@ func (q *Queries) ActRejectApprovalRequest(ctx context.Context, arg ActRejectApp
 const actReturnApprovalRequest = `-- name: ActReturnApprovalRequest :one
 UPDATE approval_requests
 SET status = 'returned', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('pending', 'approved')
+WHERE id = $2 AND status IN ('pending')
 RETURNING id, subject_type, subject_id, workflow_key, policy_id, site_id, amount_amount, amount_currency, current_step, summary, decided_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

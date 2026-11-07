@@ -16,7 +16,7 @@ import (
 const actReviewEmergencyProcurement = `-- name: ActReviewEmergencyProcurement :one
 UPDATE emergency_procurements
 SET post_review = COALESCE($1, post_review), status = 'reviewed', updated_at = now(), updated_by = $2, row_version = row_version + 1
-WHERE id = $3 AND status IN ('draft', 'pending_approval', 'approved')
+WHERE id = $3 AND status IN ('pending_approval', 'reviewed')
 RETURNING id, reference, site_id, event, why_unforeseeable, continuity_impact, supplier_id, amount_amount, amount_currency, purchased_at, purchase_requisition_id, post_review, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

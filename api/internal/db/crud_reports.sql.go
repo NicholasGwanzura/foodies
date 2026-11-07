@@ -58,7 +58,7 @@ func (q *Queries) ActExplainLateReport(ctx context.Context, arg ActExplainLateRe
 const actReviewReport = `-- name: ActReviewReport :one
 UPDATE reports
 SET status = 'reviewed', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('pending', 'draft', 'submitted')
+WHERE id = $2 AND status IN ('pending', 'submitted', 'reviewed')
 RETURNING id, reference, report_definition_id, period_start, period_end, site_id, department_id, due_at, submitted_at, submitted_by, deputy_reason, form_submission_id, late, delay_reason, escalated_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

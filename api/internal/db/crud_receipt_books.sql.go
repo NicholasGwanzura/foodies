@@ -52,7 +52,7 @@ func (q *Queries) ActIssueReceiptBook(ctx context.Context, arg ActIssueReceiptBo
 const actReturnReceiptBook = `-- name: ActReturnReceiptBook :one
 UPDATE receipt_books
 SET returned_at = now(), status = 'returned', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('in_storage', 'issued', 'missing')
+WHERE id = $2 AND status IN ('in_storage', 'issued')
 RETURNING id, site_id, book_number, first_number, last_number, custodian_employee_id, storage_location, issued_to_employee_id, issued_at, returned_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

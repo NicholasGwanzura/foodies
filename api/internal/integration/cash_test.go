@@ -145,6 +145,11 @@ func TestCashUpNeverNetsCurrenciesAndNeedsAnIndependentReviewer(t *testing.T) {
 	if got.str("fx_rate_value") != "0.0400" {
 		t.Fatalf("rate not frozen: %s", got.raw)
 	}
+
+	// A draft has nothing to decide on, even for the right role.
+	draftSig := sign(t, reviewer, employeeIDOf(t, "E1008"), "cash_ups", id)
+	wantCode(t, call(t, reviewer, http.MethodPost, path+"/approve", map[string]any{"signature_id": draftSig}), http.StatusConflict, "invalid_state_transition")
+
 	want(t, call(t, finance, http.MethodPost, path+"/submit", nil), http.StatusOK)
 
 	// CIT cannot start before the day's cash is dealt with.

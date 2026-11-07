@@ -40,5 +40,5 @@ RETURNING *;
 -- name: ActReviewEmergencyProcurement :one
 UPDATE emergency_procurements
 SET post_review = COALESCE(sqlc.narg(post_review), post_review), status = 'reviewed', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('draft', 'pending_approval', 'approved')
+WHERE id = sqlc.arg(id) AND status IN ('pending_approval', 'reviewed')
 RETURNING *;

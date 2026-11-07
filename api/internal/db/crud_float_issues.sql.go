@@ -55,7 +55,7 @@ func (q *Queries) ActAcknowledgeFloatIssue(ctx context.Context, arg ActAcknowled
 const actReturnFloatIssue = `-- name: ActReturnFloatIssue :one
 UPDATE float_issues
 SET returned_amounts = COALESCE($1, returned_amounts), returned_at = now(), status = 'returned', updated_at = now(), updated_by = $2, row_version = row_version + 1
-WHERE id = $3 AND status IN ('issued', 'acknowledged', 'exception')
+WHERE id = $3 AND status IN ('issued', 'acknowledged')
 RETURNING id, reference, site_id, till_id, cashier_employee_id, business_date, shift, amounts, issued_at, acknowledged_at, returned_amounts, returned_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

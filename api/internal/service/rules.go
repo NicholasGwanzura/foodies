@@ -186,5 +186,10 @@ func (s *Service) SubmitRuleVersion(ctx context.Context, p db.ActSubmitRuleVersi
 	if err := s.audit(ctx, "rules.rule_version.submit", "rule_versions", row.ID, nil, before, row); err != nil {
 		return row, err
 	}
-	return row, s.startApproval(ctx, "rule_versions", row.ID, nil, row)
+	// The approver needs to see which rule and what value, not just a row.
+	def, err := s.q(ctx).GetRuleDefinition(ctx, row.RuleDefinitionID)
+	if err != nil {
+		return row, wrap(err, "read rule")
+	}
+	return row, s.startApproval(ctx, "rule_versions", row.ID, nil, map[string]string{"name": def.Key + " = " + string(row.Value)})
 }

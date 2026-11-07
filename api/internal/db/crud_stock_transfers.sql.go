@@ -172,7 +172,7 @@ func (q *Queries) ActReceiveStockTransfer(ctx context.Context, arg ActReceiveSto
 const actRejectStockTransfer = `-- name: ActRejectStockTransfer :one
 UPDATE stock_transfers
 SET status = 'rejected', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('requested', 'accepted', 'dispatched', 'received', 'discrepancy')
+WHERE id = $2 AND status IN ('requested', 'accepted')
 RETURNING id, reference, from_site_id, to_site_id, requested_by, vehicle, dispatched_at, dispatch_security_employee_id, arrived_at, receiving_security_employee_id, received_by, tba_followup_due, invoice_attachment_id, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

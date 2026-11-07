@@ -17,7 +17,7 @@ import (
 const actReturnFormSubmission = `-- name: ActReturnFormSubmission :one
 UPDATE form_submissions
 SET status = 'returned', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('draft', 'submitted', 'pending_signature', 'pending_review')
+WHERE id = $2 AND status IN ('submitted', 'pending_signature', 'pending_review')
 RETURNING id, reference, template_version_id, site_id, business_date, shift, task_id, answers, result, captured_at, channel, client_record_id, status, created_at, updated_at, created_by, updated_by, row_version
 `
 
@@ -55,7 +55,7 @@ func (q *Queries) ActReturnFormSubmission(ctx context.Context, arg ActReturnForm
 const actReviewFormSubmission = `-- name: ActReviewFormSubmission :one
 UPDATE form_submissions
 SET status = 'closed', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('draft', 'submitted', 'pending_signature', 'pending_review')
+WHERE id = $2 AND status IN ('submitted', 'pending_signature', 'pending_review')
 RETURNING id, reference, template_version_id, site_id, business_date, shift, task_id, answers, result, captured_at, channel, client_record_id, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

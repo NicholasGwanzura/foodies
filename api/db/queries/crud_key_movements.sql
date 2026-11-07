@@ -27,5 +27,5 @@ RETURNING *;
 -- name: ActReturnKeyMovement :one
 UPDATE key_movements
 SET condition = COALESCE(sqlc.narg(condition), condition), returned_at = now(), status = 'returned', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('out', 'overdue')
+WHERE id = sqlc.arg(id) AND status IN ('out')
 RETURNING *;

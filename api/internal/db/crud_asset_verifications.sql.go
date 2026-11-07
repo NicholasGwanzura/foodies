@@ -16,7 +16,7 @@ import (
 const actReviewAssetVerification = `-- name: ActReviewAssetVerification :one
 UPDATE asset_verifications
 SET status = 'reviewed', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('planned', 'in_progress', 'submitted')
+WHERE id = $2 AND status IN ('submitted', 'reviewed')
 RETURNING id, reference, site_id, verification_year, completed_at, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

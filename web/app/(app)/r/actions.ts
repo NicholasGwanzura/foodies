@@ -7,7 +7,8 @@ import { serverApi } from "@/lib/api/server";
 import { coerce } from "@/lib/coerce";
 import type { FormState } from "@/lib/form-state";
 import { fillPath, resourceOr404, type Row } from "@/lib/resources";
-import { formError, getSession } from "@/lib/session";
+import { formError } from "@/lib/session";
+import { signRecord } from "@/lib/sign";
 
 const reader = (form: FormData) => (name: string) => {
   const value = form.get(name);
@@ -79,18 +80,7 @@ export async function runAction(
   try {
     // A signed decision: the PIN confirms this exact version of the record.
     if (typeof body.signature_id === "string") {
-      const { me } = await getSession();
-      const request = (await serverApi.post("/signature-requests", {
-        body: {
-          subject_type: slug.replaceAll("-", "_"), subject_id: id, meaning: "approved",
-          signer_kind: "employee", signer_employee_id: me.employee.id,
-        },
-      })) as { id: string };
-      await serverApi.post("/signature-requests/{signature_request_id}/sign", {
-        path: { signature_request_id: request.id },
-        body: { pin: body.signature_id },
-      });
-      body.signature_id = request.id;
+      body.signature_id = await signRecord(slug.replaceAll("-", "_"), id, body.signature_id);
     }
     await serverApi.request("post", fillPath(action.path, id, parent), {
       body: action.fields.length > 0 ? body : undefined,

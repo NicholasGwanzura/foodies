@@ -98,7 +98,7 @@ def field(t, name, p, required, built, depth=0):
             f["kind"] = "rows"
             ct = sc.table_for(ir)
             f["fields"] = [field(ct, k, v, k in rq, built, 1) for k, v in sub.items()
-                           if k not in sc.AUDIT_COLS and k != "links" and not v.get("readOnly")
+                           if k not in sc.AUDIT_COLS and k != "links"
                            and not (ct and sc.parent_fk(ct) and k == sc.parent_fk(ct)["name"])]
         elif items.get("format") == "uuid":
             f["kind"] = "list"

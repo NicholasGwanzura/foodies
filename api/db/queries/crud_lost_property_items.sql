@@ -35,7 +35,7 @@ RETURNING *;
 -- name: ActReturnLostPropertyItem :one
 UPDATE lost_property_items
 SET claimant_name = COALESCE(sqlc.narg(claimant_name), claimant_name), claimant_evidence = COALESCE(sqlc.narg(claimant_evidence), claimant_evidence), status = 'returned', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('in_custody', 'disposed')
+WHERE id = sqlc.arg(id) AND status IN ('in_custody')
 RETURNING *;
 
 -- name: ActDisposeLostPropertyItem :one

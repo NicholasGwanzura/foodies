@@ -16,7 +16,7 @@ import (
 const actReturnKeyMovement = `-- name: ActReturnKeyMovement :one
 UPDATE key_movements
 SET condition = COALESCE($1, condition), returned_at = now(), status = 'returned', updated_at = now(), updated_by = $2, row_version = row_version + 1
-WHERE id = $3 AND status IN ('out', 'overdue')
+WHERE id = $3 AND status IN ('out')
 RETURNING id, key_item_id, holder_employee_id, purpose, issued_at, returned_at, condition, movement_kind, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

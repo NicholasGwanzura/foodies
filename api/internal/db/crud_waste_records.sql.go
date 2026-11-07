@@ -16,7 +16,7 @@ import (
 const actReviewWasteRecord = `-- name: ActReviewWasteRecord :one
 UPDATE waste_records
 SET status = 'reviewed', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('recorded')
+WHERE id = $2 AND status IN ('reviewed')
 RETURNING id, reference, site_id, occurred_at, item_id, product_id, batch_id, quantity, uom, category, cause, value_amount, value_currency, photo_attachment_id, disposition, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

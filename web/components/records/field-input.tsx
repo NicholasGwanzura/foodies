@@ -44,7 +44,13 @@ function Control({ field, value, refs, currencies, invalid, describedBy, id, nam
       );
     case "ref": {
       const options = refs[field.ref ?? ""] ?? [];
-      if (options.length === 0) return <input {...shared} defaultValue={text} placeholder="Paste the record id" />;
+      if (options.length === 0) {
+        return (
+          <select {...shared} defaultValue="" disabled={!field.required}>
+            <option value="">{field.required ? "Nothing to choose yet" : "Not available"}</option>
+          </select>
+        );
+      }
       return (
         <select {...shared} defaultValue={text ?? ""}>
           <option value="">Choose…</option>
@@ -84,7 +90,7 @@ function Control({ field, value, refs, currencies, invalid, describedBy, id, nam
 type RowValue = Record<string, string>;
 
 function RowsField({ field, value, error, refs, currencies }: Common) {
-  const columns = field.fields ?? [];
+  const columns = (field.fields ?? []).filter((c) => !c.readOnly);
   const start = Array.isArray(value) ? (value as RowValue[]) : [];
   const [rows, setRows] = useState<RowValue[]>(start.length > 0 ? start : [{}]);
   const set = (i: number, key: string, v: string) =>

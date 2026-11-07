@@ -59,5 +59,5 @@ RETURNING *;
 -- name: ActReturnPurchaseRequisition :one
 UPDATE purchase_requisitions
 SET status = 'returned', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('draft', 'submitted', 'validated', 'pending_approval', 'approved', 'sourcing')
+WHERE id = sqlc.arg(id) AND status IN ('submitted', 'validated', 'pending_approval')
 RETURNING *;

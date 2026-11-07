@@ -62,7 +62,7 @@ func (q *Queries) ActDisposeLostPropertyItem(ctx context.Context, arg ActDispose
 const actReturnLostPropertyItem = `-- name: ActReturnLostPropertyItem :one
 UPDATE lost_property_items
 SET claimant_name = COALESCE($1, claimant_name), claimant_evidence = COALESCE($2, claimant_evidence), status = 'returned', updated_at = now(), updated_by = $3, row_version = row_version + 1
-WHERE id = $4 AND status IN ('in_custody', 'disposed')
+WHERE id = $4 AND status IN ('in_custody')
 RETURNING id, reference, site_id, item_type, description, found_at, found_location, finder_employee_id, custodian_employee_id, storage_location, issuer_if_visible, name_if_visible, disposition_due, contact_attempts, claimant_name, claimant_evidence, released_at, disposition, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

@@ -35,5 +35,5 @@ RETURNING *;
 -- name: ActReviewPettyCashReconciliation :one
 UPDATE petty_cash_reconciliations
 SET status = 'reviewed', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('draft', 'submitted')
+WHERE id = sqlc.arg(id) AND status IN ('submitted', 'reviewed')
 RETURNING *;

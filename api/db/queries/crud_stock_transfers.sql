@@ -51,7 +51,7 @@ RETURNING *;
 -- name: ActRejectStockTransfer :one
 UPDATE stock_transfers
 SET status = 'rejected', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('requested', 'accepted', 'dispatched', 'received', 'discrepancy')
+WHERE id = sqlc.arg(id) AND status IN ('requested', 'accepted')
 RETURNING *;
 
 -- name: ActDispatchStockTransfer :one

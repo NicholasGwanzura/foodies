@@ -8,6 +8,8 @@ internal/service replaces all of this for that action.
 """
 FINAL = {"closed", "cancelled", "rejected", "completed", "reimbursed", "reconciled", "retired", "superseded", "revoked", "expired", "released", "done", "skipped"}
 
+WAITING = {"submitted", "under_review", "in_review", "qms_review", "validated", "reviewed", "counted", "inspected"}
+
 TARGETS = {
     "submit": ["pending_approval", "pending_review", "pending_signatures", "pending_signature", "pending_verification", "pending_acceptance", "submitted", "under_review", "in_review"],
     "approve": ["approved", "active"], "reject": ["rejected"], "cancel": ["cancelled"], "return": ["returned", "draft"],
@@ -87,7 +89,12 @@ def infer(op, verb, statuses, table=None):
     for target in TARGETS.get(verb, []):
         if target in statuses:
             i = statuses.index(target)
-            if verb in ("reject", "cancel", "suspend", "return", "revoke", "hold", "reopen"):
+            if verb in ("approve", "reject", "return", "review"):
+                # A decision needs something submitted to decide on. A draft never qualifies.
+                source = [s for s in statuses if s.startswith("pending") or s in WAITING]
+                if not source:
+                    source = [s for s in statuses[:i] if s not in FINAL]
+            elif verb in ("cancel", "suspend", "revoke", "hold", "reopen"):
                 source = [s for s in statuses if s not in FINAL and s != target]
                 if verb == "reopen":
                     source = [s for s in statuses if s in ("pending_verification", "closed", "resolved", "completed")]

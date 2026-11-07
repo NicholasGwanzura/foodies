@@ -4126,7 +4126,75 @@ export const RESOURCES: Record<string, Resource> = {
     "name": "steps",
     "label": "Steps",
     "kind": "rows",
-    "fields": []
+    "fields": [
+     {
+      "name": "sequence",
+      "label": "Sequence",
+      "readOnly": true,
+      "kind": "number"
+     },
+     {
+      "name": "role_id",
+      "label": "Role",
+      "readOnly": true,
+      "kind": "ref",
+      "ref": "roles"
+     },
+     {
+      "name": "decided_by",
+      "label": "Decided by",
+      "readOnly": true,
+      "kind": "ref",
+      "ref": "users"
+     },
+     {
+      "name": "decision",
+      "label": "Decision",
+      "readOnly": true,
+      "kind": "enum",
+      "options": [
+       "pending",
+       "approved",
+       "rejected",
+       "returned"
+      ]
+     },
+     {
+      "name": "decided_at",
+      "label": "Decided",
+      "readOnly": true,
+      "kind": "datetime"
+     },
+     {
+      "name": "channel",
+      "label": "Channel",
+      "readOnly": true,
+      "kind": "enum",
+      "options": [
+       "web",
+       "whatsapp"
+      ]
+     },
+     {
+      "name": "comment",
+      "label": "Comment",
+      "readOnly": true,
+      "kind": "textarea"
+     },
+     {
+      "name": "signature_id",
+      "label": "Your 6-digit PIN",
+      "readOnly": true,
+      "kind": "pin",
+      "ref": "signature-requests"
+     },
+     {
+      "name": "due_at",
+      "label": "Due",
+      "readOnly": true,
+      "kind": "datetime"
+     }
+    ]
    }
   ],
   "columns": [
@@ -4176,9 +4244,7 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "approvals.approval_request.reject",
     "operationId": "rejectApprovalRequest",
     "from": [
-     "pending",
-     "approved",
-     "returned"
+     "pending"
     ],
     "fields": [
      {
@@ -4202,8 +4268,7 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "approvals.approval_request.return",
     "operationId": "returnApprovalRequest",
     "from": [
-     "pending",
-     "approved"
+     "pending"
     ],
     "fields": [
      {
@@ -6079,7 +6144,6 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "forms.form_submission.review",
     "operationId": "reviewFormSubmission",
     "from": [
-     "draft",
      "submitted",
      "pending_signature",
      "pending_review"
@@ -6099,7 +6163,6 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "forms.form_submission.return",
     "operationId": "returnFormSubmission",
     "from": [
-     "draft",
      "submitted",
      "pending_signature",
      "pending_review"
@@ -6445,7 +6508,39 @@ export const RESOURCES: Record<string, Resource> = {
     "name": "recipients",
     "label": "Recipients",
     "kind": "rows",
-    "fields": []
+    "fields": [
+     {
+      "name": "step",
+      "label": "Step",
+      "readOnly": true,
+      "kind": "number"
+     },
+     {
+      "name": "user_id",
+      "label": "User",
+      "readOnly": true,
+      "kind": "ref",
+      "ref": "users"
+     },
+     {
+      "name": "channel",
+      "label": "Channel",
+      "readOnly": true,
+      "kind": "text"
+     },
+     {
+      "name": "notified_at",
+      "label": "Notified",
+      "readOnly": true,
+      "kind": "datetime"
+     },
+     {
+      "name": "acknowledged_at",
+      "label": "Acknowledged",
+      "readOnly": true,
+      "kind": "datetime"
+     }
+    ]
    }
   ],
   "columns": [
@@ -9234,8 +9329,7 @@ export const RESOURCES: Record<string, Resource> = {
     "operationId": "returnFloatIssue",
     "from": [
      "issued",
-     "acknowledged",
-     "exception"
+     "acknowledged"
     ],
     "fields": [
      {
@@ -9883,6 +9977,12 @@ export const RESOURCES: Record<string, Resource> = {
       "label": "Actual",
       "required": true,
       "kind": "decimal"
+     },
+     {
+      "name": "variance",
+      "label": "Variance",
+      "readOnly": true,
+      "kind": "decimal"
      }
     ]
    }
@@ -10024,6 +10124,12 @@ export const RESOURCES: Record<string, Resource> = {
        "label": "Actual",
        "required": true,
        "kind": "decimal"
+      },
+      {
+       "name": "variance",
+       "label": "Variance",
+       "readOnly": true,
+       "kind": "decimal"
       }
      ]
     }
@@ -10150,6 +10256,12 @@ export const RESOURCES: Record<string, Resource> = {
        "label": "Actual",
        "required": true,
        "kind": "decimal"
+      },
+      {
+       "name": "variance",
+       "label": "Variance",
+       "readOnly": true,
+       "kind": "decimal"
       }
      ]
     }
@@ -10185,7 +10297,6 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "cash.cash_up.approve",
     "operationId": "approveCashUp",
     "from": [
-     "draft",
      "counted",
      "pending_signatures",
      "pending_review"
@@ -10211,12 +10322,9 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "cash.cash_up.return",
     "operationId": "returnCashUp",
     "from": [
-     "draft",
      "counted",
      "pending_signatures",
-     "pending_review",
-     "approved",
-     "exception"
+     "pending_review"
     ],
     "fields": [
      {
@@ -10792,6 +10900,17 @@ export const RESOURCES: Record<string, Resource> = {
       "label": "Amount",
       "required": true,
       "kind": "money"
+     },
+     {
+      "name": "seal_condition_on_receipt",
+      "label": "Seal condition on receipt",
+      "readOnly": true,
+      "kind": "enum",
+      "options": [
+       "intact",
+       "damaged",
+       "mismatch"
+      ]
      }
     ]
    }
@@ -10877,6 +10996,17 @@ export const RESOURCES: Record<string, Resource> = {
        "label": "Amount",
        "required": true,
        "kind": "money"
+      },
+      {
+       "name": "seal_condition_on_receipt",
+       "label": "Seal condition on receipt",
+       "readOnly": true,
+       "kind": "enum",
+       "options": [
+        "intact",
+        "damaged",
+        "mismatch"
+       ]
       }
      ]
     }
@@ -10950,6 +11080,17 @@ export const RESOURCES: Record<string, Resource> = {
        "label": "Amount",
        "required": true,
        "kind": "money"
+      },
+      {
+       "name": "seal_condition_on_receipt",
+       "label": "Seal condition on receipt",
+       "readOnly": true,
+       "kind": "enum",
+       "options": [
+        "intact",
+        "damaged",
+        "mismatch"
+       ]
       }
      ]
     }
@@ -12525,8 +12666,8 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "cash.petty_cash_reconciliation.review",
     "operationId": "reviewPettyCashReconciliation",
     "from": [
-     "draft",
-     "submitted"
+     "submitted",
+     "reviewed"
     ],
     "fields": [
      {
@@ -13508,12 +13649,9 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "procurement.purchase_requisition.return",
     "operationId": "returnPurchaseRequisition",
     "from": [
-     "draft",
      "submitted",
      "validated",
-     "pending_approval",
-     "approved",
-     "sourcing"
+     "pending_approval"
     ],
     "fields": [
      {
@@ -13891,6 +14029,18 @@ export const RESOURCES: Record<string, Resource> = {
       "label": "Unit price",
       "required": true,
       "kind": "decimal"
+     },
+     {
+      "name": "line_total",
+      "label": "Line total",
+      "readOnly": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "received_quantity",
+      "label": "Received quantity",
+      "readOnly": true,
+      "kind": "decimal"
      }
     ]
    }
@@ -13990,6 +14140,18 @@ export const RESOURCES: Record<string, Resource> = {
        "label": "Unit price",
        "required": true,
        "kind": "decimal"
+      },
+      {
+       "name": "line_total",
+       "label": "Line total",
+       "readOnly": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "received_quantity",
+       "label": "Received quantity",
+       "readOnly": true,
+       "kind": "decimal"
       }
      ]
     }
@@ -14075,6 +14237,18 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "unit_price",
        "label": "Unit price",
        "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "line_total",
+       "label": "Line total",
+       "readOnly": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "received_quantity",
+       "label": "Received quantity",
+       "readOnly": true,
        "kind": "decimal"
       }
      ]
@@ -14291,6 +14465,13 @@ export const RESOURCES: Record<string, Resource> = {
       "name": "rejection_reason",
       "label": "Rejection reason",
       "kind": "text"
+     },
+     {
+      "name": "hold_id",
+      "label": "Hold",
+      "readOnly": true,
+      "kind": "ref",
+      "ref": "holds"
      }
     ]
    }
@@ -14426,6 +14607,13 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "rejection_reason",
        "label": "Rejection reason",
        "kind": "text"
+      },
+      {
+       "name": "hold_id",
+       "label": "Hold",
+       "readOnly": true,
+       "kind": "ref",
+       "ref": "holds"
       }
      ]
     }
@@ -14549,6 +14737,13 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "rejection_reason",
        "label": "Rejection reason",
        "kind": "text"
+      },
+      {
+       "name": "hold_id",
+       "label": "Hold",
+       "readOnly": true,
+       "kind": "ref",
+       "ref": "holds"
       }
      ]
     }
@@ -14986,6 +15181,18 @@ export const RESOURCES: Record<string, Resource> = {
       "name": "po_line_id",
       "label": "PO line",
       "kind": "uuid"
+     },
+     {
+      "name": "match_result",
+      "label": "Match result",
+      "readOnly": true,
+      "kind": "enum",
+      "options": [
+       "matched",
+       "quantity_mismatch",
+       "price_mismatch",
+       "unmatched"
+      ]
      }
     ]
    }
@@ -15108,6 +15315,18 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "po_line_id",
        "label": "PO line",
        "kind": "uuid"
+      },
+      {
+       "name": "match_result",
+       "label": "Match result",
+       "readOnly": true,
+       "kind": "enum",
+       "options": [
+        "matched",
+        "quantity_mismatch",
+        "price_mismatch",
+        "unmatched"
+       ]
       }
      ]
     }
@@ -15217,6 +15436,18 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "po_line_id",
        "label": "PO line",
        "kind": "uuid"
+      },
+      {
+       "name": "match_result",
+       "label": "Match result",
+       "readOnly": true,
+       "kind": "enum",
+       "options": [
+        "matched",
+        "quantity_mismatch",
+        "price_mismatch",
+        "unmatched"
+       ]
       }
      ]
     }
@@ -15960,9 +16191,8 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "procurement.emergency_procurement.review",
     "operationId": "reviewEmergencyProcurement",
     "from": [
-     "draft",
      "pending_approval",
-     "approved"
+     "reviewed"
     ],
     "fields": [
      {
@@ -17694,10 +17924,7 @@ export const RESOURCES: Record<string, Resource> = {
     "operationId": "rejectStockTransfer",
     "from": [
      "requested",
-     "accepted",
-     "dispatched",
-     "received",
-     "discrepancy"
+     "accepted"
     ],
     "fields": [
      {
@@ -18109,6 +18336,18 @@ export const RESOURCES: Record<string, Resource> = {
       "kind": "decimal"
      },
      {
+      "name": "variance_quantity",
+      "label": "Variance quantity",
+      "readOnly": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "variance_value",
+      "label": "Variance value",
+      "readOnly": true,
+      "kind": "money"
+     },
+     {
       "name": "obsolete",
       "label": "Obsolete",
       "kind": "boolean"
@@ -18241,6 +18480,18 @@ export const RESOURCES: Record<string, Resource> = {
        "kind": "decimal"
       },
       {
+       "name": "variance_quantity",
+       "label": "Variance quantity",
+       "readOnly": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "variance_value",
+       "label": "Variance value",
+       "readOnly": true,
+       "kind": "money"
+      },
+      {
        "name": "obsolete",
        "label": "Obsolete",
        "kind": "boolean"
@@ -18362,6 +18613,18 @@ export const RESOURCES: Record<string, Resource> = {
        "kind": "decimal"
       },
       {
+       "name": "variance_quantity",
+       "label": "Variance quantity",
+       "readOnly": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "variance_value",
+       "label": "Variance value",
+       "readOnly": true,
+       "kind": "money"
+      },
+      {
        "name": "obsolete",
        "label": "Obsolete",
        "kind": "boolean"
@@ -18403,8 +18666,6 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "stock.stocktake.approve",
     "operationId": "approveStocktake",
     "from": [
-     "planned",
-     "counting",
      "submitted",
      "reviewed"
     ],
@@ -19172,7 +19433,7 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "stock.waste_record.review",
     "operationId": "reviewWasteRecord",
     "from": [
-     "recorded"
+     "reviewed"
     ],
     "fields": [
      {
@@ -20034,6 +20295,12 @@ export const RESOURCES: Record<string, Resource> = {
       "kind": "decimal"
      },
      {
+      "name": "unusual_flag",
+      "label": "Unusual flag",
+      "readOnly": true,
+      "kind": "boolean"
+     },
+     {
       "name": "confirmed_quantity",
       "label": "Confirmed quantity",
       "kind": "decimal"
@@ -20134,6 +20401,12 @@ export const RESOURCES: Record<string, Resource> = {
        "kind": "decimal"
       },
       {
+       "name": "unusual_flag",
+       "label": "Unusual flag",
+       "readOnly": true,
+       "kind": "boolean"
+      },
+      {
        "name": "confirmed_quantity",
        "label": "Confirmed quantity",
        "kind": "decimal"
@@ -20220,6 +20493,12 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "expected_sales",
        "label": "Expected sales",
        "kind": "decimal"
+      },
+      {
+       "name": "unusual_flag",
+       "label": "Unusual flag",
+       "readOnly": true,
+       "kind": "boolean"
       },
       {
        "name": "confirmed_quantity",
@@ -24205,7 +24484,7 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "quality.recall_reconciliation.review",
     "operationId": "reviewRecallReconciliation",
     "from": [
-     "draft"
+     "reviewed"
     ],
     "fields": [
      {
@@ -26393,8 +26672,7 @@ export const RESOURCES: Record<string, Resource> = {
     "operationId": "returnReceiptBook",
     "from": [
      "in_storage",
-     "issued",
-     "missing"
+     "issued"
     ],
     "fields": [
      {
@@ -27825,8 +28103,8 @@ export const RESOURCES: Record<string, Resource> = {
     "operationId": "reviewReport",
     "from": [
      "pending",
-     "draft",
-     "submitted"
+     "submitted",
+     "reviewed"
     ],
     "fields": [
      {
@@ -29503,9 +29781,8 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "assets.asset_verification.review",
     "operationId": "reviewAssetVerification",
     "from": [
-     "planned",
-     "in_progress",
-     "submitted"
+     "submitted",
+     "reviewed"
     ],
     "fields": [
      {
@@ -30052,8 +30329,7 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "keys.key_movement.return",
     "operationId": "returnKeyMovement",
     "from": [
-     "out",
-     "overdue"
+     "out"
     ],
     "fields": [
      {
@@ -31149,8 +31425,7 @@ export const RESOURCES: Record<string, Resource> = {
     "permission": "lost_property.lost_property_item.return",
     "operationId": "returnLostPropertyItem",
     "from": [
-     "in_custody",
-     "disposed"
+     "in_custody"
     ],
     "fields": [
      {
@@ -33907,6 +34182,19 @@ export const RESOURCES: Record<string, Resource> = {
       "name": "outstanding_items",
       "label": "Outstanding items",
       "kind": "text"
+     },
+     {
+      "name": "signed_by",
+      "label": "Signed by",
+      "readOnly": true,
+      "kind": "ref",
+      "ref": "users"
+     },
+     {
+      "name": "signed_at",
+      "label": "Signed",
+      "readOnly": true,
+      "kind": "datetime"
      }
     ]
    }
@@ -33994,6 +34282,19 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "outstanding_items",
        "label": "Outstanding items",
        "kind": "text"
+      },
+      {
+       "name": "signed_by",
+       "label": "Signed by",
+       "readOnly": true,
+       "kind": "ref",
+       "ref": "users"
+      },
+      {
+       "name": "signed_at",
+       "label": "Signed",
+       "readOnly": true,
+       "kind": "datetime"
       }
      ]
     }
@@ -34070,6 +34371,19 @@ export const RESOURCES: Record<string, Resource> = {
        "name": "outstanding_items",
        "label": "Outstanding items",
        "kind": "text"
+      },
+      {
+       "name": "signed_by",
+       "label": "Signed by",
+       "readOnly": true,
+       "kind": "ref",
+       "ref": "users"
+      },
+      {
+       "name": "signed_at",
+       "label": "Signed",
+       "readOnly": true,
+       "kind": "datetime"
       }
      ]
     }

@@ -37,5 +37,5 @@ RETURNING *;
 -- name: ActReturnFloatIssue :one
 UPDATE float_issues
 SET returned_amounts = COALESCE(sqlc.narg(returned_amounts), returned_amounts), returned_at = now(), status = 'returned', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('issued', 'acknowledged', 'exception')
+WHERE id = sqlc.arg(id) AND status IN ('issued', 'acknowledged')
 RETURNING *;

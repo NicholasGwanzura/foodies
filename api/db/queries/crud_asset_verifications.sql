@@ -51,5 +51,5 @@ RETURNING *;
 -- name: ActReviewAssetVerification :one
 UPDATE asset_verifications
 SET status = 'reviewed', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('planned', 'in_progress', 'submitted')
+WHERE id = sqlc.arg(id) AND status IN ('submitted', 'reviewed')
 RETURNING *;

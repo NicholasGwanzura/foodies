@@ -16,7 +16,7 @@ import (
 const actApproveStocktake = `-- name: ActApproveStocktake :one
 UPDATE stocktakes
 SET status = 'approved', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('planned', 'counting', 'submitted', 'reviewed')
+WHERE id = $2 AND status IN ('submitted', 'reviewed')
 RETURNING id, reference, site_id, kind, count_date, shift, finance_instruction_ref, alternative_control, system_capture_ref, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

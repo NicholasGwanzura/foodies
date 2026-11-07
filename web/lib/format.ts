@@ -54,7 +54,8 @@ export function tone(status: string): string {
 /** The best short name for a record. */
 export function recordLabel(row: Record<string, unknown>): string {
   if (row.first_name) return `${row.first_name} ${row.last_name ?? ""}`.trim();
-  for (const key of ["reference", "name", "title", "label", "code", "key"]) {
+  if (row.rate) return `${row.from_currency} to ${row.to_currency}: ${row.rate} on ${row.rate_date}`;
+  for (const key of ["reference", "name", "legal_name", "full_name", "title", "label", "batch_number", "book_number", "code", "key"]) {
     if (row[key]) return String(row[key]);
   }
   return String(row.id ?? "").slice(0, 8);

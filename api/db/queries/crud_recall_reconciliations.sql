@@ -29,5 +29,5 @@ RETURNING *;
 -- name: ActReviewRecallReconciliation :one
 UPDATE recall_reconciliations
 SET status = 'reviewed', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('draft')
+WHERE id = sqlc.arg(id) AND status IN ('reviewed')
 RETURNING *;

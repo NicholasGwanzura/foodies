@@ -37,7 +37,7 @@ RETURNING *;
 -- name: ActReviewReport :one
 UPDATE reports
 SET status = 'reviewed', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('pending', 'draft', 'submitted')
+WHERE id = sqlc.arg(id) AND status IN ('pending', 'submitted', 'reviewed')
 RETURNING *;
 
 -- name: ActExplainLateReport :one

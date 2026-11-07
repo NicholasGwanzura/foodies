@@ -16,7 +16,7 @@ import (
 const actReturnPurchaseRequisition = `-- name: ActReturnPurchaseRequisition :one
 UPDATE purchase_requisitions
 SET status = 'returned', updated_at = now(), updated_by = $1, row_version = row_version + 1
-WHERE id = $2 AND status IN ('draft', 'submitted', 'validated', 'pending_approval', 'approved', 'sourcing')
+WHERE id = $2 AND status IN ('submitted', 'validated', 'pending_approval')
 RETURNING id, reference, site_id, department_id, cost_centre_id, requester_employee_id, purpose, requirement_type, required_date, budget_code, yield_estimate, status, created_at, updated_at, created_by, updated_by, row_version
 `
 

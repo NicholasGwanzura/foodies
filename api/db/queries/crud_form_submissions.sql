@@ -43,11 +43,11 @@ RETURNING *;
 -- name: ActReviewFormSubmission :one
 UPDATE form_submissions
 SET status = 'closed', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('draft', 'submitted', 'pending_signature', 'pending_review')
+WHERE id = sqlc.arg(id) AND status IN ('submitted', 'pending_signature', 'pending_review')
 RETURNING *;
 
 -- name: ActReturnFormSubmission :one
 UPDATE form_submissions
 SET status = 'returned', updated_at = now(), updated_by = sqlc.narg(updated_by), row_version = row_version + 1
-WHERE id = sqlc.arg(id) AND status IN ('draft', 'submitted', 'pending_signature', 'pending_review')
+WHERE id = sqlc.arg(id) AND status IN ('submitted', 'pending_signature', 'pending_review')
 RETURNING *;
