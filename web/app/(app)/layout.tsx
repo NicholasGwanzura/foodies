@@ -2,6 +2,9 @@ import { Suspense } from "react";
 
 import { Shell } from "@/components/shell";
 
+// Every page here reads the signed-in session, so none can be instant.
+export const instant = false;
+
 function Loading() {
   return (
     <>

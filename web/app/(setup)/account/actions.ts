@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { serverApi } from "@/lib/api/server";
 import type { FormState } from "@/lib/form-state";
-import { formError } from "@/lib/session";
+import { clearTokens, formError } from "@/lib/session";
 
 export async function changePassword(
   _: FormState,
@@ -24,7 +24,16 @@ export async function changePassword(
   } catch (error) {
     return formError(error);
   }
-  redirect("/");
+  return startOver();
+}
+
+/**
+ * The token from this step can do nothing else, so finishing it means signing
+ * in again with the new credentials.
+ */
+async function startOver(): Promise<never> {
+  await clearTokens();
+  redirect("/sign-in?done=1");
 }
 
 export async function confirmTwoFactor(
@@ -38,5 +47,5 @@ export async function confirmTwoFactor(
   } catch (error) {
     return formError(error);
   }
-  redirect("/");
+  return startOver();
 }

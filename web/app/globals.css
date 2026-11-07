@@ -238,6 +238,7 @@ table.data td.money, table.data th.money { text-align: right; font-variant-numer
 .auth-page .tagline { color: #fff; font-weight: 700; margin-top: 2px; text-shadow: 0 1px 0 rgb(120 50 0 / 35%); }
 .auth-card { width: min(420px, calc(100% - 24px)); margin: -64px auto 32px; align-self: start; }
 .auth-card h1 { font-size: 22px; font-weight: 900; }
+.auth-card > .notice { margin-bottom: 12px; }
 
 .action-details > summary { list-style: none; }
 .action-details > summary::-webkit-details-marker { display: none; }

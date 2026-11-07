@@ -504,6 +504,18 @@ func (s *Service) EnrolMfa(ctx context.Context) (secret, uri string, err error) 
 	if err != nil {
 		return "", "", fmt.Errorf("read employee: %w", err)
 	}
+	cred, err := q.GetCredentials(ctx, p.UserID)
+	if err != nil {
+		return "", "", fmt.Errorf("read credentials: %w", err)
+	}
+	if cred.TotpConfirmedAt != nil {
+		return "", "", errState("Two-factor sign-in is already set up. Ask ICT to reset it.")
+	}
+	// A key the user may already have scanned stays valid until it is confirmed,
+	// so loading the page again does not break their authenticator.
+	if cred.TotpSecret != nil {
+		return *cred.TotpSecret, auth.TOTPURI(*cred.TotpSecret, emp.EmployeeNumber), nil
+	}
 	secret, err = auth.NewTOTPSecret()
 	if err != nil {
 		return "", "", err

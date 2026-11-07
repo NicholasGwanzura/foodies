@@ -200,3 +200,19 @@ func TestAuditChainHoldsAndIsAppendOnly(t *testing.T) {
 		t.Fatal("audit_events accepted a delete")
 	}
 }
+
+func TestEnrolmentKeyStaysStableUntilConfirmed(t *testing.T) {
+	r := want(t, call(t, "", http.MethodPost, "/auth/login", map[string]any{"employee_number": "E1006", "password": password}), http.StatusOK)
+	limited := r.str("access_token")
+	first := want(t, call(t, limited, http.MethodPost, "/auth/mfa/enrol", nil), http.StatusOK)
+	second := want(t, call(t, limited, http.MethodPost, "/auth/mfa/enrol", nil), http.StatusOK)
+	if first.str("secret") != second.str("secret") {
+		t.Fatal("the key changed before it was confirmed")
+	}
+	code, err := auth.TOTPCode(first.str("secret"), time.Now())
+	if err != nil {
+		t.Fatal(err)
+	}
+	want(t, call(t, limited, http.MethodPost, "/auth/mfa/confirm", map[string]any{"code": code}), http.StatusNoContent)
+	wantCode(t, call(t, limited, http.MethodPost, "/auth/mfa/enrol", nil), http.StatusConflict, "invalid_state_transition")
+}

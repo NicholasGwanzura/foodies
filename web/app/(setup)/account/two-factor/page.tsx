@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { redirect } from "next/navigation";
+
+import { ApiError } from "@/lib/api/client";
 import { serverApi } from "@/lib/api/server";
 
 import { ConfirmForm } from "./confirm-form";
@@ -7,7 +10,11 @@ import { ConfirmForm } from "./confirm-form";
 export const metadata: Metadata = { title: "Set up two-factor" };
 
 export default async function TwoFactorPage() {
-  const enrolment = await serverApi.post("/auth/mfa/enrol");
+  const enrolment = await serverApi.post("/auth/mfa/enrol").catch((error) => {
+    // Already set up, for example from a stale tab.
+    if (error instanceof ApiError && error.problem.status === 409) redirect("/");
+    throw error;
+  });
   return (
     <div className="stack">
       <h1>Set up two-factor sign-in</h1>
