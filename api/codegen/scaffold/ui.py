@@ -114,6 +114,10 @@ def field(t, name, p, required, built):
         f["hint"] = str(p["description"]).split("\n")[0][:110]
     if "pin" == name or name.endswith("_pin"):
         f["kind"] = "pin"
+    if name == "signature_id":
+        # The screen collects a PIN, and the server action turns it into a signature.
+        f.update(kind="pin", label="Your 6-digit PIN")
+        f.pop("hint", None)
     if p.get("format") == "password":
         f["kind"] = "password"
     return f

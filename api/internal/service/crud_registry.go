@@ -367,4 +367,274 @@ var subjects = map[string]subject{
 			return err
 		},
 	},
+	"float_certificates": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetFloatCertificate(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "active", "superseded", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetFloatCertificateStatus(ctx, db.SetFloatCertificateStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"float_issues": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetFloatIssue(ctx, id) },
+		statuses: []string{"issued", "acknowledged", "returned", "exception"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetFloatIssueStatus(ctx, db.SetFloatIssueStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"float_exceptions": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetFloatException(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "reimbursed", "overdue", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetFloatExceptionStatus(ctx, db.SetFloatExceptionStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"till_flushes": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetTillFlush(ctx, id) },
+		statuses: []string{"draft", "pending_signatures", "closed", "exception"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetTillFlushStatus(ctx, db.SetTillFlushStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"cash_ups": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCashUp(ctx, id) },
+		statuses: []string{"draft", "counted", "pending_signatures", "pending_review", "approved", "returned", "exception"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetCashUpStatus(ctx, db.SetCashUpStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"cash_variances": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCashVariance(ctx, id) },
+		statuses: []string{"open", "recovered", "under_investigation", "referred", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetCashVarianceStatus(ctx, db.SetCashVarianceStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"cit_providers": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCitProvider(ctx, id) },
+	},
+	"cit_personnel": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCitPerson(ctx, id) },
+	},
+	"cit_transits": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetCitTransit(ctx, id) },
+		statuses: []string{"draft", "sealed", "identity_verified", "handed_over", "in_transit", "received", "reconciled", "discrepancy", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetCitTransitStatus(ctx, db.SetCitTransitStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"bank_deposits": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetBankDeposit(ctx, id) },
+		statuses: []string{"draft", "banked", "proof_submitted", "verified", "exception"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetBankDepositStatus(ctx, db.SetBankDepositStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"cit_reconciliations": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetCitReconciliation(ctx, id)
+		},
+		statuses: []string{"open", "reconciled", "unresolved"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetCitReconciliationStatus(ctx, db.SetCitReconciliationStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"surprise_counts": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetSurpriseCount(ctx, id) },
+		statuses: []string{"planned", "in_progress", "completed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetSurpriseCountStatus(ctx, db.SetSurpriseCountStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"petty_cash_accounts": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetPettyCashAccount(ctx, id)
+		},
+	},
+	"petty_cash_vouchers": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetPettyCashVoucher(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "issued", "receipted", "reimbursed", "rejected", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPettyCashVoucherStatus(ctx, db.SetPettyCashVoucherStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"petty_cash_handovers": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetPettyCashHandover(ctx, id)
+		},
+		statuses: []string{"draft", "pending_signatures", "closed", "exception"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPettyCashHandoverStatus(ctx, db.SetPettyCashHandoverStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"petty_cash_reconciliations": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetPettyCashReconciliation(ctx, id)
+		},
+		statuses: []string{"draft", "submitted", "reviewed", "exception"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPettyCashReconciliationStatus(ctx, db.SetPettyCashReconciliationStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"petty_cash_reimbursements": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetPettyCashReimbursement(ctx, id)
+		},
+		statuses: []string{"draft", "submitted", "approved", "paid", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPettyCashReimbursementStatus(ctx, db.SetPettyCashReimbursementStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"suppliers": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetSupplier(ctx, id) },
+		statuses: []string{"draft", "pending_verification", "active", "suspended", "blocked"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetSupplierStatus(ctx, db.SetSupplierStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"supplier_amendments": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetSupplierAmendment(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetSupplierAmendmentStatus(ctx, db.SetSupplierAmendmentStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"purchase_requisitions": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetPurchaseRequisition(ctx, id)
+		},
+		statuses: []string{"draft", "submitted", "returned", "validated", "pending_approval", "approved", "rejected", "sourcing", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPurchaseRequisitionStatus(ctx, db.SetPurchaseRequisitionStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"quotations": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetQuotation(ctx, id) },
+	},
+	"purchase_orders": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetPurchaseOrder(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "issued", "part_received", "received", "closed", "cancelled"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPurchaseOrderStatus(ctx, db.SetPurchaseOrderStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"goods_receipts": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetGoodsReceipt(ctx, id) },
+		statuses: []string{"draft", "inspected", "accepted", "part_rejected", "rejected", "posted"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetGoodsReceiptStatus(ctx, db.SetGoodsReceiptStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"delivery_discrepancies": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetDeliveryDiscrepancy(ctx, id)
+		},
+		statuses: []string{"open", "supplier_notified", "resolved", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetDeliveryDiscrepancyStatus(ctx, db.SetDeliveryDiscrepancyStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"supplier_invoices": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetSupplierInvoice(ctx, id)
+		},
+		statuses: []string{"received", "matched", "on_hold", "approved_exception", "posted", "paid", "void"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetSupplierInvoiceStatus(ctx, db.SetSupplierInvoiceStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"payment_requisitions": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetPaymentRequisition(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "scheduled", "paid", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPaymentRequisitionStatus(ctx, db.SetPaymentRequisitionStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"payment_batches": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetPaymentBatch(ctx, id) },
+		statuses: []string{"draft", "pending_approval", "approved", "executed", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetPaymentBatchStatus(ctx, db.SetPaymentBatchStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"emergency_procurements": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetEmergencyProcurement(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "rejected", "reviewed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetEmergencyProcurementStatus(ctx, db.SetEmergencyProcurementStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"unauthorized_purchases": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetUnauthorizedPurchase(ctx, id)
+		},
+		statuses: []string{"reported", "under_review", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetUnauthorizedPurchaseStatus(ctx, db.SetUnauthorizedPurchaseStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"budgets": {
+		get:      func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) { return q.GetBudget(ctx, id) },
+		statuses: []string{"draft", "submitted", "consolidated", "pending_approval", "approved", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetBudgetStatus(ctx, db.SetBudgetStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"budget_variances": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetBudgetVariance(ctx, id)
+		},
+		statuses: []string{"open", "explained", "escalated", "closed"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetBudgetVarianceStatus(ctx, db.SetBudgetVarianceStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
+	"budget_reallocations": {
+		get: func(ctx context.Context, q db.Querier, id uuid.UUID) (any, error) {
+			return q.GetBudgetReallocation(ctx, id)
+		},
+		statuses: []string{"draft", "pending_approval", "approved", "rejected"},
+		setStatus: func(ctx context.Context, q db.Querier, id uuid.UUID, status string, actor *uuid.UUID) error {
+			_, err := q.SetBudgetReallocationStatus(ctx, db.SetBudgetReallocationStatusParams{ID: id, Status: status, UpdatedBy: actor})
+			return err
+		},
+	},
 }

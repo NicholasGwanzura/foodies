@@ -262,6 +262,9 @@ func (s *Service) ApproveApprovalRequest(ctx context.Context, id uuid.UUID, comm
 	if err := s.signedBy(ctx, r, signature); err != nil {
 		return r, err
 	}
+	if err := s.beforeApprove(ctx, r); err != nil {
+		return r, err
+	}
 	if err := s.decide(ctx, st, "approved", comment, &signature); err != nil {
 		return r, err
 	}

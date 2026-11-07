@@ -4158,9 +4158,9 @@ export const RESOURCES: Record<string, Resource> = {
      },
      {
       "name": "signature_id",
-      "label": "Signature",
+      "label": "Your 6-digit PIN",
       "required": true,
-      "kind": "uuid"
+      "kind": "pin"
      }
     ]
    },
@@ -4184,9 +4184,9 @@ export const RESOURCES: Record<string, Resource> = {
      },
      {
       "name": "signature_id",
-      "label": "Signature",
+      "label": "Your 6-digit PIN",
       "required": true,
-      "kind": "uuid"
+      "kind": "pin"
      }
     ]
    },
@@ -8888,6 +8888,7793 @@ export const RESOURCES: Record<string, Resource> = {
      "proposed",
      "pending_approval",
      "approved"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "float-certificates": {
+  "slug": "float-certificates",
+  "title": "Float certificates",
+  "singular": "Float certificate",
+  "about": "Approved change float and petty cash amounts per branch. Limited by `cash.change_float_max` and `cash.petty_cash_max`.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/float-certificates",
+  "readPermission": "cash.float_certificate.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "brand",
+    "label": "Brand",
+    "kind": "text"
+   },
+   {
+    "name": "location",
+    "label": "Location",
+    "kind": "text"
+   },
+   {
+    "name": "change_float",
+    "label": "Change float",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "petty_cash",
+    "label": "Petty cash",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "effective_date",
+    "label": "Effective date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "certificate_attachment_id",
+    "label": "Certificate attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "active",
+     "superseded",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "certificate_attachment_id",
+   "change_float"
+  ],
+  "restricted": false,
+  "getPath": "/cash/float-certificates/{float_certificate_id}",
+  "create": {
+   "path": "/cash/float-certificates",
+   "permission": "cash.float_certificate.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "brand",
+     "label": "Brand",
+     "kind": "text"
+    },
+    {
+     "name": "location",
+     "label": "Location",
+     "kind": "text"
+    },
+    {
+     "name": "change_float",
+     "label": "Change float",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "petty_cash",
+     "label": "Petty cash",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "effective_date",
+     "label": "Effective date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "certificate_attachment_id",
+     "label": "Certificate attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "active",
+   "superseded",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cash/float-certificates/{float_certificate_id}/submit",
+    "permission": "cash.float_certificate.submit",
+    "operationId": "submitFloatCertificate",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "float-issues": {
+  "slug": "float-issues",
+  "title": "Float issues",
+  "singular": "Float issue",
+  "about": "Issue of change float to a cashier at the start of a shift and its return.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/float-issues",
+  "readPermission": "cash.float_issue.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "till_id",
+    "label": "Till",
+    "required": true,
+    "kind": "ref",
+    "ref": "tills"
+   },
+   {
+    "name": "cashier_employee_id",
+    "label": "Cashier",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "business_date",
+    "label": "Business date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "shift",
+    "label": "Shift",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "amounts",
+    "label": "Amounts",
+    "required": true,
+    "kind": "json",
+    "hint": "Per currency, never netted"
+   },
+   {
+    "name": "issued_at",
+    "label": "Issued",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "acknowledged_at",
+    "label": "Acknowledged",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "returned_amounts",
+    "label": "Returned amounts",
+    "kind": "json"
+   },
+   {
+    "name": "returned_at",
+    "label": "Returned",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "issued",
+     "acknowledged",
+     "returned",
+     "exception"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "till_id",
+   "cashier_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/cash/float-issues/{float_issue_id}",
+  "create": {
+   "path": "/cash/float-issues",
+   "permission": "cash.float_issue.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "till_id",
+     "label": "Till",
+     "required": true,
+     "kind": "ref",
+     "ref": "tills"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "business_date",
+     "label": "Business date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "amounts",
+     "label": "Amounts",
+     "required": true,
+     "kind": "json",
+     "hint": "Per currency, never netted"
+    },
+    {
+     "name": "issued_at",
+     "label": "Issued",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "returned_amounts",
+     "label": "Returned amounts",
+     "kind": "json"
+    }
+   ]
+  },
+  "statuses": [
+   "issued",
+   "acknowledged",
+   "returned",
+   "exception"
+  ],
+  "actions": [
+   {
+    "key": "acknowledge",
+    "label": "Cashier acknowledges the float",
+    "path": "/cash/float-issues/{float_issue_id}/acknowledge",
+    "permission": "cash.float_issue.acknowledge",
+    "operationId": "acknowledgeFloatIssue",
+    "from": [
+     "issued"
+    ],
+    "fields": []
+   },
+   {
+    "key": "return",
+    "label": "Record float returned",
+    "path": "/cash/float-issues/{float_issue_id}/return",
+    "permission": "cash.float_issue.return",
+    "operationId": "returnFloatIssue",
+    "from": [
+     "issued",
+     "acknowledged",
+     "exception"
+    ],
+    "fields": [
+     {
+      "name": "returned_amounts",
+      "label": "Returned amounts",
+      "required": true,
+      "kind": "json"
+     }
+    ]
+   }
+  ]
+ },
+ "float-exceptions": {
+  "slug": "float-exceptions",
+  "title": "Float exceptions",
+  "singular": "Float exception",
+  "about": "Exceptional temporary use of float with prior MD approval and next-day reimbursement.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/float-exceptions",
+  "readPermission": "cash.float_exception.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "amount",
+    "label": "Amount",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "transaction_date",
+    "label": "Transaction date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "reimbursement_due",
+    "label": "Reimbursement due",
+    "readOnly": true,
+    "kind": "date"
+   },
+   {
+    "name": "reimbursed_at",
+    "label": "Reimbursed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "receipt_attachment_ids",
+    "label": "Receipt attachments",
+    "kind": "list"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "reimbursed",
+     "overdue",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "amount",
+   "transaction_date"
+  ],
+  "restricted": false,
+  "getPath": "/cash/float-exceptions/{float_exception_id}",
+  "create": {
+   "path": "/cash/float-exceptions",
+   "permission": "cash.float_exception.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "transaction_date",
+     "label": "Transaction date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "receipt_attachment_ids",
+     "label": "Receipt attachments",
+     "kind": "list"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "reimbursed",
+   "overdue",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cash/float-exceptions/{float_exception_id}/submit",
+    "permission": "cash.float_exception.submit",
+    "operationId": "submitFloatException",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "reimburse",
+    "label": "Record full reimbursement",
+    "path": "/cash/float-exceptions/{float_exception_id}/reimburse",
+    "permission": "cash.float_exception.reimburse",
+    "operationId": "reimburseFloatException",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved"
+    ],
+    "fields": [
+     {
+      "name": "receipt_attachment_ids",
+      "label": "Receipt attachments",
+      "required": true,
+      "kind": "list"
+     }
+    ]
+   }
+  ]
+ },
+ "till-flushes": {
+  "slug": "till-flushes",
+  "title": "Till flushes",
+  "singular": "Till flush",
+  "about": "Mandatory flush when till cash reaches `cash.till_flush_threshold`. Cannot close without exact time and all signatures.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/till-flushes",
+  "readPermission": "cash.till_flush.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "till_id",
+    "label": "Till",
+    "required": true,
+    "kind": "ref",
+    "ref": "tills"
+   },
+   {
+    "name": "cashier_employee_id",
+    "label": "Cashier",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "supervisor_employee_id",
+    "label": "Supervisor",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "security_witness_employee_id",
+    "label": "Security witness",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "business_date",
+    "label": "Business date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "shift",
+    "label": "Shift",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "threshold_reached_at",
+    "label": "Threshold reached",
+    "kind": "datetime"
+   },
+   {
+    "name": "flushed_at",
+    "label": "Flushed",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "amount",
+    "label": "Amount",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "denominations",
+    "label": "Denominations",
+    "kind": "json"
+   },
+   {
+    "name": "safe_id",
+    "label": "Safe",
+    "required": true,
+    "kind": "ref",
+    "ref": "safes"
+   },
+   {
+    "name": "safe_reference",
+    "label": "Safe reference",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_signatures",
+     "closed",
+     "exception"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "till_id",
+   "cashier_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/cash/till-flushes/{till_flush_id}",
+  "create": {
+   "path": "/cash/till-flushes",
+   "permission": "cash.till_flush.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "till_id",
+     "label": "Till",
+     "required": true,
+     "kind": "ref",
+     "ref": "tills"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "supervisor_employee_id",
+     "label": "Supervisor",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "security_witness_employee_id",
+     "label": "Security witness",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "business_date",
+     "label": "Business date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "threshold_reached_at",
+     "label": "Threshold reached",
+     "kind": "datetime"
+    },
+    {
+     "name": "flushed_at",
+     "label": "Flushed",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "denominations",
+     "label": "Denominations",
+     "kind": "json"
+    },
+    {
+     "name": "safe_id",
+     "label": "Safe",
+     "required": true,
+     "kind": "ref",
+     "ref": "safes"
+    },
+    {
+     "name": "safe_reference",
+     "label": "Safe reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/till-flushes/{till_flush_id}",
+   "permission": "cash.till_flush.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "till_id",
+     "label": "Till",
+     "kind": "ref",
+     "ref": "tills"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "supervisor_employee_id",
+     "label": "Supervisor",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "security_witness_employee_id",
+     "label": "Security witness",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "business_date",
+     "label": "Business date",
+     "kind": "date"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "kind": "text"
+    },
+    {
+     "name": "threshold_reached_at",
+     "label": "Threshold reached",
+     "kind": "datetime"
+    },
+    {
+     "name": "flushed_at",
+     "label": "Flushed",
+     "kind": "datetime"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "kind": "money"
+    },
+    {
+     "name": "denominations",
+     "label": "Denominations",
+     "kind": "json"
+    },
+    {
+     "name": "safe_id",
+     "label": "Safe",
+     "kind": "ref",
+     "ref": "safes"
+    },
+    {
+     "name": "safe_reference",
+     "label": "Safe reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_signatures",
+   "closed",
+   "exception"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cash/till-flushes/{till_flush_id}/submit",
+    "permission": "cash.till_flush.submit",
+    "operationId": "submitTillFlush",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "cash-ups": {
+  "slug": "cash-ups",
+  "title": "Cash ups",
+  "singular": "Cash up",
+  "about": "End-of-shift and close-of-day cash-up. Counts by currency and tender against POS, X-read and Z-report. A cashier cannot approve their own cash-up.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/cash-ups",
+  "readPermission": "cash.cash_up.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "till_id",
+    "label": "Till",
+    "required": true,
+    "kind": "ref",
+    "ref": "tills"
+   },
+   {
+    "name": "cashier_employee_id",
+    "label": "Cashier",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "supervisor_employee_id",
+    "label": "Supervisor",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "witness_employee_id",
+    "label": "Witness",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "business_date",
+    "label": "Business date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "shift",
+    "label": "Shift",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "shift",
+     "close_of_day"
+    ]
+   },
+   {
+    "name": "x_read_id",
+    "label": "X read",
+    "kind": "ref",
+    "ref": "z-reports"
+   },
+   {
+    "name": "z_report_id",
+    "label": "Z report",
+    "kind": "ref",
+    "ref": "z-reports"
+   },
+   {
+    "name": "fx_rate_id",
+    "label": "FX rate",
+    "kind": "ref",
+    "ref": "fx-rates"
+   },
+   {
+    "name": "fx_rate_value",
+    "label": "FX rate value",
+    "readOnly": true,
+    "kind": "decimal",
+    "hint": "Snapshot of the rate used"
+   },
+   {
+    "name": "variance_base",
+    "label": "Variance base",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "safe_id",
+    "label": "Safe",
+    "kind": "ref",
+    "ref": "safes"
+   },
+   {
+    "name": "safe_deposit_seal",
+    "label": "Safe deposit seal",
+    "kind": "text"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "counted",
+     "pending_signatures",
+     "pending_review",
+     "approved",
+     "returned",
+     "exception"
+    ]
+   },
+   {
+    "name": "tenders",
+    "label": "Tenders",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "currency",
+      "label": "Currency",
+      "required": true,
+      "kind": "currency"
+     },
+     {
+      "name": "tender",
+      "label": "Tender",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "cash",
+       "card",
+       "mobile_money",
+       "other"
+      ]
+     },
+     {
+      "name": "expected",
+      "label": "Expected",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "actual",
+      "label": "Actual",
+      "required": true,
+      "kind": "decimal"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "kind",
+   "site_id",
+   "till_id"
+  ],
+  "restricted": false,
+  "getPath": "/cash/cash-ups/{cash_up_id}",
+  "create": {
+   "path": "/cash/cash-ups",
+   "permission": "cash.cash_up.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "till_id",
+     "label": "Till",
+     "required": true,
+     "kind": "ref",
+     "ref": "tills"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "supervisor_employee_id",
+     "label": "Supervisor",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "witness_employee_id",
+     "label": "Witness",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "business_date",
+     "label": "Business date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "shift",
+      "close_of_day"
+     ]
+    },
+    {
+     "name": "x_read_id",
+     "label": "X read",
+     "kind": "ref",
+     "ref": "z-reports"
+    },
+    {
+     "name": "z_report_id",
+     "label": "Z report",
+     "kind": "ref",
+     "ref": "z-reports"
+    },
+    {
+     "name": "fx_rate_id",
+     "label": "FX rate",
+     "kind": "ref",
+     "ref": "fx-rates"
+    },
+    {
+     "name": "safe_id",
+     "label": "Safe",
+     "kind": "ref",
+     "ref": "safes"
+    },
+    {
+     "name": "safe_deposit_seal",
+     "label": "Safe deposit seal",
+     "kind": "text"
+    },
+    {
+     "name": "closed_at",
+     "label": "Closed",
+     "kind": "datetime"
+    },
+    {
+     "name": "tenders",
+     "label": "Tenders",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "currency",
+       "label": "Currency",
+       "required": true,
+       "kind": "currency"
+      },
+      {
+       "name": "tender",
+       "label": "Tender",
+       "required": true,
+       "kind": "enum",
+       "options": [
+        "cash",
+        "card",
+        "mobile_money",
+        "other"
+       ]
+      },
+      {
+       "name": "expected",
+       "label": "Expected",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "actual",
+       "label": "Actual",
+       "required": true,
+       "kind": "decimal"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/cash-ups/{cash_up_id}",
+   "permission": "cash.cash_up.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "till_id",
+     "label": "Till",
+     "kind": "ref",
+     "ref": "tills"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "supervisor_employee_id",
+     "label": "Supervisor",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "witness_employee_id",
+     "label": "Witness",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "business_date",
+     "label": "Business date",
+     "kind": "date"
+    },
+    {
+     "name": "shift",
+     "label": "Shift",
+     "kind": "text"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "kind": "enum",
+     "options": [
+      "shift",
+      "close_of_day"
+     ]
+    },
+    {
+     "name": "x_read_id",
+     "label": "X read",
+     "kind": "ref",
+     "ref": "z-reports"
+    },
+    {
+     "name": "z_report_id",
+     "label": "Z report",
+     "kind": "ref",
+     "ref": "z-reports"
+    },
+    {
+     "name": "fx_rate_id",
+     "label": "FX rate",
+     "kind": "ref",
+     "ref": "fx-rates"
+    },
+    {
+     "name": "safe_id",
+     "label": "Safe",
+     "kind": "ref",
+     "ref": "safes"
+    },
+    {
+     "name": "safe_deposit_seal",
+     "label": "Safe deposit seal",
+     "kind": "text"
+    },
+    {
+     "name": "closed_at",
+     "label": "Closed",
+     "kind": "datetime"
+    },
+    {
+     "name": "tenders",
+     "label": "Tenders",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "currency",
+       "label": "Currency",
+       "required": true,
+       "kind": "currency"
+      },
+      {
+       "name": "tender",
+       "label": "Tender",
+       "required": true,
+       "kind": "enum",
+       "options": [
+        "cash",
+        "card",
+        "mobile_money",
+        "other"
+       ]
+      },
+      {
+       "name": "expected",
+       "label": "Expected",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "actual",
+       "label": "Actual",
+       "required": true,
+       "kind": "decimal"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "counted",
+   "pending_signatures",
+   "pending_review",
+   "approved",
+   "returned",
+   "exception"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cash/cash-ups/{cash_up_id}/submit",
+    "permission": "cash.cash_up.submit",
+    "operationId": "submitCashUp",
+    "from": [
+     "draft",
+     "returned",
+     "counted"
+    ],
+    "fields": []
+   },
+   {
+    "key": "approve",
+    "label": "Independent review and approval",
+    "path": "/cash/cash-ups/{cash_up_id}/approve",
+    "permission": "cash.cash_up.approve",
+    "operationId": "approveCashUp",
+    "from": [
+     "draft",
+     "counted",
+     "pending_signatures",
+     "pending_review"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     },
+     {
+      "name": "signature_id",
+      "label": "Your 6-digit PIN",
+      "required": true,
+      "kind": "pin"
+     }
+    ]
+   },
+   {
+    "key": "return",
+    "label": "Return for correction",
+    "path": "/cash/cash-ups/{cash_up_id}/return",
+    "permission": "cash.cash_up.return",
+    "operationId": "returnCashUp",
+    "from": [
+     "draft",
+     "counted",
+     "pending_signatures",
+     "pending_review",
+     "approved",
+     "exception"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "cash-variances": {
+  "slug": "cash-variances",
+  "title": "Cash variances",
+  "singular": "Cash variance",
+  "about": "Every cash difference, however small. Foodies records and refers; it never decides a sanction.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/variances",
+  "readPermission": "cash.cash_variance.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "cash_up_id",
+    "label": "Cash up",
+    "required": true,
+    "kind": "ref",
+    "ref": "cash-ups"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "cashier_employee_id",
+    "label": "Cashier",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "variance_type",
+    "label": "Variance type",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "shortage",
+     "overage"
+    ]
+   },
+   {
+    "name": "amount",
+    "label": "Amount",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "explanation",
+    "label": "Explanation",
+    "kind": "text"
+   },
+   {
+    "name": "recovery_status",
+    "label": "Recovery status",
+    "kind": "enum",
+    "options": [
+     "none",
+     "paid",
+     "not_applicable"
+    ]
+   },
+   {
+    "name": "recovered_at",
+    "label": "Recovered",
+    "kind": "datetime"
+   },
+   {
+    "name": "recovery_reference",
+    "label": "Recovery reference",
+    "kind": "text"
+   },
+   {
+    "name": "occurrence_week",
+    "label": "Occurrence week",
+    "readOnly": true,
+    "kind": "number",
+    "hint": "Count in the last 7 days"
+   },
+   {
+    "name": "occurrence_month",
+    "label": "Occurrence month",
+    "readOnly": true,
+    "kind": "number",
+    "hint": "Count in the last month"
+   },
+   {
+    "name": "amount_band",
+    "label": "Amount band",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "From cash.sanction_bands"
+   },
+   {
+    "name": "hr_referred_at",
+    "label": "HR referred",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "disciplinary_case_id",
+    "label": "Disciplinary case",
+    "readOnly": true,
+    "kind": "uuid"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "recovered",
+     "under_investigation",
+     "referred",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "variance_type",
+   "recovery_status",
+   "cash_up_id"
+  ],
+  "restricted": false,
+  "getPath": "/cash/variances/{cash_variance_id}",
+  "update": {
+   "path": "/cash/variances/{cash_variance_id}",
+   "permission": "cash.cash_variance.write",
+   "fields": [
+    {
+     "name": "cash_up_id",
+     "label": "Cash up",
+     "kind": "ref",
+     "ref": "cash-ups"
+    },
+    {
+     "name": "explanation",
+     "label": "Explanation",
+     "kind": "text"
+    },
+    {
+     "name": "recovery_status",
+     "label": "Recovery status",
+     "kind": "enum",
+     "options": [
+      "none",
+      "paid",
+      "not_applicable"
+     ]
+    },
+    {
+     "name": "recovered_at",
+     "label": "Recovered",
+     "kind": "datetime"
+    },
+    {
+     "name": "recovery_reference",
+     "label": "Recovery reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "recovered",
+   "under_investigation",
+   "referred",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "record-recovery",
+    "label": "Record immediate payment of the variance",
+    "path": "/cash/variances/{cash_variance_id}/record-recovery",
+    "permission": "cash.cash_variance.record_recovery",
+    "operationId": "recordRecoveryCashVariance",
+    "from": [
+     "open",
+     "under_investigation"
+    ],
+    "fields": [
+     {
+      "name": "recovery_reference",
+      "label": "Recovery reference",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "recovered_at",
+      "label": "Recovered",
+      "required": true,
+      "kind": "datetime"
+     }
+    ]
+   },
+   {
+    "key": "refer-hr",
+    "label": "Refer to HR for the applicable process",
+    "path": "/cash/variances/{cash_variance_id}/refer-hr",
+    "permission": "cash.cash_variance.refer_hr",
+    "operationId": "referHrCashVariance",
+    "from": [
+     "open",
+     "under_investigation"
+    ],
+    "fields": [
+     {
+      "name": "note",
+      "label": "Note",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   },
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/cash/variances/{cash_variance_id}/close",
+    "permission": "cash.cash_variance.close",
+    "operationId": "closeCashVariance",
+    "from": [
+     "open",
+     "recovered",
+     "under_investigation",
+     "referred"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "cit-providers": {
+  "slug": "cit-providers",
+  "title": "CIT providers",
+  "singular": "CIT provider",
+  "about": "Contracted cash-in-transit provider.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/cit/providers",
+  "readPermission": "cash.cit_provider.read",
+  "fields": [
+   {
+    "name": "name",
+    "label": "Name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "contract_reference",
+    "label": "Contract reference",
+    "kind": "text"
+   },
+   {
+    "name": "insurance_limit",
+    "label": "Insurance limit",
+    "kind": "money"
+   },
+   {
+    "name": "active",
+    "label": "Active",
+    "kind": "boolean"
+   }
+  ],
+  "columns": [
+   "name",
+   "insurance_limit",
+   "contract_reference",
+   "active"
+  ],
+  "restricted": false,
+  "getPath": "/cash/cit/providers/{cit_provider_id}",
+  "create": {
+   "path": "/cash/cit/providers",
+   "permission": "cash.cit_provider.write",
+   "fields": [
+    {
+     "name": "name",
+     "label": "Name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "contract_reference",
+     "label": "Contract reference",
+     "kind": "text"
+    },
+    {
+     "name": "insurance_limit",
+     "label": "Insurance limit",
+     "kind": "money"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/cit/providers/{cit_provider_id}",
+   "permission": "cash.cit_provider.write",
+   "fields": [
+    {
+     "name": "name",
+     "label": "Name",
+     "kind": "text"
+    },
+    {
+     "name": "contract_reference",
+     "label": "Contract reference",
+     "kind": "text"
+    },
+    {
+     "name": "insurance_limit",
+     "label": "Insurance limit",
+     "kind": "money"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  }
+ },
+ "cit-personnel": {
+  "slug": "cit-personnel",
+  "title": "CIT personnel",
+  "singular": "CIT personnel",
+  "about": "Approved CIT personnel, used for identity checks at handover.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/cit/providers/{cit_provider_id}/personnel",
+  "readPermission": "cash.cit_person.read",
+  "fields": [
+   {
+    "name": "full_name",
+    "label": "Full name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "id_number",
+    "label": "ID number",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "active",
+    "label": "Active",
+    "kind": "boolean"
+   }
+  ],
+  "columns": [
+   "full_name",
+   "id_number",
+   "active"
+  ],
+  "restricted": false,
+  "create": {
+   "path": "/cash/cit/providers/{cit_provider_id}/personnel",
+   "permission": "cash.cit_person.write",
+   "fields": [
+    {
+     "name": "full_name",
+     "label": "Full name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "id_number",
+     "label": "ID number",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/cit/providers/{cit_provider_id}/personnel/{cit_person_id}",
+   "permission": "cash.cit_person.write",
+   "fields": [
+    {
+     "name": "full_name",
+     "label": "Full name",
+     "kind": "text"
+    },
+    {
+     "name": "id_number",
+     "label": "ID number",
+     "kind": "text"
+    },
+    {
+     "name": "active",
+     "label": "Active",
+     "kind": "boolean"
+    }
+   ]
+  },
+  "nestedUnder": "cit-providers"
+ },
+ "cit-transits": {
+  "slug": "cit-transits",
+  "title": "CIT transits",
+  "singular": "CIT transit",
+  "about": "One cash collection from sealing to vault receipt. Blocked above `cash.cit_transit_limit`.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/cit/transits",
+  "readPermission": "cash.cit_transit.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "provider_id",
+    "label": "Provider",
+    "required": true,
+    "kind": "ref",
+    "ref": "cit-providers"
+   },
+   {
+    "name": "transit_date",
+    "label": "Transit date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "total",
+    "label": "Total",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "deposit_slip_number",
+    "label": "Deposit slip number",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "slip_copy_dispatched",
+    "label": "Slip copy dispatched",
+    "kind": "boolean"
+   },
+   {
+    "name": "slip_copy_retained",
+    "label": "Slip copy retained",
+    "kind": "boolean"
+   },
+   {
+    "name": "identity_verified_person_id",
+    "label": "Identity verified person",
+    "readOnly": true,
+    "kind": "uuid"
+   },
+   {
+    "name": "collected_at",
+    "label": "Collected",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "cit_receipt_number",
+    "label": "CIT receipt number",
+    "kind": "text"
+   },
+   {
+    "name": "armoured_vehicle_confirmed",
+    "label": "Armoured vehicle confirmed",
+    "kind": "boolean"
+   },
+   {
+    "name": "vault_received_at",
+    "label": "Vault received",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "vault_amount",
+    "label": "Vault amount",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "received_by",
+    "label": "Received by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "sealed",
+     "identity_verified",
+     "handed_over",
+     "in_transit",
+     "received",
+     "reconciled",
+     "discrepancy",
+     "cancelled"
+    ]
+   },
+   {
+    "name": "bags",
+    "label": "Bags",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "bag_number",
+      "label": "Bag number",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "seal_number",
+      "label": "Seal number",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "amount",
+      "label": "Amount",
+      "required": true,
+      "kind": "money"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "provider_id",
+   "received_by"
+  ],
+  "restricted": false,
+  "getPath": "/cash/cit/transits/{cit_transit_id}",
+  "create": {
+   "path": "/cash/cit/transits",
+   "permission": "cash.cit_transit.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "provider_id",
+     "label": "Provider",
+     "required": true,
+     "kind": "ref",
+     "ref": "cit-providers"
+    },
+    {
+     "name": "transit_date",
+     "label": "Transit date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "total",
+     "label": "Total",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "slip_copy_dispatched",
+     "label": "Slip copy dispatched",
+     "kind": "boolean"
+    },
+    {
+     "name": "slip_copy_retained",
+     "label": "Slip copy retained",
+     "kind": "boolean"
+    },
+    {
+     "name": "cit_receipt_number",
+     "label": "CIT receipt number",
+     "kind": "text"
+    },
+    {
+     "name": "armoured_vehicle_confirmed",
+     "label": "Armoured vehicle confirmed",
+     "kind": "boolean"
+    },
+    {
+     "name": "bags",
+     "label": "Bags",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "bag_number",
+       "label": "Bag number",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "seal_number",
+       "label": "Seal number",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "amount",
+       "label": "Amount",
+       "required": true,
+       "kind": "money"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/cit/transits/{cit_transit_id}",
+   "permission": "cash.cit_transit.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "provider_id",
+     "label": "Provider",
+     "kind": "ref",
+     "ref": "cit-providers"
+    },
+    {
+     "name": "transit_date",
+     "label": "Transit date",
+     "kind": "date"
+    },
+    {
+     "name": "total",
+     "label": "Total",
+     "kind": "money"
+    },
+    {
+     "name": "slip_copy_dispatched",
+     "label": "Slip copy dispatched",
+     "kind": "boolean"
+    },
+    {
+     "name": "slip_copy_retained",
+     "label": "Slip copy retained",
+     "kind": "boolean"
+    },
+    {
+     "name": "cit_receipt_number",
+     "label": "CIT receipt number",
+     "kind": "text"
+    },
+    {
+     "name": "armoured_vehicle_confirmed",
+     "label": "Armoured vehicle confirmed",
+     "kind": "boolean"
+    },
+    {
+     "name": "bags",
+     "label": "Bags",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "bag_number",
+       "label": "Bag number",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "seal_number",
+       "label": "Seal number",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "amount",
+       "label": "Amount",
+       "required": true,
+       "kind": "money"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "sealed",
+   "identity_verified",
+   "handed_over",
+   "in_transit",
+   "received",
+   "reconciled",
+   "discrepancy",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "seal",
+    "label": "Confirm bags sealed and slip prepared",
+    "path": "/cash/cit/transits/{cit_transit_id}/seal",
+    "permission": "cash.cit_transit.seal",
+    "operationId": "sealCitTransit",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "verify-identity",
+    "label": "Match the CIT person against the approved list",
+    "path": "/cash/cit/transits/{cit_transit_id}/verify-identity",
+    "permission": "cash.cit_transit.verify_identity",
+    "operationId": "verifyIdentityCitTransit",
+    "from": [
+     "sealed"
+    ],
+    "fields": [
+     {
+      "name": "cit_person_id",
+      "label": "CIT person",
+      "required": true,
+      "kind": "uuid"
+     }
+    ]
+   },
+   {
+    "key": "hand-over",
+    "label": "Record handover and countersignatures",
+    "path": "/cash/cit/transits/{cit_transit_id}/hand-over",
+    "permission": "cash.cit_transit.hand_over",
+    "operationId": "handOverCitTransit",
+    "from": [
+     "identity_verified"
+    ],
+    "fields": [
+     {
+      "name": "cit_receipt_number",
+      "label": "CIT receipt number",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "armoured_vehicle_confirmed",
+      "label": "Armoured vehicle confirmed",
+      "required": true,
+      "kind": "boolean"
+     }
+    ]
+   },
+   {
+    "key": "receive-vault",
+    "label": "Record vault or bank receipt and seal checks",
+    "path": "/cash/cit/transits/{cit_transit_id}/receive-vault",
+    "permission": "cash.cit_transit.receive_vault",
+    "operationId": "receiveVaultCitTransit",
+    "from": [
+     "handed_over",
+     "in_transit"
+    ],
+    "fields": [
+     {
+      "name": "amount",
+      "label": "Amount",
+      "required": true,
+      "kind": "money"
+     },
+     {
+      "name": "seal_results",
+      "label": "Seal results",
+      "required": true,
+      "kind": "json"
+     }
+    ]
+   },
+   {
+    "key": "raise-discrepancy",
+    "label": "Raise a discrepancy, starting the 2-hour clock",
+    "path": "/cash/cit/transits/{cit_transit_id}/raise-discrepancy",
+    "permission": "cash.cit_transit.raise_discrepancy",
+    "operationId": "raiseDiscrepancyCitTransit",
+    "from": [
+     "handed_over",
+     "in_transit",
+     "received"
+    ],
+    "fields": [
+     {
+      "name": "description",
+      "label": "Description",
+      "required": true,
+      "kind": "textarea"
+     },
+     {
+      "name": "discovered_at",
+      "label": "Discovered",
+      "required": true,
+      "kind": "datetime"
+     }
+    ]
+   }
+  ]
+ },
+ "bank-deposits": {
+  "slug": "bank-deposits",
+  "title": "Bank deposits",
+  "singular": "Bank deposit",
+  "about": "Banking of takings: intact, in full, proof within 24 hours. Direct banking needs a Head Office Finance instruction.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/bank-deposits",
+  "readPermission": "cash.bank_deposit.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "trading_date",
+    "label": "Trading date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "route",
+    "label": "Route",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "cit",
+     "direct_bank"
+    ]
+   },
+   {
+    "name": "takings",
+    "label": "Takings",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "deposit_amount",
+    "label": "Deposit amount",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "bank",
+    "label": "Bank",
+    "kind": "text"
+   },
+   {
+    "name": "deposited_at",
+    "label": "Deposited",
+    "kind": "datetime"
+   },
+   {
+    "name": "slip_number",
+    "label": "Slip number",
+    "kind": "text"
+   },
+   {
+    "name": "finance_instruction_ref",
+    "label": "Finance instruction ref",
+    "kind": "text",
+    "hint": "Required for direct_bank"
+   },
+   {
+    "name": "proof_attachment_id",
+    "label": "Proof attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "proof_received_at",
+    "label": "Proof received",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "delay_reason",
+    "label": "Delay reason",
+    "kind": "text"
+   },
+   {
+    "name": "cit_transit_id",
+    "label": "CIT transit",
+    "kind": "ref",
+    "ref": "cit-transits"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "banked",
+     "proof_submitted",
+     "verified",
+     "exception"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "route",
+   "site_id",
+   "proof_attachment_id"
+  ],
+  "restricted": false,
+  "getPath": "/cash/bank-deposits/{bank_deposit_id}",
+  "create": {
+   "path": "/cash/bank-deposits",
+   "permission": "cash.bank_deposit.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "trading_date",
+     "label": "Trading date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "route",
+     "label": "Route",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "cit",
+      "direct_bank"
+     ]
+    },
+    {
+     "name": "takings",
+     "label": "Takings",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "deposit_amount",
+     "label": "Deposit amount",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "bank",
+     "label": "Bank",
+     "kind": "text"
+    },
+    {
+     "name": "deposited_at",
+     "label": "Deposited",
+     "kind": "datetime"
+    },
+    {
+     "name": "slip_number",
+     "label": "Slip number",
+     "kind": "text"
+    },
+    {
+     "name": "finance_instruction_ref",
+     "label": "Finance instruction ref",
+     "kind": "text",
+     "hint": "Required for direct_bank"
+    },
+    {
+     "name": "proof_attachment_id",
+     "label": "Proof attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "delay_reason",
+     "label": "Delay reason",
+     "kind": "text"
+    },
+    {
+     "name": "cit_transit_id",
+     "label": "CIT transit",
+     "kind": "ref",
+     "ref": "cit-transits"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/bank-deposits/{bank_deposit_id}",
+   "permission": "cash.bank_deposit.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "trading_date",
+     "label": "Trading date",
+     "kind": "date"
+    },
+    {
+     "name": "route",
+     "label": "Route",
+     "kind": "enum",
+     "options": [
+      "cit",
+      "direct_bank"
+     ]
+    },
+    {
+     "name": "takings",
+     "label": "Takings",
+     "kind": "money"
+    },
+    {
+     "name": "deposit_amount",
+     "label": "Deposit amount",
+     "kind": "money"
+    },
+    {
+     "name": "bank",
+     "label": "Bank",
+     "kind": "text"
+    },
+    {
+     "name": "deposited_at",
+     "label": "Deposited",
+     "kind": "datetime"
+    },
+    {
+     "name": "slip_number",
+     "label": "Slip number",
+     "kind": "text"
+    },
+    {
+     "name": "finance_instruction_ref",
+     "label": "Finance instruction ref",
+     "kind": "text",
+     "hint": "Required for direct_bank"
+    },
+    {
+     "name": "proof_attachment_id",
+     "label": "Proof attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "delay_reason",
+     "label": "Delay reason",
+     "kind": "text"
+    },
+    {
+     "name": "cit_transit_id",
+     "label": "CIT transit",
+     "kind": "ref",
+     "ref": "cit-transits"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "banked",
+   "proof_submitted",
+   "verified",
+   "exception"
+  ],
+  "actions": [
+   {
+    "key": "submit-proof",
+    "label": "Attach proof of banking",
+    "path": "/cash/bank-deposits/{bank_deposit_id}/submit-proof",
+    "permission": "cash.bank_deposit.submit_proof",
+    "operationId": "submitProofBankDeposit",
+    "from": [
+     "banked"
+    ],
+    "fields": [
+     {
+      "name": "proof_attachment_id",
+      "label": "Proof attachment",
+      "required": true,
+      "kind": "uuid"
+     }
+    ]
+   },
+   {
+    "key": "verify",
+    "label": "Finance verifies",
+    "path": "/cash/bank-deposits/{bank_deposit_id}/verify",
+    "permission": "cash.bank_deposit.verify",
+    "operationId": "verifyBankDeposit",
+    "from": [
+     "draft",
+     "banked",
+     "proof_submitted"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "cit-reconciliations": {
+  "slug": "cit-reconciliations",
+  "title": "CIT reconciliations",
+  "singular": "CIT reconciliation",
+  "about": "Daily reconciliation of dispatches, vault receipts and deposits.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/cit/reconciliations",
+  "readPermission": "cash.cit_reconciliation.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "reconciliation_date",
+    "label": "Reconciliation date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "dispatched",
+    "label": "Dispatched",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "received",
+    "label": "Received",
+    "kind": "money"
+   },
+   {
+    "name": "deposited",
+    "label": "Deposited",
+    "kind": "money"
+   },
+   {
+    "name": "variance",
+    "label": "Variance",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "investigation_owner_employee_id",
+    "label": "Investigation owner",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "reconciled",
+     "unresolved"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "investigation_owner_employee_id",
+   "reconciliation_date"
+  ],
+  "restricted": false,
+  "getPath": "/cash/cit/reconciliations/{cit_reconciliation_id}",
+  "create": {
+   "path": "/cash/cit/reconciliations",
+   "permission": "cash.cit_reconciliation.write",
+   "fields": [
+    {
+     "name": "reconciliation_date",
+     "label": "Reconciliation date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "dispatched",
+     "label": "Dispatched",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "received",
+     "label": "Received",
+     "kind": "money"
+    },
+    {
+     "name": "deposited",
+     "label": "Deposited",
+     "kind": "money"
+    },
+    {
+     "name": "investigation_owner_employee_id",
+     "label": "Investigation owner",
+     "kind": "ref",
+     "ref": "employees"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/cit/reconciliations/{cit_reconciliation_id}",
+   "permission": "cash.cit_reconciliation.write",
+   "fields": [
+    {
+     "name": "reconciliation_date",
+     "label": "Reconciliation date",
+     "kind": "date"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "dispatched",
+     "label": "Dispatched",
+     "kind": "money"
+    },
+    {
+     "name": "received",
+     "label": "Received",
+     "kind": "money"
+    },
+    {
+     "name": "deposited",
+     "label": "Deposited",
+     "kind": "money"
+    },
+    {
+     "name": "investigation_owner_employee_id",
+     "label": "Investigation owner",
+     "kind": "ref",
+     "ref": "employees"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "reconciled",
+   "unresolved"
+  ],
+  "actions": [
+   {
+    "key": "complete",
+    "label": "Mark reconciled",
+    "path": "/cash/cit/reconciliations/{cit_reconciliation_id}/complete",
+    "permission": "cash.cit_reconciliation.complete",
+    "operationId": "completeCitReconciliation",
+    "from": [
+     "open"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "surprise-counts": {
+  "slug": "surprise-counts",
+  "title": "Surprise counts",
+  "singular": "Surprise count",
+  "about": "Unannounced cash count. Not visible to the branch until started.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/surprise-counts",
+  "readPermission": "cash.surprise_count.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "counted_at",
+    "label": "Counted",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "count_team",
+    "label": "Count team",
+    "required": true,
+    "kind": "list"
+   },
+   {
+    "name": "cashier_employee_id",
+    "label": "Cashier",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "pos_balance",
+    "label": "POS balance",
+    "kind": "money"
+   },
+   {
+    "name": "physical_cash",
+    "label": "Physical cash",
+    "kind": "money"
+   },
+   {
+    "name": "variance",
+    "label": "Variance",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "findings",
+    "label": "Findings",
+    "kind": "textarea"
+   },
+   {
+    "name": "corrective_action_id",
+    "label": "Corrective action",
+    "kind": "ref",
+    "ref": "actions"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "planned",
+     "in_progress",
+     "completed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "cashier_employee_id",
+   "corrective_action_id"
+  ],
+  "restricted": true,
+  "getPath": "/cash/surprise-counts/{surprise_count_id}",
+  "create": {
+   "path": "/cash/surprise-counts",
+   "permission": "cash.surprise_count.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "counted_at",
+     "label": "Counted",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "count_team",
+     "label": "Count team",
+     "required": true,
+     "kind": "list"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "pos_balance",
+     "label": "POS balance",
+     "kind": "money"
+    },
+    {
+     "name": "physical_cash",
+     "label": "Physical cash",
+     "kind": "money"
+    },
+    {
+     "name": "findings",
+     "label": "Findings",
+     "kind": "textarea"
+    },
+    {
+     "name": "corrective_action_id",
+     "label": "Corrective action",
+     "kind": "ref",
+     "ref": "actions"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/surprise-counts/{surprise_count_id}",
+   "permission": "cash.surprise_count.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "counted_at",
+     "label": "Counted",
+     "kind": "datetime"
+    },
+    {
+     "name": "count_team",
+     "label": "Count team",
+     "kind": "list"
+    },
+    {
+     "name": "cashier_employee_id",
+     "label": "Cashier",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "pos_balance",
+     "label": "POS balance",
+     "kind": "money"
+    },
+    {
+     "name": "physical_cash",
+     "label": "Physical cash",
+     "kind": "money"
+    },
+    {
+     "name": "findings",
+     "label": "Findings",
+     "kind": "textarea"
+    },
+    {
+     "name": "corrective_action_id",
+     "label": "Corrective action",
+     "kind": "ref",
+     "ref": "actions"
+    }
+   ]
+  },
+  "statuses": [
+   "planned",
+   "in_progress",
+   "completed"
+  ],
+  "actions": [
+   {
+    "key": "complete",
+    "label": "Complete the count",
+    "path": "/cash/surprise-counts/{surprise_count_id}/complete",
+    "permission": "cash.surprise_count.complete",
+    "operationId": "completeSurpriseCount",
+    "from": [
+     "planned",
+     "in_progress"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "petty-cash-accounts": {
+  "slug": "petty-cash-accounts",
+  "title": "Petty cash accounts",
+  "singular": "Petty cash account",
+  "about": "Petty cash account for a branch, held in the safe.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/petty-cash/accounts",
+  "readPermission": "cash.petty_cash_account.read",
+  "fields": [
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "currency",
+    "label": "Currency",
+    "required": true,
+    "kind": "currency"
+   },
+   {
+    "name": "approved_limit",
+    "label": "Approved limit",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "custodian_employee_id",
+    "label": "Custodian",
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "safe_id",
+    "label": "Safe",
+    "kind": "ref",
+    "ref": "safes"
+   },
+   {
+    "name": "book_balance",
+    "label": "Book balance",
+    "readOnly": true,
+    "kind": "money"
+   }
+  ],
+  "columns": [
+   "site_id",
+   "custodian_employee_id",
+   "safe_id",
+   "approved_limit",
+   "book_balance"
+  ],
+  "restricted": false,
+  "getPath": "/cash/petty-cash/accounts/{petty_cash_account_id}",
+  "create": {
+   "path": "/cash/petty-cash/accounts",
+   "permission": "cash.petty_cash_account.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "required": true,
+     "kind": "currency"
+    },
+    {
+     "name": "custodian_employee_id",
+     "label": "Custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "safe_id",
+     "label": "Safe",
+     "kind": "ref",
+     "ref": "safes"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/petty-cash/accounts/{petty_cash_account_id}",
+   "permission": "cash.petty_cash_account.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "kind": "currency"
+    },
+    {
+     "name": "custodian_employee_id",
+     "label": "Custodian",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "safe_id",
+     "label": "Safe",
+     "kind": "ref",
+     "ref": "safes"
+    }
+   ]
+  }
+ },
+ "petty-cash-vouchers": {
+  "slug": "petty-cash-vouchers",
+  "title": "Petty cash vouchers",
+  "singular": "Petty cash voucher",
+  "about": "Voucher from request to reimbursement. Cash cannot be issued before approval, and prohibited categories are rejected.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/petty-cash/vouchers",
+  "readPermission": "cash.petty_cash_voucher.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "account_id",
+    "label": "Account",
+    "required": true,
+    "kind": "ref",
+    "ref": "petty-cash-accounts"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "supervisor_employee_id",
+    "label": "Supervisor",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "amount",
+    "label": "Amount",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "expense_category",
+    "label": "Expense category",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "recipient",
+    "label": "Recipient",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "verified_by",
+    "label": "Verified by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "issued_amount",
+    "label": "Issued amount",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "balance_before",
+    "label": "Balance before",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "balance_after",
+    "label": "Balance after",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "issued_at",
+    "label": "Issued",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "receipt_attachment_id",
+    "label": "Receipt attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "issued",
+     "receipted",
+     "reimbursed",
+     "rejected",
+     "cancelled"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "account_id",
+   "site_id",
+   "supervisor_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/cash/petty-cash/vouchers/{petty_cash_voucher_id}",
+  "create": {
+   "path": "/cash/petty-cash/vouchers",
+   "permission": "cash.petty_cash_voucher.write",
+   "fields": [
+    {
+     "name": "account_id",
+     "label": "Account",
+     "required": true,
+     "kind": "ref",
+     "ref": "petty-cash-accounts"
+    },
+    {
+     "name": "supervisor_employee_id",
+     "label": "Supervisor",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "expense_category",
+     "label": "Expense category",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "recipient",
+     "label": "Recipient",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "receipt_attachment_id",
+     "label": "Receipt attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "update": {
+   "path": "/cash/petty-cash/vouchers/{petty_cash_voucher_id}",
+   "permission": "cash.petty_cash_voucher.write",
+   "fields": [
+    {
+     "name": "account_id",
+     "label": "Account",
+     "kind": "ref",
+     "ref": "petty-cash-accounts"
+    },
+    {
+     "name": "supervisor_employee_id",
+     "label": "Supervisor",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "kind": "money"
+    },
+    {
+     "name": "expense_category",
+     "label": "Expense category",
+     "kind": "text"
+    },
+    {
+     "name": "recipient",
+     "label": "Recipient",
+     "kind": "text"
+    },
+    {
+     "name": "receipt_attachment_id",
+     "label": "Receipt attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "issued",
+   "receipted",
+   "reimbursed",
+   "rejected",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cash/petty-cash/vouchers/{petty_cash_voucher_id}/submit",
+    "permission": "cash.petty_cash_voucher.submit",
+    "operationId": "submitPettyCashVoucher",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "verify",
+    "label": "Complex Manager verifies approval",
+    "path": "/cash/petty-cash/vouchers/{petty_cash_voucher_id}/verify",
+    "permission": "cash.petty_cash_voucher.verify",
+    "operationId": "verifyPettyCashVoucher",
+    "from": [
+     "pending_approval"
+    ],
+    "fields": []
+   },
+   {
+    "key": "issue",
+    "label": "Issue the approved amount",
+    "path": "/cash/petty-cash/vouchers/{petty_cash_voucher_id}/issue",
+    "permission": "cash.petty_cash_voucher.issue",
+    "operationId": "issuePettyCashVoucher",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved"
+    ],
+    "fields": [
+     {
+      "name": "issued_amount",
+      "label": "Issued amount",
+      "required": true,
+      "kind": "money"
+     }
+    ]
+   },
+   {
+    "key": "attach-receipt",
+    "label": "Attach proof of purchase",
+    "path": "/cash/petty-cash/vouchers/{petty_cash_voucher_id}/attach-receipt",
+    "permission": "cash.petty_cash_voucher.attach_receipt",
+    "operationId": "attachReceiptPettyCashVoucher",
+    "from": [
+     "issued"
+    ],
+    "fields": [
+     {
+      "name": "receipt_attachment_id",
+      "label": "Receipt attachment",
+      "required": true,
+      "kind": "uuid"
+     }
+    ]
+   }
+  ]
+ },
+ "petty-cash-handovers": {
+  "slug": "petty-cash-handovers",
+  "title": "Petty cash handovers",
+  "singular": "Petty cash handover",
+  "about": "Joint count at each change of custodian.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/petty-cash/handovers",
+  "readPermission": "cash.petty_cash_handover.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "account_id",
+    "label": "Account",
+    "required": true,
+    "kind": "ref",
+    "ref": "petty-cash-accounts"
+   },
+   {
+    "name": "outgoing_employee_id",
+    "label": "Outgoing",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "incoming_employee_id",
+    "label": "Incoming",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "book_balance",
+    "label": "Book balance",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "physical_balance",
+    "label": "Physical balance",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "variance",
+    "label": "Variance",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "handed_over_at",
+    "label": "Handed over",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_signatures",
+     "closed",
+     "exception"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "account_id",
+   "outgoing_employee_id",
+   "incoming_employee_id"
+  ],
+  "restricted": false,
+  "getPath": "/cash/petty-cash/handovers/{petty_cash_handover_id}",
+  "create": {
+   "path": "/cash/petty-cash/handovers",
+   "permission": "cash.petty_cash_handover.write",
+   "fields": [
+    {
+     "name": "account_id",
+     "label": "Account",
+     "required": true,
+     "kind": "ref",
+     "ref": "petty-cash-accounts"
+    },
+    {
+     "name": "outgoing_employee_id",
+     "label": "Outgoing",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "incoming_employee_id",
+     "label": "Incoming",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "book_balance",
+     "label": "Book balance",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "physical_balance",
+     "label": "Physical balance",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "handed_over_at",
+     "label": "Handed over",
+     "required": true,
+     "kind": "datetime"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_signatures",
+   "closed",
+   "exception"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cash/petty-cash/handovers/{petty_cash_handover_id}/submit",
+    "permission": "cash.petty_cash_handover.submit",
+    "operationId": "submitPettyCashHandover",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "petty-cash-reconciliations": {
+  "slug": "petty-cash-reconciliations",
+  "title": "Petty cash reconciliations",
+  "singular": "Petty cash reconciliation",
+  "about": "End-of-day reconciliation or unannounced spot check.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/petty-cash/reconciliations",
+  "readPermission": "cash.petty_cash_reconciliation.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "account_id",
+    "label": "Account",
+    "required": true,
+    "kind": "ref",
+    "ref": "petty-cash-accounts"
+   },
+   {
+    "name": "kind",
+    "label": "Kind",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "end_of_day",
+     "spot_check"
+    ]
+   },
+   {
+    "name": "business_date",
+    "label": "Business date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "opening_balance",
+    "label": "Opening balance",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "receipts",
+    "label": "Receipts",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "disbursements",
+    "label": "Disbursements",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "expected_closing",
+    "label": "Expected closing",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "physical_closing",
+    "label": "Physical closing",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "variance",
+    "label": "Variance",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "explanation",
+    "label": "Explanation",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "submitted",
+     "reviewed",
+     "exception"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "kind",
+   "account_id",
+   "business_date"
+  ],
+  "restricted": false,
+  "getPath": "/cash/petty-cash/reconciliations/{petty_cash_reconciliation_id}",
+  "create": {
+   "path": "/cash/petty-cash/reconciliations",
+   "permission": "cash.petty_cash_reconciliation.write",
+   "fields": [
+    {
+     "name": "account_id",
+     "label": "Account",
+     "required": true,
+     "kind": "ref",
+     "ref": "petty-cash-accounts"
+    },
+    {
+     "name": "kind",
+     "label": "Kind",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "end_of_day",
+      "spot_check"
+     ]
+    },
+    {
+     "name": "business_date",
+     "label": "Business date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "opening_balance",
+     "label": "Opening balance",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "receipts",
+     "label": "Receipts",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "disbursements",
+     "label": "Disbursements",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "physical_closing",
+     "label": "Physical closing",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "explanation",
+     "label": "Explanation",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "submitted",
+   "reviewed",
+   "exception"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cash/petty-cash/reconciliations/{petty_cash_reconciliation_id}/submit",
+    "permission": "cash.petty_cash_reconciliation.submit",
+    "operationId": "submitPettyCashReconciliation",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "review",
+    "label": "Review",
+    "path": "/cash/petty-cash/reconciliations/{petty_cash_reconciliation_id}/review",
+    "permission": "cash.petty_cash_reconciliation.review",
+    "operationId": "reviewPettyCashReconciliation",
+    "from": [
+     "draft",
+     "submitted"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "petty-cash-reimbursements": {
+  "slug": "petty-cash-reimbursements",
+  "title": "Petty cash reimbursements",
+  "singular": "Petty cash reimbursement",
+  "about": "Claim to Finance for vouchers, on the day set by `cash.petty_cash_reimbursement_day`.",
+  "group": "Cash",
+  "tile": "cash-finance",
+  "listPath": "/cash/petty-cash/reimbursements",
+  "readPermission": "cash.petty_cash_reimbursement.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "account_id",
+    "label": "Account",
+    "required": true,
+    "kind": "ref",
+    "ref": "petty-cash-accounts"
+   },
+   {
+    "name": "voucher_ids",
+    "label": "Vouchers",
+    "required": true,
+    "kind": "list"
+   },
+   {
+    "name": "total",
+    "label": "Total",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "submitted_at",
+    "label": "Submitted",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "paid_at",
+    "label": "Paid",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "payment_reference",
+    "label": "Payment reference",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "submitted",
+     "approved",
+     "paid",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "account_id",
+   "total",
+   "submitted_at"
+  ],
+  "restricted": false,
+  "getPath": "/cash/petty-cash/reimbursements/{petty_cash_reimbursement_id}",
+  "create": {
+   "path": "/cash/petty-cash/reimbursements",
+   "permission": "cash.petty_cash_reimbursement.write",
+   "fields": [
+    {
+     "name": "account_id",
+     "label": "Account",
+     "required": true,
+     "kind": "ref",
+     "ref": "petty-cash-accounts"
+    },
+    {
+     "name": "voucher_ids",
+     "label": "Vouchers",
+     "required": true,
+     "kind": "list"
+    },
+    {
+     "name": "payment_reference",
+     "label": "Payment reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "submitted",
+   "approved",
+   "paid",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/cash/petty-cash/reimbursements/{petty_cash_reimbursement_id}/submit",
+    "permission": "cash.petty_cash_reimbursement.submit",
+    "operationId": "submitPettyCashReimbursement",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "record-payment",
+    "label": "Record reimbursement paid",
+    "path": "/cash/petty-cash/reimbursements/{petty_cash_reimbursement_id}/record-payment",
+    "permission": "cash.petty_cash_reimbursement.record_payment",
+    "operationId": "recordPaymentPettyCashReimbursement",
+    "from": [
+     "approved"
+    ],
+    "fields": [
+     {
+      "name": "payment_reference",
+      "label": "Payment reference",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "suppliers": {
+  "slug": "suppliers",
+  "title": "Suppliers",
+  "singular": "Supplier",
+  "about": "Supplier master. Activation needs complete documents and independent Finance Manager approval. SAP Business One holds the ledger account.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/suppliers",
+  "readPermission": "procurement.supplier.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "legal_name",
+    "label": "Legal name",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "supplier_type",
+    "label": "Supplier type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "local",
+     "foreign"
+    ]
+   },
+   {
+    "name": "sap_code",
+    "label": "SAP code",
+    "kind": "text",
+    "hint": "LOSUP or FOSUP series"
+   },
+   {
+    "name": "categories",
+    "label": "Categories",
+    "kind": "list"
+   },
+   {
+    "name": "currency",
+    "label": "Currency",
+    "kind": "currency"
+   },
+   {
+    "name": "address",
+    "label": "Address",
+    "kind": "text"
+   },
+   {
+    "name": "contact",
+    "label": "Contact",
+    "kind": "text"
+   },
+   {
+    "name": "tin",
+    "label": "Tin",
+    "kind": "text"
+   },
+   {
+    "name": "vat_number",
+    "label": "VAT number",
+    "kind": "text"
+   },
+   {
+    "name": "tax_clearance_expiry",
+    "label": "Tax clearance expiry",
+    "kind": "date"
+   },
+   {
+    "name": "bank_details_verified",
+    "label": "Bank details verified",
+    "readOnly": true,
+    "kind": "boolean"
+   },
+   {
+    "name": "bank_details_masked",
+    "label": "Bank details masked",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "payment_terms",
+    "label": "Payment terms",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_verification",
+     "active",
+     "suspended",
+     "blocked"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "supplier_type",
+   "tax_clearance_expiry",
+   "legal_name"
+  ],
+  "restricted": false,
+  "getPath": "/suppliers/{supplier_id}",
+  "create": {
+   "path": "/suppliers",
+   "permission": "procurement.supplier.write",
+   "fields": [
+    {
+     "name": "legal_name",
+     "label": "Legal name",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "supplier_type",
+     "label": "Supplier type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "local",
+      "foreign"
+     ]
+    },
+    {
+     "name": "sap_code",
+     "label": "SAP code",
+     "kind": "text",
+     "hint": "LOSUP or FOSUP series"
+    },
+    {
+     "name": "categories",
+     "label": "Categories",
+     "kind": "list"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "kind": "currency"
+    },
+    {
+     "name": "address",
+     "label": "Address",
+     "kind": "text"
+    },
+    {
+     "name": "contact",
+     "label": "Contact",
+     "kind": "text"
+    },
+    {
+     "name": "tin",
+     "label": "Tin",
+     "kind": "text"
+    },
+    {
+     "name": "vat_number",
+     "label": "VAT number",
+     "kind": "text"
+    },
+    {
+     "name": "tax_clearance_expiry",
+     "label": "Tax clearance expiry",
+     "kind": "date"
+    },
+    {
+     "name": "payment_terms",
+     "label": "Payment terms",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/suppliers/{supplier_id}",
+   "permission": "procurement.supplier.write",
+   "fields": [
+    {
+     "name": "legal_name",
+     "label": "Legal name",
+     "kind": "text"
+    },
+    {
+     "name": "supplier_type",
+     "label": "Supplier type",
+     "kind": "enum",
+     "options": [
+      "local",
+      "foreign"
+     ]
+    },
+    {
+     "name": "sap_code",
+     "label": "SAP code",
+     "kind": "text",
+     "hint": "LOSUP or FOSUP series"
+    },
+    {
+     "name": "categories",
+     "label": "Categories",
+     "kind": "list"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "kind": "currency"
+    },
+    {
+     "name": "address",
+     "label": "Address",
+     "kind": "text"
+    },
+    {
+     "name": "contact",
+     "label": "Contact",
+     "kind": "text"
+    },
+    {
+     "name": "tin",
+     "label": "Tin",
+     "kind": "text"
+    },
+    {
+     "name": "vat_number",
+     "label": "VAT number",
+     "kind": "text"
+    },
+    {
+     "name": "tax_clearance_expiry",
+     "label": "Tax clearance expiry",
+     "kind": "date"
+    },
+    {
+     "name": "payment_terms",
+     "label": "Payment terms",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_verification",
+   "active",
+   "suspended",
+   "blocked"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/suppliers/{supplier_id}/submit",
+    "permission": "procurement.supplier.submit",
+    "operationId": "submitSupplier",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "suspend",
+    "label": "Suspend",
+    "path": "/suppliers/{supplier_id}/suspend",
+    "permission": "procurement.supplier.suspend",
+    "operationId": "suspendSupplier",
+    "from": [
+     "draft",
+     "pending_verification",
+     "active",
+     "blocked"
+    ],
+    "fields": [
+     {
+      "name": "reason",
+      "label": "Reason",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   },
+   {
+    "key": "reinstate",
+    "label": "Reinstate",
+    "path": "/suppliers/{supplier_id}/reinstate",
+    "permission": "procurement.supplier.reinstate",
+    "operationId": "reinstateSupplier",
+    "from": [
+     "draft",
+     "pending_verification"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "supplier-amendments": {
+  "slug": "supplier-amendments",
+  "title": "Supplier amendments",
+  "singular": "Supplier amendment",
+  "about": "Change to supplier master. Bank changes need independent verification.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/suppliers/{supplier_id}/amendments",
+  "readPermission": "procurement.supplier_amendment.read",
+  "fields": [
+   {
+    "name": "field",
+    "label": "Field",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "old_value",
+    "label": "Old value",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "new_value",
+    "label": "New value",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "evidence_attachment_id",
+    "label": "Evidence attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "verified_by",
+    "label": "Verified by",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "users"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "evidence_attachment_id",
+   "verified_by",
+   "field",
+   "old_value"
+  ],
+  "restricted": false,
+  "getPath": "/suppliers/{supplier_id}/amendments/{supplier_amendment_id}",
+  "create": {
+   "path": "/suppliers/{supplier_id}/amendments",
+   "permission": "procurement.supplier_amendment.write",
+   "fields": [
+    {
+     "name": "field",
+     "label": "Field",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "new_value",
+     "label": "New value",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "evidence_attachment_id",
+     "label": "Evidence attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/suppliers/{supplier_id}/amendments/{supplier_amendment_id}/submit",
+    "permission": "procurement.supplier_amendment.submit",
+    "operationId": "submitSupplierAmendment",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ],
+  "nestedUnder": "suppliers"
+ },
+ "purchase-requisitions": {
+  "slug": "purchase-requisitions",
+  "title": "Purchase requisitions",
+  "singular": "Purchase requisition",
+  "about": "Formal request. No PR, no procurement.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/purchase-requisitions",
+  "readPermission": "procurement.purchase_requisition.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "required": true,
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "cost_centre_id",
+    "label": "Cost centre",
+    "required": true,
+    "kind": "ref",
+    "ref": "cost-centres"
+   },
+   {
+    "name": "requester_employee_id",
+    "label": "Requester",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "purpose",
+    "label": "Purpose",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "requirement_type",
+    "label": "Requirement type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "trading",
+     "departmental",
+     "capex",
+     "emergency"
+    ]
+   },
+   {
+    "name": "required_date",
+    "label": "Required date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "budget_code",
+    "label": "Budget code",
+    "kind": "text"
+   },
+   {
+    "name": "yield_estimate",
+    "label": "Yield estimate",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "submitted",
+     "returned",
+     "validated",
+     "pending_approval",
+     "approved",
+     "rejected",
+     "sourcing",
+     "closed"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "item_id",
+      "label": "Item",
+      "kind": "uuid"
+     },
+     {
+      "name": "description",
+      "label": "Description",
+      "required": true,
+      "kind": "textarea"
+     },
+     {
+      "name": "specification",
+      "label": "Specification",
+      "kind": "text"
+     },
+     {
+      "name": "quantity_on_hand",
+      "label": "Quantity on hand",
+      "kind": "decimal"
+     },
+     {
+      "name": "quantity_required",
+      "label": "Quantity required",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "uom",
+      "label": "Uom",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "estimated_unit_price",
+      "label": "Estimated unit price",
+      "kind": "money"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "requirement_type",
+   "site_id",
+   "department_id"
+  ],
+  "restricted": false,
+  "getPath": "/purchase-requisitions/{purchase_requisition_id}",
+  "create": {
+   "path": "/purchase-requisitions",
+   "permission": "procurement.purchase_requisition.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "required": true,
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "cost_centre_id",
+     "label": "Cost centre",
+     "required": true,
+     "kind": "ref",
+     "ref": "cost-centres"
+    },
+    {
+     "name": "requester_employee_id",
+     "label": "Requester",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "purpose",
+     "label": "Purpose",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "requirement_type",
+     "label": "Requirement type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "trading",
+      "departmental",
+      "capex",
+      "emergency"
+     ]
+    },
+    {
+     "name": "required_date",
+     "label": "Required date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "budget_code",
+     "label": "Budget code",
+     "kind": "text"
+    },
+    {
+     "name": "yield_estimate",
+     "label": "Yield estimate",
+     "kind": "text"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "kind": "uuid"
+      },
+      {
+       "name": "description",
+       "label": "Description",
+       "required": true,
+       "kind": "textarea"
+      },
+      {
+       "name": "specification",
+       "label": "Specification",
+       "kind": "text"
+      },
+      {
+       "name": "quantity_on_hand",
+       "label": "Quantity on hand",
+       "kind": "decimal"
+      },
+      {
+       "name": "quantity_required",
+       "label": "Quantity required",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "estimated_unit_price",
+       "label": "Estimated unit price",
+       "kind": "money"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/purchase-requisitions/{purchase_requisition_id}",
+   "permission": "procurement.purchase_requisition.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "cost_centre_id",
+     "label": "Cost centre",
+     "kind": "ref",
+     "ref": "cost-centres"
+    },
+    {
+     "name": "requester_employee_id",
+     "label": "Requester",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "purpose",
+     "label": "Purpose",
+     "kind": "text"
+    },
+    {
+     "name": "requirement_type",
+     "label": "Requirement type",
+     "kind": "enum",
+     "options": [
+      "trading",
+      "departmental",
+      "capex",
+      "emergency"
+     ]
+    },
+    {
+     "name": "required_date",
+     "label": "Required date",
+     "kind": "date"
+    },
+    {
+     "name": "budget_code",
+     "label": "Budget code",
+     "kind": "text"
+    },
+    {
+     "name": "yield_estimate",
+     "label": "Yield estimate",
+     "kind": "text"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "kind": "uuid"
+      },
+      {
+       "name": "description",
+       "label": "Description",
+       "required": true,
+       "kind": "textarea"
+      },
+      {
+       "name": "specification",
+       "label": "Specification",
+       "kind": "text"
+      },
+      {
+       "name": "quantity_on_hand",
+       "label": "Quantity on hand",
+       "kind": "decimal"
+      },
+      {
+       "name": "quantity_required",
+       "label": "Quantity required",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "estimated_unit_price",
+       "label": "Estimated unit price",
+       "kind": "money"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "submitted",
+   "returned",
+   "validated",
+   "pending_approval",
+   "approved",
+   "rejected",
+   "sourcing",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/purchase-requisitions/{purchase_requisition_id}/submit",
+    "permission": "procurement.purchase_requisition.submit",
+    "operationId": "submitPurchaseRequisition",
+    "from": [
+     "draft",
+     "returned"
+    ],
+    "fields": []
+   },
+   {
+    "key": "validate",
+    "label": "Procurement validates completeness",
+    "path": "/purchase-requisitions/{purchase_requisition_id}/validate",
+    "permission": "procurement.purchase_requisition.validate",
+    "operationId": "validatePurchaseRequisition",
+    "from": [
+     "draft",
+     "submitted",
+     "returned"
+    ],
+    "fields": []
+   },
+   {
+    "key": "return",
+    "label": "Return as incomplete",
+    "path": "/purchase-requisitions/{purchase_requisition_id}/return",
+    "permission": "procurement.purchase_requisition.return",
+    "operationId": "returnPurchaseRequisition",
+    "from": [
+     "draft",
+     "submitted",
+     "validated",
+     "pending_approval",
+     "approved",
+     "sourcing"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "quotations": {
+  "slug": "quotations",
+  "title": "Quotations",
+  "singular": "Quotation",
+  "about": "Like-for-like quotation. Required count comes from `procurement.quotation_count`.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/purchase-requisitions/{purchase_requisition_id}/quotations",
+  "readPermission": "procurement.quotation.read",
+  "fields": [
+   {
+    "name": "supplier_id",
+    "label": "Supplier",
+    "required": true,
+    "kind": "ref",
+    "ref": "suppliers"
+   },
+   {
+    "name": "quote_number",
+    "label": "Quote number",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "quote_date",
+    "label": "Quote date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "valid_until",
+    "label": "Valid until",
+    "kind": "date"
+   },
+   {
+    "name": "total",
+    "label": "Total",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "charges",
+    "label": "Charges",
+    "kind": "money"
+   },
+   {
+    "name": "lead_time_days",
+    "label": "Lead time days",
+    "kind": "number"
+   },
+   {
+    "name": "payment_terms",
+    "label": "Payment terms",
+    "kind": "text"
+   },
+   {
+    "name": "specification_compliant",
+    "label": "Specification compliant",
+    "kind": "boolean"
+   },
+   {
+    "name": "selected",
+    "label": "Selected",
+    "kind": "boolean"
+   },
+   {
+    "name": "selection_reason",
+    "label": "Selection reason",
+    "kind": "text",
+    "hint": "Required when the lowest quote is not selected"
+   },
+   {
+    "name": "attachment_id",
+    "label": "Attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   }
+  ],
+  "columns": [
+   "supplier_id",
+   "attachment_id",
+   "quote_date",
+   "valid_until",
+   "total"
+  ],
+  "restricted": false,
+  "getPath": "/purchase-requisitions/{purchase_requisition_id}/quotations/{quotation_id}",
+  "create": {
+   "path": "/purchase-requisitions/{purchase_requisition_id}/quotations",
+   "permission": "procurement.quotation.write",
+   "fields": [
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "required": true,
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "quote_number",
+     "label": "Quote number",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "quote_date",
+     "label": "Quote date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "valid_until",
+     "label": "Valid until",
+     "kind": "date"
+    },
+    {
+     "name": "total",
+     "label": "Total",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "charges",
+     "label": "Charges",
+     "kind": "money"
+    },
+    {
+     "name": "lead_time_days",
+     "label": "Lead time days",
+     "kind": "number"
+    },
+    {
+     "name": "payment_terms",
+     "label": "Payment terms",
+     "kind": "text"
+    },
+    {
+     "name": "specification_compliant",
+     "label": "Specification compliant",
+     "kind": "boolean"
+    },
+    {
+     "name": "selected",
+     "label": "Selected",
+     "kind": "boolean"
+    },
+    {
+     "name": "selection_reason",
+     "label": "Selection reason",
+     "kind": "text",
+     "hint": "Required when the lowest quote is not selected"
+    },
+    {
+     "name": "attachment_id",
+     "label": "Attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "update": {
+   "path": "/purchase-requisitions/{purchase_requisition_id}/quotations/{quotation_id}",
+   "permission": "procurement.quotation.write",
+   "fields": [
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "quote_number",
+     "label": "Quote number",
+     "kind": "text"
+    },
+    {
+     "name": "quote_date",
+     "label": "Quote date",
+     "kind": "date"
+    },
+    {
+     "name": "valid_until",
+     "label": "Valid until",
+     "kind": "date"
+    },
+    {
+     "name": "total",
+     "label": "Total",
+     "kind": "money"
+    },
+    {
+     "name": "charges",
+     "label": "Charges",
+     "kind": "money"
+    },
+    {
+     "name": "lead_time_days",
+     "label": "Lead time days",
+     "kind": "number"
+    },
+    {
+     "name": "payment_terms",
+     "label": "Payment terms",
+     "kind": "text"
+    },
+    {
+     "name": "specification_compliant",
+     "label": "Specification compliant",
+     "kind": "boolean"
+    },
+    {
+     "name": "selected",
+     "label": "Selected",
+     "kind": "boolean"
+    },
+    {
+     "name": "selection_reason",
+     "label": "Selection reason",
+     "kind": "text",
+     "hint": "Required when the lowest quote is not selected"
+    },
+    {
+     "name": "attachment_id",
+     "label": "Attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "nestedUnder": "purchase-requisitions"
+ },
+ "purchase-orders": {
+  "slug": "purchase-orders",
+  "title": "Purchase orders",
+  "singular": "Purchase order",
+  "about": "Approved commitment. No PO, no purchase, no payment. Backdating is blocked.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/purchase-orders",
+  "readPermission": "procurement.purchase_order.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "purchase_requisition_id",
+    "label": "Purchase requisition",
+    "required": true,
+    "kind": "ref",
+    "ref": "purchase-requisitions"
+   },
+   {
+    "name": "supplier_id",
+    "label": "Supplier",
+    "required": true,
+    "kind": "ref",
+    "ref": "suppliers"
+   },
+   {
+    "name": "order_date",
+    "label": "Order date",
+    "readOnly": true,
+    "kind": "date"
+   },
+   {
+    "name": "currency",
+    "label": "Currency",
+    "required": true,
+    "kind": "currency"
+   },
+   {
+    "name": "total",
+    "label": "Total",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "delivery_site_id",
+    "label": "Delivery site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "delivery_date",
+    "label": "Delivery date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "payment_terms",
+    "label": "Payment terms",
+    "kind": "text"
+   },
+   {
+    "name": "special_conditions",
+    "label": "Special conditions",
+    "kind": "text"
+   },
+   {
+    "name": "sap_po_ref",
+    "label": "SAP PO ref",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "confirmed_at",
+    "label": "Confirmed",
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "issued",
+     "part_received",
+     "received",
+     "closed",
+     "cancelled"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "item_id",
+      "label": "Item",
+      "kind": "uuid"
+     },
+     {
+      "name": "description",
+      "label": "Description",
+      "required": true,
+      "kind": "textarea"
+     },
+     {
+      "name": "quantity",
+      "label": "Quantity",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "uom",
+      "label": "Uom",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "unit_price",
+      "label": "Unit price",
+      "required": true,
+      "kind": "decimal"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "purchase_requisition_id",
+   "supplier_id",
+   "delivery_site_id"
+  ],
+  "restricted": false,
+  "getPath": "/purchase-orders/{purchase_order_id}",
+  "create": {
+   "path": "/purchase-orders",
+   "permission": "procurement.purchase_order.write",
+   "fields": [
+    {
+     "name": "purchase_requisition_id",
+     "label": "Purchase requisition",
+     "required": true,
+     "kind": "ref",
+     "ref": "purchase-requisitions"
+    },
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "required": true,
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "required": true,
+     "kind": "currency"
+    },
+    {
+     "name": "delivery_site_id",
+     "label": "Delivery site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "delivery_date",
+     "label": "Delivery date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "payment_terms",
+     "label": "Payment terms",
+     "kind": "text"
+    },
+    {
+     "name": "special_conditions",
+     "label": "Special conditions",
+     "kind": "text"
+    },
+    {
+     "name": "confirmed_at",
+     "label": "Confirmed",
+     "kind": "datetime"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "kind": "uuid"
+      },
+      {
+       "name": "description",
+       "label": "Description",
+       "required": true,
+       "kind": "textarea"
+      },
+      {
+       "name": "quantity",
+       "label": "Quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "unit_price",
+       "label": "Unit price",
+       "required": true,
+       "kind": "decimal"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/purchase-orders/{purchase_order_id}",
+   "permission": "procurement.purchase_order.write",
+   "fields": [
+    {
+     "name": "purchase_requisition_id",
+     "label": "Purchase requisition",
+     "kind": "ref",
+     "ref": "purchase-requisitions"
+    },
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "kind": "currency"
+    },
+    {
+     "name": "delivery_site_id",
+     "label": "Delivery site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "delivery_date",
+     "label": "Delivery date",
+     "kind": "date"
+    },
+    {
+     "name": "payment_terms",
+     "label": "Payment terms",
+     "kind": "text"
+    },
+    {
+     "name": "special_conditions",
+     "label": "Special conditions",
+     "kind": "text"
+    },
+    {
+     "name": "confirmed_at",
+     "label": "Confirmed",
+     "kind": "datetime"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "kind": "uuid"
+      },
+      {
+       "name": "description",
+       "label": "Description",
+       "required": true,
+       "kind": "textarea"
+      },
+      {
+       "name": "quantity",
+       "label": "Quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "unit_price",
+       "label": "Unit price",
+       "required": true,
+       "kind": "decimal"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "issued",
+   "part_received",
+   "received",
+   "closed",
+   "cancelled"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/purchase-orders/{purchase_order_id}/submit",
+    "permission": "procurement.purchase_order.submit",
+    "operationId": "submitPurchaseOrder",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "issue",
+    "label": "Issue to supplier",
+    "path": "/purchase-orders/{purchase_order_id}/issue",
+    "permission": "procurement.purchase_order.issue",
+    "operationId": "issuePurchaseOrder",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved"
+    ],
+    "fields": []
+   },
+   {
+    "key": "cancel",
+    "label": "Cancel",
+    "path": "/purchase-orders/{purchase_order_id}/cancel",
+    "permission": "procurement.purchase_order.cancel",
+    "operationId": "cancelPurchaseOrder",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "issued",
+     "part_received",
+     "received"
+    ],
+    "fields": [
+     {
+      "name": "reason",
+      "label": "Reason",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "goods-receipts": {
+  "slug": "goods-receipts",
+  "title": "Goods receipts",
+  "singular": "Goods receipt",
+  "about": "GRV for a delivery. Food deliveries capture temperature, batch and expiry and can create a HOLD.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/goods-receipts",
+  "readPermission": "procurement.goods_receipt.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "purchase_order_id",
+    "label": "Purchase order",
+    "kind": "ref",
+    "ref": "purchase-orders"
+   },
+   {
+    "name": "supplier_id",
+    "label": "Supplier",
+    "required": true,
+    "kind": "ref",
+    "ref": "suppliers"
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "delivery_note_number",
+    "label": "Delivery note number",
+    "kind": "text"
+   },
+   {
+    "name": "supplier_invoice_number",
+    "label": "Supplier invoice number",
+    "kind": "text"
+   },
+   {
+    "name": "received_at",
+    "label": "Received",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "receiver_employee_id",
+    "label": "Receiver",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "delivery_note_attachment_id",
+    "label": "Delivery note attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "inspected",
+     "accepted",
+     "part_rejected",
+     "rejected",
+     "posted"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "item_id",
+      "label": "Item",
+      "required": true,
+      "kind": "uuid"
+     },
+     {
+      "name": "ordered_quantity",
+      "label": "Ordered quantity",
+      "kind": "decimal"
+     },
+     {
+      "name": "received_quantity",
+      "label": "Received quantity",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "uom",
+      "label": "Uom",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "batch_lot",
+      "label": "Batch lot",
+      "kind": "text"
+     },
+     {
+      "name": "expiry_date",
+      "label": "Expiry date",
+      "kind": "date"
+     },
+     {
+      "name": "temperature_c",
+      "label": "Temperature c",
+      "kind": "decimal"
+     },
+     {
+      "name": "thermometer_id",
+      "label": "Thermometer",
+      "kind": "text"
+     },
+     {
+      "name": "pack_condition",
+      "label": "Pack condition",
+      "kind": "text"
+     },
+     {
+      "name": "outcome",
+      "label": "Outcome",
+      "required": true,
+      "kind": "enum",
+      "options": [
+       "accepted",
+       "rejected",
+       "quarantined"
+      ]
+     },
+     {
+      "name": "rejection_reason",
+      "label": "Rejection reason",
+      "kind": "text"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "purchase_order_id",
+   "supplier_id",
+   "site_id"
+  ],
+  "restricted": false,
+  "getPath": "/goods-receipts/{goods_receipt_id}",
+  "create": {
+   "path": "/goods-receipts",
+   "permission": "procurement.goods_receipt.write",
+   "fields": [
+    {
+     "name": "purchase_order_id",
+     "label": "Purchase order",
+     "kind": "ref",
+     "ref": "purchase-orders"
+    },
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "required": true,
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "delivery_note_number",
+     "label": "Delivery note number",
+     "kind": "text"
+    },
+    {
+     "name": "supplier_invoice_number",
+     "label": "Supplier invoice number",
+     "kind": "text"
+    },
+    {
+     "name": "received_at",
+     "label": "Received",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "receiver_employee_id",
+     "label": "Receiver",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "delivery_note_attachment_id",
+     "label": "Delivery note attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "uuid"
+      },
+      {
+       "name": "ordered_quantity",
+       "label": "Ordered quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "received_quantity",
+       "label": "Received quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "batch_lot",
+       "label": "Batch lot",
+       "kind": "text"
+      },
+      {
+       "name": "expiry_date",
+       "label": "Expiry date",
+       "kind": "date"
+      },
+      {
+       "name": "temperature_c",
+       "label": "Temperature c",
+       "kind": "decimal"
+      },
+      {
+       "name": "thermometer_id",
+       "label": "Thermometer",
+       "kind": "text"
+      },
+      {
+       "name": "pack_condition",
+       "label": "Pack condition",
+       "kind": "text"
+      },
+      {
+       "name": "outcome",
+       "label": "Outcome",
+       "required": true,
+       "kind": "enum",
+       "options": [
+        "accepted",
+        "rejected",
+        "quarantined"
+       ]
+      },
+      {
+       "name": "rejection_reason",
+       "label": "Rejection reason",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/goods-receipts/{goods_receipt_id}",
+   "permission": "procurement.goods_receipt.write",
+   "fields": [
+    {
+     "name": "purchase_order_id",
+     "label": "Purchase order",
+     "kind": "ref",
+     "ref": "purchase-orders"
+    },
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "delivery_note_number",
+     "label": "Delivery note number",
+     "kind": "text"
+    },
+    {
+     "name": "supplier_invoice_number",
+     "label": "Supplier invoice number",
+     "kind": "text"
+    },
+    {
+     "name": "received_at",
+     "label": "Received",
+     "kind": "datetime"
+    },
+    {
+     "name": "receiver_employee_id",
+     "label": "Receiver",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "delivery_note_attachment_id",
+     "label": "Delivery note attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "item_id",
+       "label": "Item",
+       "required": true,
+       "kind": "uuid"
+      },
+      {
+       "name": "ordered_quantity",
+       "label": "Ordered quantity",
+       "kind": "decimal"
+      },
+      {
+       "name": "received_quantity",
+       "label": "Received quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "uom",
+       "label": "Uom",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "batch_lot",
+       "label": "Batch lot",
+       "kind": "text"
+      },
+      {
+       "name": "expiry_date",
+       "label": "Expiry date",
+       "kind": "date"
+      },
+      {
+       "name": "temperature_c",
+       "label": "Temperature c",
+       "kind": "decimal"
+      },
+      {
+       "name": "thermometer_id",
+       "label": "Thermometer",
+       "kind": "text"
+      },
+      {
+       "name": "pack_condition",
+       "label": "Pack condition",
+       "kind": "text"
+      },
+      {
+       "name": "outcome",
+       "label": "Outcome",
+       "required": true,
+       "kind": "enum",
+       "options": [
+        "accepted",
+        "rejected",
+        "quarantined"
+       ]
+      },
+      {
+       "name": "rejection_reason",
+       "label": "Rejection reason",
+       "kind": "text"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "inspected",
+   "accepted",
+   "part_rejected",
+   "rejected",
+   "posted"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/goods-receipts/{goods_receipt_id}/submit",
+    "permission": "procurement.goods_receipt.submit",
+    "operationId": "submitGoodsReceipt",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "delivery-discrepancies": {
+  "slug": "delivery-discrepancies",
+  "title": "Delivery discrepancies",
+  "singular": "Delivery discrepancy",
+  "about": "Short, wrong, damaged or mispriced delivery. Material ones are resolved before payment.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/delivery-discrepancies",
+  "readPermission": "procurement.delivery_discrepancy.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "goods_receipt_id",
+    "label": "Goods receipt",
+    "required": true,
+    "kind": "ref",
+    "ref": "goods-receipts"
+   },
+   {
+    "name": "item_id",
+    "label": "Item",
+    "kind": "uuid"
+   },
+   {
+    "name": "discrepancy_type",
+    "label": "Discrepancy type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "short",
+     "wrong_item",
+     "damage",
+     "quality",
+     "expiry",
+     "price",
+     "specification"
+    ]
+   },
+   {
+    "name": "description",
+    "label": "Description",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "supplier_notified_at",
+    "label": "Supplier notified",
+    "kind": "datetime"
+   },
+   {
+    "name": "resolution",
+    "label": "Resolution",
+    "kind": "enum",
+    "options": [
+     "credit",
+     "replacement",
+     "accepted",
+     "returned"
+    ]
+   },
+   {
+    "name": "resolution_reference",
+    "label": "Resolution reference",
+    "kind": "text"
+   },
+   {
+    "name": "closed_at",
+    "label": "Closed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "supplier_notified",
+     "resolved",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "discrepancy_type",
+   "resolution",
+   "goods_receipt_id"
+  ],
+  "restricted": false,
+  "getPath": "/delivery-discrepancies/{delivery_discrepancy_id}",
+  "create": {
+   "path": "/delivery-discrepancies",
+   "permission": "procurement.delivery_discrepancy.write",
+   "fields": [
+    {
+     "name": "goods_receipt_id",
+     "label": "Goods receipt",
+     "required": true,
+     "kind": "ref",
+     "ref": "goods-receipts"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "uuid"
+    },
+    {
+     "name": "discrepancy_type",
+     "label": "Discrepancy type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "short",
+      "wrong_item",
+      "damage",
+      "quality",
+      "expiry",
+      "price",
+      "specification"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "supplier_notified_at",
+     "label": "Supplier notified",
+     "kind": "datetime"
+    },
+    {
+     "name": "resolution",
+     "label": "Resolution",
+     "kind": "enum",
+     "options": [
+      "credit",
+      "replacement",
+      "accepted",
+      "returned"
+     ]
+    },
+    {
+     "name": "resolution_reference",
+     "label": "Resolution reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/delivery-discrepancies/{delivery_discrepancy_id}",
+   "permission": "procurement.delivery_discrepancy.write",
+   "fields": [
+    {
+     "name": "goods_receipt_id",
+     "label": "Goods receipt",
+     "kind": "ref",
+     "ref": "goods-receipts"
+    },
+    {
+     "name": "item_id",
+     "label": "Item",
+     "kind": "uuid"
+    },
+    {
+     "name": "discrepancy_type",
+     "label": "Discrepancy type",
+     "kind": "enum",
+     "options": [
+      "short",
+      "wrong_item",
+      "damage",
+      "quality",
+      "expiry",
+      "price",
+      "specification"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "kind": "textarea"
+    },
+    {
+     "name": "supplier_notified_at",
+     "label": "Supplier notified",
+     "kind": "datetime"
+    },
+    {
+     "name": "resolution",
+     "label": "Resolution",
+     "kind": "enum",
+     "options": [
+      "credit",
+      "replacement",
+      "accepted",
+      "returned"
+     ]
+    },
+    {
+     "name": "resolution_reference",
+     "label": "Resolution reference",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "supplier_notified",
+   "resolved",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/delivery-discrepancies/{delivery_discrepancy_id}/close",
+    "permission": "procurement.delivery_discrepancy.close",
+    "operationId": "closeDeliveryDiscrepancy",
+    "from": [
+     "open",
+     "supplier_notified",
+     "resolved"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "supplier-invoices": {
+  "slug": "supplier-invoices",
+  "title": "Supplier invoices",
+  "singular": "Supplier invoice",
+  "about": "Invoice from receipt to posting. Three-way matched, duplicate-checked and QR-verified, then posted to SAP Business One.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/supplier-invoices",
+  "readPermission": "procurement.supplier_invoice.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "supplier_id",
+    "label": "Supplier",
+    "required": true,
+    "kind": "ref",
+    "ref": "suppliers"
+   },
+   {
+    "name": "invoice_number",
+    "label": "Invoice number",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "invoice_date",
+    "label": "Invoice date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "total",
+    "label": "Total",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "vat",
+    "label": "VAT",
+    "kind": "money"
+   },
+   {
+    "name": "due_date",
+    "label": "Due date",
+    "kind": "date"
+   },
+   {
+    "name": "purchase_order_id",
+    "label": "Purchase order",
+    "kind": "ref",
+    "ref": "purchase-orders"
+   },
+   {
+    "name": "goods_receipt_ids",
+    "label": "Goods receipts",
+    "kind": "list"
+   },
+   {
+    "name": "invoice_received_at",
+    "label": "Invoice received",
+    "required": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "forwarded_to_finance_at",
+    "label": "Forwarded to finance",
+    "kind": "datetime"
+   },
+   {
+    "name": "qr_verified",
+    "label": "Qr verified",
+    "kind": "boolean"
+   },
+   {
+    "name": "match_status",
+    "label": "Match status",
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "unmatched",
+     "matched",
+     "exception"
+    ]
+   },
+   {
+    "name": "duplicate_of_id",
+    "label": "Duplicate of",
+    "readOnly": true,
+    "kind": "ref",
+    "ref": "supplier-invoices"
+   },
+   {
+    "name": "attachment_id",
+    "label": "Attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "paper_original_location",
+    "label": "Paper original location",
+    "kind": "text"
+   },
+   {
+    "name": "sap_doc_ref",
+    "label": "SAP doc ref",
+    "readOnly": true,
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "received",
+     "matched",
+     "on_hold",
+     "approved_exception",
+     "posted",
+     "paid",
+     "void"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "description",
+      "label": "Description",
+      "required": true,
+      "kind": "textarea"
+     },
+     {
+      "name": "quantity",
+      "label": "Quantity",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "unit_price",
+      "label": "Unit price",
+      "required": true,
+      "kind": "decimal"
+     },
+     {
+      "name": "line_total",
+      "label": "Line total",
+      "kind": "decimal"
+     },
+     {
+      "name": "po_line_id",
+      "label": "PO line",
+      "kind": "uuid"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "match_status",
+   "supplier_id",
+   "purchase_order_id"
+  ],
+  "restricted": false,
+  "getPath": "/supplier-invoices/{supplier_invoice_id}",
+  "create": {
+   "path": "/supplier-invoices",
+   "permission": "procurement.supplier_invoice.write",
+   "fields": [
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "required": true,
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "invoice_number",
+     "label": "Invoice number",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "invoice_date",
+     "label": "Invoice date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "total",
+     "label": "Total",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "vat",
+     "label": "VAT",
+     "kind": "money"
+    },
+    {
+     "name": "due_date",
+     "label": "Due date",
+     "kind": "date"
+    },
+    {
+     "name": "purchase_order_id",
+     "label": "Purchase order",
+     "kind": "ref",
+     "ref": "purchase-orders"
+    },
+    {
+     "name": "goods_receipt_ids",
+     "label": "Goods receipts",
+     "kind": "list"
+    },
+    {
+     "name": "invoice_received_at",
+     "label": "Invoice received",
+     "required": true,
+     "kind": "datetime"
+    },
+    {
+     "name": "forwarded_to_finance_at",
+     "label": "Forwarded to finance",
+     "kind": "datetime"
+    },
+    {
+     "name": "qr_verified",
+     "label": "Qr verified",
+     "kind": "boolean"
+    },
+    {
+     "name": "attachment_id",
+     "label": "Attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "paper_original_location",
+     "label": "Paper original location",
+     "kind": "text"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "description",
+       "label": "Description",
+       "required": true,
+       "kind": "textarea"
+      },
+      {
+       "name": "quantity",
+       "label": "Quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "unit_price",
+       "label": "Unit price",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "line_total",
+       "label": "Line total",
+       "kind": "decimal"
+      },
+      {
+       "name": "po_line_id",
+       "label": "PO line",
+       "kind": "uuid"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/supplier-invoices/{supplier_invoice_id}",
+   "permission": "procurement.supplier_invoice.write",
+   "fields": [
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "invoice_number",
+     "label": "Invoice number",
+     "kind": "text"
+    },
+    {
+     "name": "invoice_date",
+     "label": "Invoice date",
+     "kind": "date"
+    },
+    {
+     "name": "total",
+     "label": "Total",
+     "kind": "money"
+    },
+    {
+     "name": "vat",
+     "label": "VAT",
+     "kind": "money"
+    },
+    {
+     "name": "due_date",
+     "label": "Due date",
+     "kind": "date"
+    },
+    {
+     "name": "purchase_order_id",
+     "label": "Purchase order",
+     "kind": "ref",
+     "ref": "purchase-orders"
+    },
+    {
+     "name": "goods_receipt_ids",
+     "label": "Goods receipts",
+     "kind": "list"
+    },
+    {
+     "name": "invoice_received_at",
+     "label": "Invoice received",
+     "kind": "datetime"
+    },
+    {
+     "name": "forwarded_to_finance_at",
+     "label": "Forwarded to finance",
+     "kind": "datetime"
+    },
+    {
+     "name": "qr_verified",
+     "label": "Qr verified",
+     "kind": "boolean"
+    },
+    {
+     "name": "attachment_id",
+     "label": "Attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "paper_original_location",
+     "label": "Paper original location",
+     "kind": "text"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "description",
+       "label": "Description",
+       "required": true,
+       "kind": "textarea"
+      },
+      {
+       "name": "quantity",
+       "label": "Quantity",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "unit_price",
+       "label": "Unit price",
+       "required": true,
+       "kind": "decimal"
+      },
+      {
+       "name": "line_total",
+       "label": "Line total",
+       "kind": "decimal"
+      },
+      {
+       "name": "po_line_id",
+       "label": "PO line",
+       "kind": "uuid"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "received",
+   "matched",
+   "on_hold",
+   "approved_exception",
+   "posted",
+   "paid",
+   "void"
+  ],
+  "actions": [
+   {
+    "key": "match",
+    "label": "Run three-way match",
+    "path": "/supplier-invoices/{supplier_invoice_id}/match",
+    "permission": "procurement.supplier_invoice.match",
+    "operationId": "matchSupplierInvoice",
+    "from": [
+     "received"
+    ],
+    "fields": []
+   },
+   {
+    "key": "hold",
+    "label": "Place on hold",
+    "path": "/supplier-invoices/{supplier_invoice_id}/hold",
+    "permission": "procurement.supplier_invoice.hold",
+    "operationId": "holdSupplierInvoice",
+    "from": [
+     "received",
+     "matched",
+     "approved_exception",
+     "posted",
+     "paid",
+     "void"
+    ],
+    "fields": [
+     {
+      "name": "reason",
+      "label": "Reason",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   },
+   {
+    "key": "approve-exception",
+    "label": "Record an authorised exception",
+    "path": "/supplier-invoices/{supplier_invoice_id}/approve-exception",
+    "permission": "procurement.supplier_invoice.approve_exception",
+    "operationId": "approveExceptionSupplierInvoice",
+    "from": [
+     "on_hold"
+    ],
+    "fields": [
+     {
+      "name": "reason",
+      "label": "Reason",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   },
+   {
+    "key": "post",
+    "label": "Post to SAP Business One",
+    "path": "/supplier-invoices/{supplier_invoice_id}/post",
+    "permission": "procurement.supplier_invoice.post",
+    "operationId": "postSupplierInvoice",
+    "from": [
+     "received",
+     "matched",
+     "on_hold",
+     "approved_exception"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "payment-requisitions": {
+  "slug": "payment-requisitions",
+  "title": "Payment requisitions",
+  "singular": "Payment requisition",
+  "about": "Payment packet. Stages come from the payment approval policy.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/payment-requisitions",
+  "readPermission": "procurement.payment_requisition.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "supplier_id",
+    "label": "Supplier",
+    "required": true,
+    "kind": "ref",
+    "ref": "suppliers"
+   },
+   {
+    "name": "invoice_ids",
+    "label": "Invoices",
+    "required": true,
+    "kind": "list"
+   },
+   {
+    "name": "total",
+    "label": "Total",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "due_date",
+    "label": "Due date",
+    "kind": "date"
+   },
+   {
+    "name": "priority",
+    "label": "Priority",
+    "kind": "enum",
+    "options": [
+     "statutory",
+     "normal",
+     "low"
+    ]
+   },
+   {
+    "name": "payment_type",
+    "label": "Payment type",
+    "required": true,
+    "kind": "enum",
+    "options": [
+     "transfer",
+     "advance",
+     "deposit",
+     "cash"
+    ]
+   },
+   {
+    "name": "withholding_tax",
+    "label": "Withholding tax",
+    "kind": "money"
+   },
+   {
+    "name": "tax_clearance_valid",
+    "label": "Tax clearance valid",
+    "readOnly": true,
+    "kind": "boolean"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "kind": "textarea"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "scheduled",
+     "paid",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "priority",
+   "payment_type",
+   "supplier_id"
+  ],
+  "restricted": false,
+  "getPath": "/payment-requisitions/{payment_requisition_id}",
+  "create": {
+   "path": "/payment-requisitions",
+   "permission": "procurement.payment_requisition.write",
+   "fields": [
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "required": true,
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "invoice_ids",
+     "label": "Invoices",
+     "required": true,
+     "kind": "list"
+    },
+    {
+     "name": "due_date",
+     "label": "Due date",
+     "kind": "date"
+    },
+    {
+     "name": "priority",
+     "label": "Priority",
+     "kind": "enum",
+     "options": [
+      "statutory",
+      "normal",
+      "low"
+     ]
+    },
+    {
+     "name": "payment_type",
+     "label": "Payment type",
+     "required": true,
+     "kind": "enum",
+     "options": [
+      "transfer",
+      "advance",
+      "deposit",
+      "cash"
+     ]
+    },
+    {
+     "name": "withholding_tax",
+     "label": "Withholding tax",
+     "kind": "money"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    }
+   ]
+  },
+  "update": {
+   "path": "/payment-requisitions/{payment_requisition_id}",
+   "permission": "procurement.payment_requisition.write",
+   "fields": [
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "invoice_ids",
+     "label": "Invoices",
+     "kind": "list"
+    },
+    {
+     "name": "due_date",
+     "label": "Due date",
+     "kind": "date"
+    },
+    {
+     "name": "priority",
+     "label": "Priority",
+     "kind": "enum",
+     "options": [
+      "statutory",
+      "normal",
+      "low"
+     ]
+    },
+    {
+     "name": "payment_type",
+     "label": "Payment type",
+     "kind": "enum",
+     "options": [
+      "transfer",
+      "advance",
+      "deposit",
+      "cash"
+     ]
+    },
+    {
+     "name": "withholding_tax",
+     "label": "Withholding tax",
+     "kind": "money"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "scheduled",
+   "paid",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/payment-requisitions/{payment_requisition_id}/submit",
+    "permission": "procurement.payment_requisition.submit",
+    "operationId": "submitPaymentRequisition",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "payment-batches": {
+  "slug": "payment-batches",
+  "title": "Payment batches",
+  "singular": "Payment batch",
+  "about": "Weekly or monthly run. Blocked until both required approvals and supporting documents are present.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/payment-batches",
+  "readPermission": "procurement.payment_batch.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "run_date",
+    "label": "Run date",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "currency",
+    "label": "Currency",
+    "required": true,
+    "kind": "currency"
+   },
+   {
+    "name": "requisition_ids",
+    "label": "Requisitions",
+    "required": true,
+    "kind": "list"
+   },
+   {
+    "name": "total",
+    "label": "Total",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "bank_reference",
+    "label": "Bank reference",
+    "kind": "text"
+   },
+   {
+    "name": "proof_attachment_id",
+    "label": "Proof attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "executed_at",
+    "label": "Executed",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "executed",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "proof_attachment_id",
+   "run_date",
+   "total"
+  ],
+  "restricted": false,
+  "getPath": "/payment-batches/{payment_batch_id}",
+  "create": {
+   "path": "/payment-batches",
+   "permission": "procurement.payment_batch.write",
+   "fields": [
+    {
+     "name": "run_date",
+     "label": "Run date",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "required": true,
+     "kind": "currency"
+    },
+    {
+     "name": "requisition_ids",
+     "label": "Requisitions",
+     "required": true,
+     "kind": "list"
+    },
+    {
+     "name": "bank_reference",
+     "label": "Bank reference",
+     "kind": "text"
+    },
+    {
+     "name": "proof_attachment_id",
+     "label": "Proof attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "update": {
+   "path": "/payment-batches/{payment_batch_id}",
+   "permission": "procurement.payment_batch.write",
+   "fields": [
+    {
+     "name": "run_date",
+     "label": "Run date",
+     "kind": "date"
+    },
+    {
+     "name": "currency",
+     "label": "Currency",
+     "kind": "currency"
+    },
+    {
+     "name": "requisition_ids",
+     "label": "Requisitions",
+     "kind": "list"
+    },
+    {
+     "name": "bank_reference",
+     "label": "Bank reference",
+     "kind": "text"
+    },
+    {
+     "name": "proof_attachment_id",
+     "label": "Proof attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "executed",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/payment-batches/{payment_batch_id}/submit",
+    "permission": "procurement.payment_batch.submit",
+    "operationId": "submitPaymentBatch",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "record-execution",
+    "label": "Record payment made in the bank portal",
+    "path": "/payment-batches/{payment_batch_id}/record-execution",
+    "permission": "procurement.payment_batch.record_execution",
+    "operationId": "recordExecutionPaymentBatch",
+    "from": [
+     "approved"
+    ],
+    "fields": [
+     {
+      "name": "bank_reference",
+      "label": "Bank reference",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "proof_attachment_id",
+      "label": "Proof attachment",
+      "required": true,
+      "kind": "uuid"
+     }
+    ]
+   }
+  ]
+ },
+ "emergency-procurements": {
+  "slug": "emergency-procurements",
+  "title": "Emergency procurements",
+  "singular": "Emergency procurement",
+  "about": "Genuine unforeseen need. Retrospective MD approval within `procurement.emergency_approval_hours`.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/emergency-procurements",
+  "readPermission": "procurement.emergency_procurement.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "event",
+    "label": "Event",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "why_unforeseeable",
+    "label": "Why unforeseeable",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "continuity_impact",
+    "label": "Continuity impact",
+    "kind": "text"
+   },
+   {
+    "name": "supplier_id",
+    "label": "Supplier",
+    "kind": "ref",
+    "ref": "suppliers"
+   },
+   {
+    "name": "amount",
+    "label": "Amount",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "purchased_at",
+    "label": "Purchased",
+    "kind": "datetime"
+   },
+   {
+    "name": "purchase_requisition_id",
+    "label": "Purchase requisition",
+    "kind": "ref",
+    "ref": "purchase-requisitions"
+   },
+   {
+    "name": "post_review",
+    "label": "Post review",
+    "kind": "text"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "rejected",
+     "reviewed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "supplier_id",
+   "purchase_requisition_id"
+  ],
+  "restricted": false,
+  "getPath": "/emergency-procurements/{emergency_procurement_id}",
+  "create": {
+   "path": "/emergency-procurements",
+   "permission": "procurement.emergency_procurement.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "event",
+     "label": "Event",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "why_unforeseeable",
+     "label": "Why unforeseeable",
+     "required": true,
+     "kind": "text"
+    },
+    {
+     "name": "continuity_impact",
+     "label": "Continuity impact",
+     "kind": "text"
+    },
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "purchased_at",
+     "label": "Purchased",
+     "kind": "datetime"
+    },
+    {
+     "name": "purchase_requisition_id",
+     "label": "Purchase requisition",
+     "kind": "ref",
+     "ref": "purchase-requisitions"
+    },
+    {
+     "name": "post_review",
+     "label": "Post review",
+     "kind": "text"
+    }
+   ]
+  },
+  "update": {
+   "path": "/emergency-procurements/{emergency_procurement_id}",
+   "permission": "procurement.emergency_procurement.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "event",
+     "label": "Event",
+     "kind": "text"
+    },
+    {
+     "name": "why_unforeseeable",
+     "label": "Why unforeseeable",
+     "kind": "text"
+    },
+    {
+     "name": "continuity_impact",
+     "label": "Continuity impact",
+     "kind": "text"
+    },
+    {
+     "name": "supplier_id",
+     "label": "Supplier",
+     "kind": "ref",
+     "ref": "suppliers"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "kind": "money"
+    },
+    {
+     "name": "purchased_at",
+     "label": "Purchased",
+     "kind": "datetime"
+    },
+    {
+     "name": "purchase_requisition_id",
+     "label": "Purchase requisition",
+     "kind": "ref",
+     "ref": "purchase-requisitions"
+    },
+    {
+     "name": "post_review",
+     "label": "Post review",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "rejected",
+   "reviewed"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/emergency-procurements/{emergency_procurement_id}/submit",
+    "permission": "procurement.emergency_procurement.submit",
+    "operationId": "submitEmergencyProcurement",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   },
+   {
+    "key": "review",
+    "label": "Record post-purchase review",
+    "path": "/emergency-procurements/{emergency_procurement_id}/review",
+    "permission": "procurement.emergency_procurement.review",
+    "operationId": "reviewEmergencyProcurement",
+    "from": [
+     "draft",
+     "pending_approval",
+     "approved"
+    ],
+    "fields": [
+     {
+      "name": "post_review",
+      "label": "Post review",
+      "required": true,
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+ },
+ "unauthorized-purchases": {
+  "slug": "unauthorized-purchases",
+  "title": "Unauthorized purchases",
+  "singular": "Unauthorized purchase",
+  "about": "Purchase outside process. Cannot be regularised retrospectively.",
+  "group": "Procurement & AP",
+  "tile": "cash-finance",
+  "listPath": "/unauthorized-purchases",
+  "readPermission": "procurement.unauthorized_purchase.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "site_id",
+    "label": "Site",
+    "required": true,
+    "kind": "ref",
+    "ref": "sites"
+   },
+   {
+    "name": "originator_employee_id",
+    "label": "Originator",
+    "required": true,
+    "kind": "ref",
+    "ref": "employees"
+   },
+   {
+    "name": "supplier_name",
+    "label": "Supplier name",
+    "kind": "text"
+   },
+   {
+    "name": "amount",
+    "label": "Amount",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "purchased_on",
+    "label": "Purchased on",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "operations_review",
+    "label": "Operations review",
+    "kind": "text"
+   },
+   {
+    "name": "finance_treatment",
+    "label": "Finance treatment",
+    "kind": "text"
+   },
+   {
+    "name": "corrective_action_id",
+    "label": "Corrective action",
+    "kind": "ref",
+    "ref": "actions"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "reported",
+     "under_review",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "site_id",
+   "originator_employee_id",
+   "corrective_action_id"
+  ],
+  "restricted": false,
+  "getPath": "/unauthorized-purchases/{unauthorized_purchase_id}",
+  "create": {
+   "path": "/unauthorized-purchases",
+   "permission": "procurement.unauthorized_purchase.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "required": true,
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "originator_employee_id",
+     "label": "Originator",
+     "required": true,
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "supplier_name",
+     "label": "Supplier name",
+     "kind": "text"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "purchased_on",
+     "label": "Purchased on",
+     "required": true,
+     "kind": "date"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    },
+    {
+     "name": "operations_review",
+     "label": "Operations review",
+     "kind": "text"
+    },
+    {
+     "name": "finance_treatment",
+     "label": "Finance treatment",
+     "kind": "text"
+    },
+    {
+     "name": "corrective_action_id",
+     "label": "Corrective action",
+     "kind": "ref",
+     "ref": "actions"
+    }
+   ]
+  },
+  "update": {
+   "path": "/unauthorized-purchases/{unauthorized_purchase_id}",
+   "permission": "procurement.unauthorized_purchase.write",
+   "fields": [
+    {
+     "name": "site_id",
+     "label": "Site",
+     "kind": "ref",
+     "ref": "sites"
+    },
+    {
+     "name": "originator_employee_id",
+     "label": "Originator",
+     "kind": "ref",
+     "ref": "employees"
+    },
+    {
+     "name": "supplier_name",
+     "label": "Supplier name",
+     "kind": "text"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "kind": "money"
+    },
+    {
+     "name": "purchased_on",
+     "label": "Purchased on",
+     "kind": "date"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "kind": "textarea"
+    },
+    {
+     "name": "operations_review",
+     "label": "Operations review",
+     "kind": "text"
+    },
+    {
+     "name": "finance_treatment",
+     "label": "Finance treatment",
+     "kind": "text"
+    },
+    {
+     "name": "corrective_action_id",
+     "label": "Corrective action",
+     "kind": "ref",
+     "ref": "actions"
+    }
+   ]
+  },
+  "statuses": [
+   "reported",
+   "under_review",
+   "closed"
+  ],
+  "actions": [
+   {
+    "key": "close",
+    "label": "Close",
+    "path": "/unauthorized-purchases/{unauthorized_purchase_id}/close",
+    "permission": "procurement.unauthorized_purchase.close",
+    "operationId": "closeUnauthorizedPurchase",
+    "from": [
+     "reported",
+     "under_review"
+    ],
+    "fields": [
+     {
+      "name": "comment",
+      "label": "Comment",
+      "required": true,
+      "kind": "textarea"
+     }
+    ]
+   }
+  ]
+ },
+ "budgets": {
+  "slug": "budgets",
+  "title": "Budgets",
+  "singular": "Budget",
+  "about": "Annual budget by department, approved to Board level.",
+  "group": "Budgets",
+  "tile": "cash-finance",
+  "listPath": "/budgets",
+  "readPermission": "budgets.budget.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "financial_year",
+    "label": "Financial year",
+    "required": true,
+    "kind": "number"
+   },
+   {
+    "name": "department_id",
+    "label": "Department",
+    "required": true,
+    "kind": "ref",
+    "ref": "departments"
+   },
+   {
+    "name": "version",
+    "label": "Version",
+    "readOnly": true,
+    "kind": "number"
+   },
+   {
+    "name": "submission_due",
+    "label": "Submission due",
+    "kind": "date"
+   },
+   {
+    "name": "total",
+    "label": "Total",
+    "readOnly": true,
+    "kind": "money"
+   },
+   {
+    "name": "board_approval_attachment_id",
+    "label": "Board approval attachment",
+    "kind": "ref",
+    "ref": "attachments"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "submitted",
+     "consolidated",
+     "pending_approval",
+     "approved",
+     "rejected"
+    ]
+   },
+   {
+    "name": "lines",
+    "label": "Lines",
+    "kind": "rows",
+    "fields": [
+     {
+      "name": "account_code",
+      "label": "Account code",
+      "required": true,
+      "kind": "text"
+     },
+     {
+      "name": "description",
+      "label": "Description",
+      "kind": "textarea"
+     },
+     {
+      "name": "month",
+      "label": "Month",
+      "required": true,
+      "kind": "number"
+     },
+     {
+      "name": "amount",
+      "label": "Amount",
+      "required": true,
+      "kind": "decimal"
+     }
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "department_id",
+   "board_approval_attachment_id",
+   "submission_due"
+  ],
+  "restricted": false,
+  "getPath": "/budgets/{budget_id}",
+  "create": {
+   "path": "/budgets",
+   "permission": "budgets.budget.write",
+   "fields": [
+    {
+     "name": "financial_year",
+     "label": "Financial year",
+     "required": true,
+     "kind": "number"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "required": true,
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "submission_due",
+     "label": "Submission due",
+     "kind": "date"
+    },
+    {
+     "name": "board_approval_attachment_id",
+     "label": "Board approval attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "account_code",
+       "label": "Account code",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "description",
+       "label": "Description",
+       "kind": "textarea"
+      },
+      {
+       "name": "month",
+       "label": "Month",
+       "required": true,
+       "kind": "number"
+      },
+      {
+       "name": "amount",
+       "label": "Amount",
+       "required": true,
+       "kind": "decimal"
+      }
+     ]
+    }
+   ]
+  },
+  "update": {
+   "path": "/budgets/{budget_id}",
+   "permission": "budgets.budget.write",
+   "fields": [
+    {
+     "name": "financial_year",
+     "label": "Financial year",
+     "kind": "number"
+    },
+    {
+     "name": "department_id",
+     "label": "Department",
+     "kind": "ref",
+     "ref": "departments"
+    },
+    {
+     "name": "submission_due",
+     "label": "Submission due",
+     "kind": "date"
+    },
+    {
+     "name": "board_approval_attachment_id",
+     "label": "Board approval attachment",
+     "kind": "ref",
+     "ref": "attachments"
+    },
+    {
+     "name": "lines",
+     "label": "Lines",
+     "kind": "rows",
+     "fields": [
+      {
+       "name": "account_code",
+       "label": "Account code",
+       "required": true,
+       "kind": "text"
+      },
+      {
+       "name": "description",
+       "label": "Description",
+       "kind": "textarea"
+      },
+      {
+       "name": "month",
+       "label": "Month",
+       "required": true,
+       "kind": "number"
+      },
+      {
+       "name": "amount",
+       "label": "Amount",
+       "required": true,
+       "kind": "decimal"
+      }
+     ]
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "submitted",
+   "consolidated",
+   "pending_approval",
+   "approved",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/budgets/{budget_id}/submit",
+    "permission": "budgets.budget.submit",
+    "operationId": "submitBudget",
+    "from": [
+     "draft"
+    ],
+    "fields": []
+   }
+  ]
+ },
+ "budget-variances": {
+  "slug": "budget-variances",
+  "title": "Budget variances",
+  "singular": "Budget variance",
+  "about": "Monthly actual against budget. Above the threshold rule it needs an explanation and escalation within 5 working days.",
+  "group": "Budgets",
+  "tile": "cash-finance",
+  "listPath": "/budgets/{budget_id}/variances",
+  "readPermission": "budgets.budget_variance.read",
+  "fields": [
+   {
+    "name": "month",
+    "label": "Month",
+    "required": true,
+    "kind": "date"
+   },
+   {
+    "name": "account_code",
+    "label": "Account code",
+    "required": true,
+    "kind": "text"
+   },
+   {
+    "name": "budget_amount",
+    "label": "Budget amount",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "actual_amount",
+    "label": "Actual amount",
+    "required": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "variance_percent",
+    "label": "Variance percent",
+    "readOnly": true,
+    "kind": "decimal"
+   },
+   {
+    "name": "explanation",
+    "label": "Explanation",
+    "kind": "text"
+   },
+   {
+    "name": "escalated_at",
+    "label": "Escalated",
+    "readOnly": true,
+    "kind": "datetime"
+   },
+   {
+    "name": "escalation_due",
+    "label": "Escalation due",
+    "readOnly": true,
+    "kind": "date"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "open",
+     "explained",
+     "escalated",
+     "closed"
+    ]
+   }
+  ],
+  "columns": [
+   "status",
+   "month",
+   "escalation_due",
+   "escalated_at",
+   "account_code"
+  ],
+  "restricted": false,
+  "getPath": "/budgets/{budget_id}/variances/{budget_variance_id}",
+  "update": {
+   "path": "/budgets/{budget_id}/variances/{budget_variance_id}",
+   "permission": "budgets.budget_variance.write",
+   "fields": [
+    {
+     "name": "month",
+     "label": "Month",
+     "kind": "date"
+    },
+    {
+     "name": "account_code",
+     "label": "Account code",
+     "kind": "text"
+    },
+    {
+     "name": "budget_amount",
+     "label": "Budget amount",
+     "kind": "decimal"
+    },
+    {
+     "name": "actual_amount",
+     "label": "Actual amount",
+     "kind": "decimal"
+    },
+    {
+     "name": "explanation",
+     "label": "Explanation",
+     "kind": "text"
+    }
+   ]
+  },
+  "statuses": [
+   "open",
+   "explained",
+   "escalated",
+   "closed"
+  ],
+  "nestedUnder": "budgets"
+ },
+ "budget-reallocations": {
+  "slug": "budget-reallocations",
+  "title": "Budget reallocations",
+  "singular": "Budget reallocation",
+  "about": "Overspend or reallocation request.",
+  "group": "Budgets",
+  "tile": "cash-finance",
+  "listPath": "/budget-reallocations",
+  "readPermission": "budgets.budget_reallocation.read",
+  "fields": [
+   {
+    "name": "reference",
+    "label": "Reference",
+    "readOnly": true,
+    "kind": "text",
+    "hint": "Human reference, e.g. `CUP-HRE01-2026-000123`. Present on referenced records."
+   },
+   {
+    "name": "budget_id",
+    "label": "Budget",
+    "required": true,
+    "kind": "ref",
+    "ref": "budgets"
+   },
+   {
+    "name": "from_account",
+    "label": "From account",
+    "kind": "text"
+   },
+   {
+    "name": "to_account",
+    "label": "To account",
+    "kind": "text"
+   },
+   {
+    "name": "amount",
+    "label": "Amount",
+    "required": true,
+    "kind": "money"
+   },
+   {
+    "name": "reason",
+    "label": "Reason",
+    "required": true,
+    "kind": "textarea"
+   },
+   {
+    "name": "status",
+    "label": "Status",
+    "required": true,
+    "readOnly": true,
+    "kind": "enum",
+    "options": [
+     "draft",
+     "pending_approval",
+     "approved",
+     "rejected"
+    ]
+   }
+  ],
+  "columns": [
+   "reference",
+   "status",
+   "budget_id",
+   "amount",
+   "from_account"
+  ],
+  "restricted": false,
+  "getPath": "/budget-reallocations/{budget_reallocation_id}",
+  "create": {
+   "path": "/budget-reallocations",
+   "permission": "budgets.budget_reallocation.write",
+   "fields": [
+    {
+     "name": "budget_id",
+     "label": "Budget",
+     "required": true,
+     "kind": "ref",
+     "ref": "budgets"
+    },
+    {
+     "name": "from_account",
+     "label": "From account",
+     "kind": "text"
+    },
+    {
+     "name": "to_account",
+     "label": "To account",
+     "kind": "text"
+    },
+    {
+     "name": "amount",
+     "label": "Amount",
+     "required": true,
+     "kind": "money"
+    },
+    {
+     "name": "reason",
+     "label": "Reason",
+     "required": true,
+     "kind": "textarea"
+    }
+   ]
+  },
+  "statuses": [
+   "draft",
+   "pending_approval",
+   "approved",
+   "rejected"
+  ],
+  "actions": [
+   {
+    "key": "submit",
+    "label": "Submit",
+    "path": "/budget-reallocations/{budget_reallocation_id}/submit",
+    "permission": "budgets.budget_reallocation.submit",
+    "operationId": "submitBudgetReallocation",
+    "from": [
+     "draft"
     ],
     "fields": []
    }

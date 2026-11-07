@@ -381,7 +381,7 @@ def queries_for(t):
     if "create" in r:
         want = set(api_columns(t, r["create"].get("req")))
         for c in sql_columns(t):
-            if c[2] and not c[3]:
+            if (c[2] and not c[3]) or c[0] == "site_id":
                 want.add(c[0])
         ordered = [c[0] for c in sql_columns(t) if c[0] in want]
         names = list(ordered)

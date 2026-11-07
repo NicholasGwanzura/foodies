@@ -528,6 +528,24 @@ func (q *Queries) CountUnreadNotifications(ctx context.Context, recipientUserID 
 	return count, err
 }
 
+const countVariances = `-- name: CountVariances :one
+SELECT count(*) FILTER (WHERE created_at >= date_trunc('week', now()))::int AS week,
+       count(*) FILTER (WHERE created_at >= date_trunc('month', now()))::int AS month
+FROM cash_variances WHERE cashier_employee_id = $1
+`
+
+type CountVariancesRow struct {
+	Week  int32 `json:"week"`
+	Month int32 `json:"month"`
+}
+
+func (q *Queries) CountVariances(ctx context.Context, cashierEmployeeID *uuid.UUID) (CountVariancesRow, error) {
+	row := q.db.QueryRow(ctx, countVariances, cashierEmployeeID)
+	var i CountVariancesRow
+	err := row.Scan(&i.Week, &i.Month)
+	return i, err
+}
+
 const createApprovalRequest = `-- name: CreateApprovalRequest :one
 INSERT INTO approval_requests (subject_type, subject_id, workflow_key, policy_id, site_id, amount_amount, amount_currency, current_step, summary, created_by, updated_by)
 VALUES ($1, $2, $3, $4, $5, $6, $7, 1, $8, $9, $9)
@@ -571,6 +589,67 @@ func (q *Queries) CreateApprovalRequest(ctx context.Context, arg CreateApprovalR
 		&i.CurrentStep,
 		&i.Summary,
 		&i.DecidedAt,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const createCashVarianceRow = `-- name: CreateCashVarianceRow :one
+INSERT INTO cash_variances (reference, cash_up_id, site_id, cashier_employee_id, variance_type, amount_amount, amount_currency, occurrence_week, occurrence_month, explanation)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+RETURNING id, reference, cash_up_id, site_id, cashier_employee_id, variance_type, amount_amount, amount_currency, explanation, recovery_status, recovered_at, recovery_reference, occurrence_week, occurrence_month, amount_band, hr_referred_at, disciplinary_case_id, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type CreateCashVarianceRowParams struct {
+	Reference         string     `json:"reference"`
+	CashUpID          uuid.UUID  `json:"cash_up_id"`
+	SiteID            *uuid.UUID `json:"site_id"`
+	CashierEmployeeID *uuid.UUID `json:"cashier_employee_id"`
+	VarianceType      *string    `json:"variance_type"`
+	AmountAmount      *string    `json:"amount_amount"`
+	AmountCurrency    *string    `json:"amount_currency"`
+	OccurrenceWeek    *int32     `json:"occurrence_week"`
+	OccurrenceMonth   *int32     `json:"occurrence_month"`
+	Explanation       *string    `json:"explanation"`
+}
+
+func (q *Queries) CreateCashVarianceRow(ctx context.Context, arg CreateCashVarianceRowParams) (CashVariance, error) {
+	row := q.db.QueryRow(ctx, createCashVarianceRow,
+		arg.Reference,
+		arg.CashUpID,
+		arg.SiteID,
+		arg.CashierEmployeeID,
+		arg.VarianceType,
+		arg.AmountAmount,
+		arg.AmountCurrency,
+		arg.OccurrenceWeek,
+		arg.OccurrenceMonth,
+		arg.Explanation,
+	)
+	var i CashVariance
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.CashUpID,
+		&i.SiteID,
+		&i.CashierEmployeeID,
+		&i.VarianceType,
+		&i.AmountAmount,
+		&i.AmountCurrency,
+		&i.Explanation,
+		&i.RecoveryStatus,
+		&i.RecoveredAt,
+		&i.RecoveryReference,
+		&i.OccurrenceWeek,
+		&i.OccurrenceMonth,
+		&i.AmountBand,
+		&i.HrReferredAt,
+		&i.DisciplinaryCaseID,
 		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -1381,6 +1460,61 @@ func (q *Queries) IntegrationBySystem(ctx context.Context, system string) (Integ
 	return i, err
 }
 
+const issueVoucher = `-- name: IssueVoucher :one
+UPDATE petty_cash_vouchers SET status = 'issued', issued_amount_amount = $1, issued_amount_currency = $2, balance_before_amount = $3, balance_before_currency = $2,
+  balance_after_amount = $4, balance_after_currency = $2, issued_at = now(), updated_at = now(), updated_by = $5, row_version = row_version + 1
+WHERE id = $6 AND status = 'approved' RETURNING id, reference, account_id, site_id, supervisor_employee_id, reason, amount_amount, amount_currency, expense_category, recipient, verified_by, issued_amount_amount, issued_amount_currency, balance_before_amount, balance_before_currency, balance_after_amount, balance_after_currency, issued_at, receipt_attachment_id, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type IssueVoucherParams struct {
+	Issued        *string    `json:"issued"`
+	Currency      *string    `json:"currency"`
+	BeforeBalance *string    `json:"before_balance"`
+	AfterBalance  *string    `json:"after_balance"`
+	UpdatedBy     *uuid.UUID `json:"updated_by"`
+	ID            uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) IssueVoucher(ctx context.Context, arg IssueVoucherParams) (PettyCashVoucher, error) {
+	row := q.db.QueryRow(ctx, issueVoucher,
+		arg.Issued,
+		arg.Currency,
+		arg.BeforeBalance,
+		arg.AfterBalance,
+		arg.UpdatedBy,
+		arg.ID,
+	)
+	var i PettyCashVoucher
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.AccountID,
+		&i.SiteID,
+		&i.SupervisorEmployeeID,
+		&i.Reason,
+		&i.AmountAmount,
+		&i.AmountCurrency,
+		&i.ExpenseCategory,
+		&i.Recipient,
+		&i.VerifiedBy,
+		&i.IssuedAmountAmount,
+		&i.IssuedAmountCurrency,
+		&i.BalanceBeforeAmount,
+		&i.BalanceBeforeCurrency,
+		&i.BalanceAfterAmount,
+		&i.BalanceAfterCurrency,
+		&i.IssuedAt,
+		&i.ReceiptAttachmentID,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
 const latestPublishedVersion = `-- name: LatestPublishedVersion :one
 SELECT id, form_template_id, version, definition, offline_allowed, channels, whatsapp_flow_id, retention_class_id, required_rule_keys, effective_from, status, created_at, updated_at, created_by, updated_by, row_version FROM form_template_versions WHERE form_template_id = $1 AND status = 'published' ORDER BY version DESC LIMIT 1
 `
@@ -1400,6 +1534,35 @@ func (q *Queries) LatestPublishedVersion(ctx context.Context, formTemplateID uui
 		&i.RequiredRuleKeys,
 		&i.EffectiveFrom,
 		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const latestRateBetween = `-- name: LatestRateBetween :one
+SELECT id, from_currency, to_currency, rate, rate_date, source, change_reason, created_at, updated_at, created_by, updated_by, row_version FROM fx_rates WHERE from_currency = $1 AND to_currency = $2 ORDER BY rate_date DESC, id DESC LIMIT 1
+`
+
+type LatestRateBetweenParams struct {
+	FromCurrency string `json:"from_currency"`
+	ToCurrency   string `json:"to_currency"`
+}
+
+func (q *Queries) LatestRateBetween(ctx context.Context, arg LatestRateBetweenParams) (FxRate, error) {
+	row := q.db.QueryRow(ctx, latestRateBetween, arg.FromCurrency, arg.ToCurrency)
+	var i FxRate
+	err := row.Scan(
+		&i.ID,
+		&i.FromCurrency,
+		&i.ToCurrency,
+		&i.Rate,
+		&i.RateDate,
+		&i.Source,
+		&i.ChangeReason,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.CreatedBy,
@@ -1735,6 +1898,15 @@ func (q *Queries) MarkReminded(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
+const markVouchersReimbursed = `-- name: MarkVouchersReimbursed :exec
+UPDATE petty_cash_vouchers SET status = 'reimbursed', updated_at = now(), row_version = row_version + 1 WHERE id = ANY($1::uuid[])
+`
+
+func (q *Queries) MarkVouchersReimbursed(ctx context.Context, dollar_1 []uuid.UUID) error {
+	_, err := q.db.Exec(ctx, markVouchersReimbursed, dollar_1)
+	return err
+}
+
 const missingRules = `-- name: MissingRules :many
 SELECT r.rule_key, d.name, d.blocking FROM workflow_requirements r
 LEFT JOIN rule_definitions d ON d."key" = r.rule_key
@@ -1829,6 +2001,17 @@ func (q *Queries) OfflineTemplates(ctx context.Context) ([]FormTemplateVersion, 
 		return nil, err
 	}
 	return items, nil
+}
+
+const openVariances = `-- name: OpenVariances :one
+SELECT count(*) FROM cash_variances WHERE site_id = $1 AND status = 'open'
+`
+
+func (q *Queries) OpenVariances(ctx context.Context, siteID *uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, openVariances, siteID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
 }
 
 const ownerRoleOfRule = `-- name: OwnerRoleOfRule :one
@@ -2095,6 +2278,32 @@ func (q *Queries) RevokeEmployeeIdentities(ctx context.Context, employeeID uuid.
 	return err
 }
 
+const roleByKey = `-- name: RoleByKey :one
+SELECT id FROM roles WHERE "key" = $1
+`
+
+func (q *Queries) RoleByKey(ctx context.Context, key string) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, roleByKey, key)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
+const setAccountBalance = `-- name: SetAccountBalance :exec
+UPDATE petty_cash_accounts SET book_balance_amount = $2, book_balance_currency = $3, updated_at = now(), row_version = row_version + 1 WHERE id = $1
+`
+
+type SetAccountBalanceParams struct {
+	ID                  uuid.UUID `json:"id"`
+	BookBalanceAmount   *string   `json:"book_balance_amount"`
+	BookBalanceCurrency *string   `json:"book_balance_currency"`
+}
+
+func (q *Queries) SetAccountBalance(ctx context.Context, arg SetAccountBalanceParams) error {
+	_, err := q.db.Exec(ctx, setAccountBalance, arg.ID, arg.BookBalanceAmount, arg.BookBalanceCurrency)
+	return err
+}
+
 const setActivationReadiness = `-- name: SetActivationReadiness :exec
 UPDATE workflow_activations SET missing_rule_keys = $3,
   status = CASE WHEN status IN ('live','suspended') AND cardinality($3::text[]) = 0 THEN status
@@ -2114,6 +2323,260 @@ func (q *Queries) SetActivationReadiness(ctx context.Context, arg SetActivationR
 	return err
 }
 
+const setCashUpFigures = `-- name: SetCashUpFigures :one
+UPDATE cash_ups SET fx_rate_id = $1, fx_rate_value = $2, variance_base_amount = $3, variance_base_currency = $4
+WHERE id = $5 RETURNING id, reference, site_id, till_id, cashier_employee_id, supervisor_employee_id, witness_employee_id, business_date, shift, kind, x_read_id, z_report_id, fx_rate_id, fx_rate_value, variance_base_amount, variance_base_currency, safe_id, safe_deposit_seal, closed_at, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type SetCashUpFiguresParams struct {
+	FxRateID             *uuid.UUID `json:"fx_rate_id"`
+	FxRateValue          *string    `json:"fx_rate_value"`
+	VarianceBaseAmount   *string    `json:"variance_base_amount"`
+	VarianceBaseCurrency *string    `json:"variance_base_currency"`
+	ID                   uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) SetCashUpFigures(ctx context.Context, arg SetCashUpFiguresParams) (CashUp, error) {
+	row := q.db.QueryRow(ctx, setCashUpFigures,
+		arg.FxRateID,
+		arg.FxRateValue,
+		arg.VarianceBaseAmount,
+		arg.VarianceBaseCurrency,
+		arg.ID,
+	)
+	var i CashUp
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.SiteID,
+		&i.TillID,
+		&i.CashierEmployeeID,
+		&i.SupervisorEmployeeID,
+		&i.WitnessEmployeeID,
+		&i.BusinessDate,
+		&i.Shift,
+		&i.Kind,
+		&i.XReadID,
+		&i.ZReportID,
+		&i.FxRateID,
+		&i.FxRateValue,
+		&i.VarianceBaseAmount,
+		&i.VarianceBaseCurrency,
+		&i.SafeID,
+		&i.SafeDepositSeal,
+		&i.ClosedAt,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const setCitHandover = `-- name: SetCitHandover :one
+UPDATE cit_transits SET status = 'handed_over', collected_at = now(), cit_receipt_number = $1, armoured_vehicle_confirmed = $2,
+  updated_at = now(), updated_by = $3, row_version = row_version + 1
+WHERE id = $4 AND status = 'identity_verified' RETURNING id, reference, site_id, provider_id, transit_date, total_amount, total_currency, deposit_slip_number, slip_copy_dispatched, slip_copy_retained, identity_verified_person_id, collected_at, cit_receipt_number, armoured_vehicle_confirmed, vault_received_at, vault_amount_amount, vault_amount_currency, received_by, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type SetCitHandoverParams struct {
+	CitReceiptNumber         *string    `json:"cit_receipt_number"`
+	ArmouredVehicleConfirmed bool       `json:"armoured_vehicle_confirmed"`
+	UpdatedBy                *uuid.UUID `json:"updated_by"`
+	ID                       uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) SetCitHandover(ctx context.Context, arg SetCitHandoverParams) (CitTransit, error) {
+	row := q.db.QueryRow(ctx, setCitHandover,
+		arg.CitReceiptNumber,
+		arg.ArmouredVehicleConfirmed,
+		arg.UpdatedBy,
+		arg.ID,
+	)
+	var i CitTransit
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.SiteID,
+		&i.ProviderID,
+		&i.TransitDate,
+		&i.TotalAmount,
+		&i.TotalCurrency,
+		&i.DepositSlipNumber,
+		&i.SlipCopyDispatched,
+		&i.SlipCopyRetained,
+		&i.IdentityVerifiedPersonID,
+		&i.CollectedAt,
+		&i.CitReceiptNumber,
+		&i.ArmouredVehicleConfirmed,
+		&i.VaultReceivedAt,
+		&i.VaultAmountAmount,
+		&i.VaultAmountCurrency,
+		&i.ReceivedBy,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const setCitIdentity = `-- name: SetCitIdentity :one
+UPDATE cit_transits SET status = 'identity_verified', identity_verified_person_id = $1, updated_at = now(), updated_by = $2, row_version = row_version + 1
+WHERE id = $3 AND status = 'sealed' RETURNING id, reference, site_id, provider_id, transit_date, total_amount, total_currency, deposit_slip_number, slip_copy_dispatched, slip_copy_retained, identity_verified_person_id, collected_at, cit_receipt_number, armoured_vehicle_confirmed, vault_received_at, vault_amount_amount, vault_amount_currency, received_by, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type SetCitIdentityParams struct {
+	Person    *uuid.UUID `json:"person"`
+	UpdatedBy *uuid.UUID `json:"updated_by"`
+	ID        uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) SetCitIdentity(ctx context.Context, arg SetCitIdentityParams) (CitTransit, error) {
+	row := q.db.QueryRow(ctx, setCitIdentity, arg.Person, arg.UpdatedBy, arg.ID)
+	var i CitTransit
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.SiteID,
+		&i.ProviderID,
+		&i.TransitDate,
+		&i.TotalAmount,
+		&i.TotalCurrency,
+		&i.DepositSlipNumber,
+		&i.SlipCopyDispatched,
+		&i.SlipCopyRetained,
+		&i.IdentityVerifiedPersonID,
+		&i.CollectedAt,
+		&i.CitReceiptNumber,
+		&i.ArmouredVehicleConfirmed,
+		&i.VaultReceivedAt,
+		&i.VaultAmountAmount,
+		&i.VaultAmountCurrency,
+		&i.ReceivedBy,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const setCitReconVariance = `-- name: SetCitReconVariance :exec
+UPDATE cit_reconciliations SET variance_amount = $2, variance_currency = $3 WHERE id = $1
+`
+
+type SetCitReconVarianceParams struct {
+	ID               uuid.UUID `json:"id"`
+	VarianceAmount   *string   `json:"variance_amount"`
+	VarianceCurrency *string   `json:"variance_currency"`
+}
+
+func (q *Queries) SetCitReconVariance(ctx context.Context, arg SetCitReconVarianceParams) error {
+	_, err := q.db.Exec(ctx, setCitReconVariance, arg.ID, arg.VarianceAmount, arg.VarianceCurrency)
+	return err
+}
+
+const setCitTotal = `-- name: SetCitTotal :one
+UPDATE cit_transits SET total_amount = $2, total_currency = $3 WHERE id = $1 RETURNING id, reference, site_id, provider_id, transit_date, total_amount, total_currency, deposit_slip_number, slip_copy_dispatched, slip_copy_retained, identity_verified_person_id, collected_at, cit_receipt_number, armoured_vehicle_confirmed, vault_received_at, vault_amount_amount, vault_amount_currency, received_by, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type SetCitTotalParams struct {
+	ID            uuid.UUID `json:"id"`
+	TotalAmount   string    `json:"total_amount"`
+	TotalCurrency string    `json:"total_currency"`
+}
+
+func (q *Queries) SetCitTotal(ctx context.Context, arg SetCitTotalParams) (CitTransit, error) {
+	row := q.db.QueryRow(ctx, setCitTotal, arg.ID, arg.TotalAmount, arg.TotalCurrency)
+	var i CitTransit
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.SiteID,
+		&i.ProviderID,
+		&i.TransitDate,
+		&i.TotalAmount,
+		&i.TotalCurrency,
+		&i.DepositSlipNumber,
+		&i.SlipCopyDispatched,
+		&i.SlipCopyRetained,
+		&i.IdentityVerifiedPersonID,
+		&i.CollectedAt,
+		&i.CitReceiptNumber,
+		&i.ArmouredVehicleConfirmed,
+		&i.VaultReceivedAt,
+		&i.VaultAmountAmount,
+		&i.VaultAmountCurrency,
+		&i.ReceivedBy,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const setCitVault = `-- name: SetCitVault :one
+UPDATE cit_transits SET status = $1, vault_received_at = now(), vault_amount_amount = $2, vault_amount_currency = $3,
+  received_by = $4, updated_at = now(), updated_by = $4, row_version = row_version + 1
+WHERE id = $5 AND status IN ('handed_over', 'in_transit') RETURNING id, reference, site_id, provider_id, transit_date, total_amount, total_currency, deposit_slip_number, slip_copy_dispatched, slip_copy_retained, identity_verified_person_id, collected_at, cit_receipt_number, armoured_vehicle_confirmed, vault_received_at, vault_amount_amount, vault_amount_currency, received_by, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type SetCitVaultParams struct {
+	Status              string     `json:"status"`
+	VaultAmountAmount   *string    `json:"vault_amount_amount"`
+	VaultAmountCurrency *string    `json:"vault_amount_currency"`
+	ReceivedBy          *uuid.UUID `json:"received_by"`
+	ID                  uuid.UUID  `json:"id"`
+}
+
+func (q *Queries) SetCitVault(ctx context.Context, arg SetCitVaultParams) (CitTransit, error) {
+	row := q.db.QueryRow(ctx, setCitVault,
+		arg.Status,
+		arg.VaultAmountAmount,
+		arg.VaultAmountCurrency,
+		arg.ReceivedBy,
+		arg.ID,
+	)
+	var i CitTransit
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.SiteID,
+		&i.ProviderID,
+		&i.TransitDate,
+		&i.TotalAmount,
+		&i.TotalCurrency,
+		&i.DepositSlipNumber,
+		&i.SlipCopyDispatched,
+		&i.SlipCopyRetained,
+		&i.IdentityVerifiedPersonID,
+		&i.CollectedAt,
+		&i.CitReceiptNumber,
+		&i.ArmouredVehicleConfirmed,
+		&i.VaultReceivedAt,
+		&i.VaultAmountAmount,
+		&i.VaultAmountCurrency,
+		&i.ReceivedBy,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
 const setCurrentTemplateVersion = `-- name: SetCurrentTemplateVersion :exec
 UPDATE form_templates SET current_version_id = $2, status = 'active', updated_at = now(), row_version = row_version + 1 WHERE id = $1
 `
@@ -2125,6 +2588,24 @@ type SetCurrentTemplateVersionParams struct {
 
 func (q *Queries) SetCurrentTemplateVersion(ctx context.Context, arg SetCurrentTemplateVersionParams) error {
 	_, err := q.db.Exec(ctx, setCurrentTemplateVersion, arg.ID, arg.CurrentVersionID)
+	return err
+}
+
+const setDepositException = `-- name: SetDepositException :exec
+UPDATE bank_deposits SET status = 'exception', updated_at = now(), row_version = row_version + 1 WHERE id = $1
+`
+
+func (q *Queries) SetDepositException(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, setDepositException, id)
+	return err
+}
+
+const setDepositProofTime = `-- name: SetDepositProofTime :exec
+UPDATE bank_deposits SET proof_received_at = now() WHERE id = $1
+`
+
+func (q *Queries) SetDepositProofTime(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, setDepositProofTime, id)
 	return err
 }
 
@@ -2175,6 +2656,20 @@ func (q *Queries) SetEscalationStep(ctx context.Context, arg SetEscalationStepPa
 	return i, err
 }
 
+const setExceptionDue = `-- name: SetExceptionDue :exec
+UPDATE float_exceptions SET reimbursement_due = $2 WHERE id = $1
+`
+
+type SetExceptionDueParams struct {
+	ID               uuid.UUID   `json:"id"`
+	ReimbursementDue pgtype.Date `json:"reimbursement_due"`
+}
+
+func (q *Queries) SetExceptionDue(ctx context.Context, arg SetExceptionDueParams) error {
+	_, err := q.db.Exec(ctx, setExceptionDue, arg.ID, arg.ReimbursementDue)
+	return err
+}
+
 const setNotificationPreferences = `-- name: SetNotificationPreferences :exec
 INSERT INTO notification_preferences (user_id, categories) VALUES ($1, $2)
 ON CONFLICT (user_id) DO UPDATE SET categories = EXCLUDED.categories, updated_at = now()
@@ -2188,6 +2683,60 @@ type SetNotificationPreferencesParams struct {
 func (q *Queries) SetNotificationPreferences(ctx context.Context, arg SetNotificationPreferencesParams) error {
 	_, err := q.db.Exec(ctx, setNotificationPreferences, arg.UserID, arg.Categories)
 	return err
+}
+
+const setReconciliationFigures = `-- name: SetReconciliationFigures :exec
+UPDATE petty_cash_reconciliations SET expected_closing_amount = $2, expected_closing_currency = $3, variance_amount = $4, variance_currency = $3 WHERE id = $1
+`
+
+type SetReconciliationFiguresParams struct {
+	ID                      uuid.UUID `json:"id"`
+	ExpectedClosingAmount   *string   `json:"expected_closing_amount"`
+	ExpectedClosingCurrency *string   `json:"expected_closing_currency"`
+	VarianceAmount          *string   `json:"variance_amount"`
+}
+
+func (q *Queries) SetReconciliationFigures(ctx context.Context, arg SetReconciliationFiguresParams) error {
+	_, err := q.db.Exec(ctx, setReconciliationFigures,
+		arg.ID,
+		arg.ExpectedClosingAmount,
+		arg.ExpectedClosingCurrency,
+		arg.VarianceAmount,
+	)
+	return err
+}
+
+const setReimbursementTotal = `-- name: SetReimbursementTotal :one
+UPDATE petty_cash_reimbursements SET total_amount = $2, total_currency = $3 WHERE id = $1 RETURNING id, reference, account_id, voucher_ids, total_amount, total_currency, submitted_at, paid_at, payment_reference, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type SetReimbursementTotalParams struct {
+	ID            uuid.UUID `json:"id"`
+	TotalAmount   *string   `json:"total_amount"`
+	TotalCurrency *string   `json:"total_currency"`
+}
+
+func (q *Queries) SetReimbursementTotal(ctx context.Context, arg SetReimbursementTotalParams) (PettyCashReimbursement, error) {
+	row := q.db.QueryRow(ctx, setReimbursementTotal, arg.ID, arg.TotalAmount, arg.TotalCurrency)
+	var i PettyCashReimbursement
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.AccountID,
+		&i.VoucherIds,
+		&i.TotalAmount,
+		&i.TotalCurrency,
+		&i.SubmittedAt,
+		&i.PaidAt,
+		&i.PaymentReference,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
 }
 
 const setSubmissionOutcome = `-- name: SetSubmissionOutcome :one
@@ -2223,6 +2772,120 @@ func (q *Queries) SetSubmissionOutcome(ctx context.Context, arg SetSubmissionOut
 		&i.CapturedAt,
 		&i.Channel,
 		&i.ClientRecordID,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const setSurpriseVariance = `-- name: SetSurpriseVariance :exec
+UPDATE surprise_counts SET variance_amount = $2, variance_currency = $3 WHERE id = $1
+`
+
+type SetSurpriseVarianceParams struct {
+	ID               uuid.UUID `json:"id"`
+	VarianceAmount   *string   `json:"variance_amount"`
+	VarianceCurrency *string   `json:"variance_currency"`
+}
+
+func (q *Queries) SetSurpriseVariance(ctx context.Context, arg SetSurpriseVarianceParams) error {
+	_, err := q.db.Exec(ctx, setSurpriseVariance, arg.ID, arg.VarianceAmount, arg.VarianceCurrency)
+	return err
+}
+
+const setVarianceFigures = `-- name: SetVarianceFigures :exec
+UPDATE petty_cash_handovers SET variance_amount = $2, variance_currency = $3 WHERE id = $1
+`
+
+type SetVarianceFiguresParams struct {
+	ID               uuid.UUID `json:"id"`
+	VarianceAmount   *string   `json:"variance_amount"`
+	VarianceCurrency *string   `json:"variance_currency"`
+}
+
+func (q *Queries) SetVarianceFigures(ctx context.Context, arg SetVarianceFiguresParams) error {
+	_, err := q.db.Exec(ctx, setVarianceFigures, arg.ID, arg.VarianceAmount, arg.VarianceCurrency)
+	return err
+}
+
+const setVoucherSite = `-- name: SetVoucherSite :one
+UPDATE petty_cash_vouchers SET site_id = $2 WHERE id = $1 RETURNING id, reference, account_id, site_id, supervisor_employee_id, reason, amount_amount, amount_currency, expense_category, recipient, verified_by, issued_amount_amount, issued_amount_currency, balance_before_amount, balance_before_currency, balance_after_amount, balance_after_currency, issued_at, receipt_attachment_id, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type SetVoucherSiteParams struct {
+	ID     uuid.UUID  `json:"id"`
+	SiteID *uuid.UUID `json:"site_id"`
+}
+
+func (q *Queries) SetVoucherSite(ctx context.Context, arg SetVoucherSiteParams) (PettyCashVoucher, error) {
+	row := q.db.QueryRow(ctx, setVoucherSite, arg.ID, arg.SiteID)
+	var i PettyCashVoucher
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.AccountID,
+		&i.SiteID,
+		&i.SupervisorEmployeeID,
+		&i.Reason,
+		&i.AmountAmount,
+		&i.AmountCurrency,
+		&i.ExpenseCategory,
+		&i.Recipient,
+		&i.VerifiedBy,
+		&i.IssuedAmountAmount,
+		&i.IssuedAmountCurrency,
+		&i.BalanceBeforeAmount,
+		&i.BalanceBeforeCurrency,
+		&i.BalanceAfterAmount,
+		&i.BalanceAfterCurrency,
+		&i.IssuedAt,
+		&i.ReceiptAttachmentID,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.RowVersion,
+	)
+	return i, err
+}
+
+const setVoucherVerified = `-- name: SetVoucherVerified :one
+UPDATE petty_cash_vouchers SET verified_by = $2, updated_at = now(), row_version = row_version + 1 WHERE id = $1 AND status = 'pending_approval' RETURNING id, reference, account_id, site_id, supervisor_employee_id, reason, amount_amount, amount_currency, expense_category, recipient, verified_by, issued_amount_amount, issued_amount_currency, balance_before_amount, balance_before_currency, balance_after_amount, balance_after_currency, issued_at, receipt_attachment_id, status, created_at, updated_at, created_by, updated_by, row_version
+`
+
+type SetVoucherVerifiedParams struct {
+	ID         uuid.UUID  `json:"id"`
+	VerifiedBy *uuid.UUID `json:"verified_by"`
+}
+
+func (q *Queries) SetVoucherVerified(ctx context.Context, arg SetVoucherVerifiedParams) (PettyCashVoucher, error) {
+	row := q.db.QueryRow(ctx, setVoucherVerified, arg.ID, arg.VerifiedBy)
+	var i PettyCashVoucher
+	err := row.Scan(
+		&i.ID,
+		&i.Reference,
+		&i.AccountID,
+		&i.SiteID,
+		&i.SupervisorEmployeeID,
+		&i.Reason,
+		&i.AmountAmount,
+		&i.AmountCurrency,
+		&i.ExpenseCategory,
+		&i.Recipient,
+		&i.VerifiedBy,
+		&i.IssuedAmountAmount,
+		&i.IssuedAmountCurrency,
+		&i.BalanceBeforeAmount,
+		&i.BalanceBeforeCurrency,
+		&i.BalanceAfterAmount,
+		&i.BalanceAfterCurrency,
+		&i.IssuedAt,
+		&i.ReceiptAttachmentID,
 		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -2396,6 +3059,22 @@ func (q *Queries) TouchIntegration(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
+const unsettledCashUps = `-- name: UnsettledCashUps :one
+SELECT count(*) FROM cash_ups WHERE site_id = $1 AND business_date <= $2 AND status NOT IN ('approved')
+`
+
+type UnsettledCashUpsParams struct {
+	SiteID       uuid.UUID   `json:"site_id"`
+	BusinessDate pgtype.Date `json:"business_date"`
+}
+
+func (q *Queries) UnsettledCashUps(ctx context.Context, arg UnsettledCashUpsParams) (int64, error) {
+	row := q.db.QueryRow(ctx, unsettledCashUps, arg.SiteID, arg.BusinessDate)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const userHoldsRole = `-- name: UserHoldsRole :one
 SELECT EXISTS (
   SELECT 1 FROM role_assignments a
@@ -2497,4 +3176,20 @@ func (q *Queries) VoidSignatures(ctx context.Context, arg VoidSignaturesParams) 
 		return 0, err
 	}
 	return result.RowsAffected(), nil
+}
+
+const voucherSum = `-- name: VoucherSum :one
+SELECT COALESCE(sum(issued_amount_amount), 0)::numeric AS total, count(*)::int AS matched FROM petty_cash_vouchers WHERE id = ANY($1::uuid[]) AND status = 'receipted'
+`
+
+type VoucherSumRow struct {
+	Total   string `json:"total"`
+	Matched int32  `json:"matched"`
+}
+
+func (q *Queries) VoucherSum(ctx context.Context, dollar_1 []uuid.UUID) (VoucherSumRow, error) {
+	row := q.db.QueryRow(ctx, voucherSum, dollar_1)
+	var i VoucherSumRow
+	err := row.Scan(&i.Total, &i.Matched)
+	return i, err
 }

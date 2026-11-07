@@ -123,6 +123,8 @@ SLICES = [
     (3, "rules_approvals_evidence", "core", ["Rules & Readiness", "Approvals", "Signatures", "Evidence"], WORKFLOW_UP, "DROP TABLE IF EXISTS workflow_requirements;", ""),
     (4, "tasks_forms_escalations", "work", ["Tasks & Schedules", "Forms", "Escalations & Actions", "Notifications"], WORK_UP, "DROP TABLE IF EXISTS notification_preferences;", WORK_POST),
     (5, "integrations_reporting", "ops", ["Sync", "WhatsApp", "Integrations", "Reporting", "Retention"], "", "", ""),
+    (6, "cash", "cash", ["Cash"], "", "", "CREATE UNIQUE INDEX cit_bags_seal_unique ON cit_bags (seal_number);\n"),
+    (7, "procurement_budgets", "procurement", ["Procurement & AP", "Budgets"], "", "", ""),
 ]
 
 

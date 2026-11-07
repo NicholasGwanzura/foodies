@@ -137,6 +137,10 @@ INSERT INTO approval_policy_steps (approval_policy_id, sequence, role_id, mode)
 SELECT p.id, 1, r.id, 'any' FROM approval_policies p JOIN roles r ON r."key" = 'gm'
 WHERE NOT EXISTS (SELECT 1 FROM approval_policy_steps s WHERE s.approval_policy_id = p.id);
 
+-- Spec 8.1: the MD approves petty cash, after the Complex Manager verifies it.
+UPDATE approval_policy_steps st SET role_id = (SELECT id FROM roles WHERE "key" = 'md')
+FROM approval_policies p WHERE p.id = st.approval_policy_id AND p.workflow_key = 'petty_cash_vouchers';
+
 -- Escalation recipients and timers are unset rules (C-06.09). These are made up.
 INSERT INTO escalation_policies (domain, severity_level, label, status)
 SELECT d.domain, l.level, l.label, 'active'

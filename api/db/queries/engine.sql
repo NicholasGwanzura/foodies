@@ -359,3 +359,90 @@ UPDATE postings SET status = 'pending', attempts = COALESCE(attempts, 0) + 1, up
 -- name: CreatePostingRow :exec
 INSERT INTO postings (target_system, posting_type, subject_type, subject_id, site_id, payload, created_by, updated_by)
 VALUES (@target_system, @posting_type, @subject_type, @subject_id, @site_id, @payload, @created_by, @created_by);
+
+-- name: SetCashUpFigures :one
+UPDATE cash_ups SET fx_rate_id = @fx_rate_id, fx_rate_value = @fx_rate_value, variance_base_amount = @variance_base_amount, variance_base_currency = @variance_base_currency
+WHERE id = @id RETURNING *;
+
+-- name: LatestRateBetween :one
+SELECT * FROM fx_rates WHERE from_currency = $1 AND to_currency = $2 ORDER BY rate_date DESC, id DESC LIMIT 1;
+
+-- name: UnsettledCashUps :one
+SELECT count(*) FROM cash_ups WHERE site_id = $1 AND business_date <= $2 AND status NOT IN ('approved');
+
+-- name: OpenVariances :one
+SELECT count(*) FROM cash_variances WHERE site_id = $1 AND status = 'open';
+
+-- name: CountVariances :one
+SELECT count(*) FILTER (WHERE created_at >= date_trunc('week', now()))::int AS week,
+       count(*) FILTER (WHERE created_at >= date_trunc('month', now()))::int AS month
+FROM cash_variances WHERE cashier_employee_id = $1;
+
+-- name: CreateCashVarianceRow :one
+INSERT INTO cash_variances (reference, cash_up_id, site_id, cashier_employee_id, variance_type, amount_amount, amount_currency, occurrence_week, occurrence_month, explanation)
+VALUES (@reference, @cash_up_id, @site_id, @cashier_employee_id, @variance_type, @amount_amount, @amount_currency, @occurrence_week, @occurrence_month, @explanation)
+RETURNING *;
+
+-- name: SetCitTotal :one
+UPDATE cit_transits SET total_amount = $2, total_currency = $3 WHERE id = $1 RETURNING *;
+
+-- name: SetCitVault :one
+UPDATE cit_transits SET status = @status, vault_received_at = now(), vault_amount_amount = @vault_amount_amount, vault_amount_currency = @vault_amount_currency,
+  received_by = @received_by, updated_at = now(), updated_by = @received_by, row_version = row_version + 1
+WHERE id = @id AND status IN ('handed_over', 'in_transit') RETURNING *;
+
+-- name: SetCitIdentity :one
+UPDATE cit_transits SET status = 'identity_verified', identity_verified_person_id = @person, updated_at = now(), updated_by = @updated_by, row_version = row_version + 1
+WHERE id = @id AND status = 'sealed' RETURNING *;
+
+-- name: SetCitHandover :one
+UPDATE cit_transits SET status = 'handed_over', collected_at = now(), cit_receipt_number = @cit_receipt_number, armoured_vehicle_confirmed = @armoured_vehicle_confirmed,
+  updated_at = now(), updated_by = @updated_by, row_version = row_version + 1
+WHERE id = @id AND status = 'identity_verified' RETURNING *;
+
+-- name: SetVoucherSite :one
+UPDATE petty_cash_vouchers SET site_id = $2 WHERE id = $1 RETURNING *;
+
+-- name: SetVoucherVerified :one
+UPDATE petty_cash_vouchers SET verified_by = $2, updated_at = now(), row_version = row_version + 1 WHERE id = $1 AND status = 'pending_approval' RETURNING *;
+
+-- name: IssueVoucher :one
+UPDATE petty_cash_vouchers SET status = 'issued', issued_amount_amount = @issued, issued_amount_currency = @currency, balance_before_amount = @before_balance, balance_before_currency = @currency,
+  balance_after_amount = @after_balance, balance_after_currency = @currency, issued_at = now(), updated_at = now(), updated_by = @updated_by, row_version = row_version + 1
+WHERE id = @id AND status = 'approved' RETURNING *;
+
+-- name: SetAccountBalance :exec
+UPDATE petty_cash_accounts SET book_balance_amount = $2, book_balance_currency = $3, updated_at = now(), row_version = row_version + 1 WHERE id = $1;
+
+-- name: VoucherSum :one
+SELECT COALESCE(sum(issued_amount_amount), 0)::numeric AS total, count(*)::int AS matched FROM petty_cash_vouchers WHERE id = ANY($1::uuid[]) AND status = 'receipted';
+
+-- name: MarkVouchersReimbursed :exec
+UPDATE petty_cash_vouchers SET status = 'reimbursed', updated_at = now(), row_version = row_version + 1 WHERE id = ANY($1::uuid[]);
+
+-- name: SetReimbursementTotal :one
+UPDATE petty_cash_reimbursements SET total_amount = $2, total_currency = $3 WHERE id = $1 RETURNING *;
+
+-- name: SetVarianceFigures :exec
+UPDATE petty_cash_handovers SET variance_amount = $2, variance_currency = $3 WHERE id = $1;
+
+-- name: SetReconciliationFigures :exec
+UPDATE petty_cash_reconciliations SET expected_closing_amount = $2, expected_closing_currency = $3, variance_amount = $4, variance_currency = $3 WHERE id = $1;
+
+-- name: SetSurpriseVariance :exec
+UPDATE surprise_counts SET variance_amount = $2, variance_currency = $3 WHERE id = $1;
+
+-- name: SetCitReconVariance :exec
+UPDATE cit_reconciliations SET variance_amount = $2, variance_currency = $3 WHERE id = $1;
+
+-- name: SetExceptionDue :exec
+UPDATE float_exceptions SET reimbursement_due = $2 WHERE id = $1;
+
+-- name: SetDepositException :exec
+UPDATE bank_deposits SET status = 'exception', updated_at = now(), row_version = row_version + 1 WHERE id = $1;
+
+-- name: SetDepositProofTime :exec
+UPDATE bank_deposits SET proof_received_at = now() WHERE id = $1;
+
+-- name: RoleByKey :one
+SELECT id FROM roles WHERE "key" = $1;
