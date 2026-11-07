@@ -112,3 +112,42 @@ export const typeChecks = async () => {
   // @ts-expect-error not a field on the response
   void me.nope;
 };
+
+describe("api writes", () => {
+  afterEach(() => mock.restoreAll());
+
+  it("repeats array query values", async () => {
+    const fetchMock = stubFetch(json(200, {}));
+    await api.request("get", "/tasks", { query: { status: ["open", "done"] } });
+    assert.equal(
+      String(fetchMock.mock.calls[0].arguments[0]),
+      "http://localhost:8080/api/v1/tasks?status=open&status=done",
+    );
+  });
+
+  it("adds an Idempotency-Key to record writes, but not to sign-in", async () => {
+    const fetchMock = mock.method(globalThis, "fetch", async () => json(200, {}));
+    await api.request("post", "/complexes", { body: {} });
+    await api.request("post", "/auth/login", { body: {} });
+    const header = (i: number) =>
+      new Headers(
+        (fetchMock.mock.calls[i].arguments[1] as RequestInit).headers,
+      ).get("Idempotency-Key");
+    assert.ok(header(0));
+    assert.equal(header(1), null);
+  });
+
+  it("keeps a caller's Idempotency-Key", async () => {
+    const fetchMock = stubFetch(json(200, {}));
+    await api.request("post", "/complexes", {
+      body: {},
+      headers: { "Idempotency-Key": "form-1" },
+    });
+    assert.equal(
+      new Headers(
+        (fetchMock.mock.calls[0].arguments[1] as RequestInit).headers,
+      ).get("Idempotency-Key"),
+      "form-1",
+    );
+  });
+});

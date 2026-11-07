@@ -3,3 +3,433 @@
 //   sqlc v1.31.1
 
 package db
+
+import (
+	"encoding/json"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
+)
+
+type AuditEvent struct {
+	ID          uuid.UUID       `json:"id"`
+	OccurredAt  *time.Time      `json:"occurred_at"`
+	ActorUserID *uuid.UUID      `json:"actor_user_id"`
+	ActorRole   *string         `json:"actor_role"`
+	Action      *string         `json:"action"`
+	SubjectType *string         `json:"subject_type"`
+	SubjectID   *uuid.UUID      `json:"subject_id"`
+	SiteID      *uuid.UUID      `json:"site_id"`
+	Channel     *string         `json:"channel"`
+	DeviceID    *uuid.UUID      `json:"device_id"`
+	Ip          *string         `json:"ip"`
+	Before      json.RawMessage `json:"before"`
+	After       json.RawMessage `json:"after"`
+	PrevHash    *string         `json:"prev_hash"`
+	Hash        *string         `json:"hash"`
+	CreatedAt   time.Time       `json:"created_at"`
+	UpdatedAt   time.Time       `json:"updated_at"`
+	CreatedBy   *uuid.UUID      `json:"created_by"`
+	UpdatedBy   *uuid.UUID      `json:"updated_by"`
+	RowVersion  int32           `json:"row_version"`
+	Seq         *int64          `json:"seq"`
+}
+
+type AuthSession struct {
+	ID         uuid.UUID  `json:"id"`
+	UserID     uuid.UUID  `json:"user_id"`
+	Channel    string     `json:"channel"`
+	DeviceID   *uuid.UUID `json:"device_id"`
+	Ip         *string    `json:"ip"`
+	CreatedAt  time.Time  `json:"created_at"`
+	LastSeenAt time.Time  `json:"last_seen_at"`
+	RevokedAt  *time.Time `json:"revoked_at"`
+}
+
+type Complex struct {
+	ID                uuid.UUID  `json:"id"`
+	Code              string     `json:"code"`
+	Name              string     `json:"name"`
+	ManagerEmployeeID *uuid.UUID `json:"manager_employee_id"`
+	Active            bool       `json:"active"`
+	CreatedAt         time.Time  `json:"created_at"`
+	UpdatedAt         time.Time  `json:"updated_at"`
+	CreatedBy         *uuid.UUID `json:"created_by"`
+	UpdatedBy         *uuid.UUID `json:"updated_by"`
+	RowVersion        int32      `json:"row_version"`
+}
+
+type CostCentre struct {
+	ID           uuid.UUID  `json:"id"`
+	Code         string     `json:"code"`
+	Name         string     `json:"name"`
+	DepartmentID *uuid.UUID `json:"department_id"`
+	SiteID       *uuid.UUID `json:"site_id"`
+	SapCode      *string    `json:"sap_code"`
+	Active       bool       `json:"active"`
+	CreatedAt    time.Time  `json:"created_at"`
+	UpdatedAt    time.Time  `json:"updated_at"`
+	CreatedBy    *uuid.UUID `json:"created_by"`
+	UpdatedBy    *uuid.UUID `json:"updated_by"`
+	RowVersion   int32      `json:"row_version"`
+}
+
+type Currency struct {
+	ID            uuid.UUID  `json:"id"`
+	Code          string     `json:"code"`
+	Name          string     `json:"name"`
+	Symbol        *string    `json:"symbol"`
+	DecimalPlaces *int32     `json:"decimal_places"`
+	IsBase        bool       `json:"is_base"`
+	Active        bool       `json:"active"`
+	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at"`
+	CreatedBy     *uuid.UUID `json:"created_by"`
+	UpdatedBy     *uuid.UUID `json:"updated_by"`
+	RowVersion    int32      `json:"row_version"`
+}
+
+type Delegation struct {
+	ID           uuid.UUID  `json:"id"`
+	FromUserID   uuid.UUID  `json:"from_user_id"`
+	ToUserID     uuid.UUID  `json:"to_user_id"`
+	RoleID       *uuid.UUID `json:"role_id"`
+	WorkflowKeys []string   `json:"workflow_keys"`
+	ValidFrom    time.Time  `json:"valid_from"`
+	ValidTo      time.Time  `json:"valid_to"`
+	Reason       string     `json:"reason"`
+	Status       string     `json:"status"`
+	CreatedAt    time.Time  `json:"created_at"`
+	UpdatedAt    time.Time  `json:"updated_at"`
+	CreatedBy    *uuid.UUID `json:"created_by"`
+	UpdatedBy    *uuid.UUID `json:"updated_by"`
+	RowVersion   int32      `json:"row_version"`
+}
+
+type Department struct {
+	ID             uuid.UUID  `json:"id"`
+	Code           string     `json:"code"`
+	Name           string     `json:"name"`
+	ParentID       *uuid.UUID `json:"parent_id"`
+	HeadEmployeeID *uuid.UUID `json:"head_employee_id"`
+	Active         bool       `json:"active"`
+	CreatedAt      time.Time  `json:"created_at"`
+	UpdatedAt      time.Time  `json:"updated_at"`
+	CreatedBy      *uuid.UUID `json:"created_by"`
+	UpdatedBy      *uuid.UUID `json:"updated_by"`
+	RowVersion     int32      `json:"row_version"`
+}
+
+type Device struct {
+	ID         uuid.UUID  `json:"id"`
+	Label      string     `json:"label"`
+	SiteID     *uuid.UUID `json:"site_id"`
+	Platform   *string    `json:"platform"`
+	Shared     bool       `json:"shared"`
+	LastSeenAt *time.Time `json:"last_seen_at"`
+	Status     string     `json:"status"`
+	CreatedAt  time.Time  `json:"created_at"`
+	UpdatedAt  time.Time  `json:"updated_at"`
+	CreatedBy  *uuid.UUID `json:"created_by"`
+	UpdatedBy  *uuid.UUID `json:"updated_by"`
+	RowVersion int32      `json:"row_version"`
+}
+
+type EmergencyContact struct {
+	ID             uuid.UUID   `json:"id"`
+	EmployeeID     uuid.UUID   `json:"employee_id"`
+	ContactName    string      `json:"contact_name"`
+	Relationship   string      `json:"relationship"`
+	PhoneE164      string      `json:"phone_e164"`
+	AlternatePhone *string     `json:"alternate_phone"`
+	LastVerifiedOn pgtype.Date `json:"last_verified_on"`
+	CreatedAt      time.Time   `json:"created_at"`
+	UpdatedAt      time.Time   `json:"updated_at"`
+	CreatedBy      *uuid.UUID  `json:"created_by"`
+	UpdatedBy      *uuid.UUID  `json:"updated_by"`
+	RowVersion     int32       `json:"row_version"`
+}
+
+type Employee struct {
+	ID                uuid.UUID   `json:"id"`
+	Reference         string      `json:"reference"`
+	EmployeeNumber    string      `json:"employee_number"`
+	FirstName         string      `json:"first_name"`
+	LastName          string      `json:"last_name"`
+	JobTitle          string      `json:"job_title"`
+	DepartmentID      uuid.UUID   `json:"department_id"`
+	SiteID            uuid.UUID   `json:"site_id"`
+	ManagerEmployeeID *uuid.UUID  `json:"manager_employee_id"`
+	EmploymentStatus  *string     `json:"employment_status"`
+	StartDate         pgtype.Date `json:"start_date"`
+	ContractType      *string     `json:"contract_type"`
+	ProbationEnd      pgtype.Date `json:"probation_end"`
+	ContractEnd       pgtype.Date `json:"contract_end"`
+	PhoneE164         *string     `json:"phone_e164"`
+	Email             *string     `json:"email"`
+	BelinaRef         *string     `json:"belina_ref"`
+	CreatedAt         time.Time   `json:"created_at"`
+	UpdatedAt         time.Time   `json:"updated_at"`
+	CreatedBy         *uuid.UUID  `json:"created_by"`
+	UpdatedBy         *uuid.UUID  `json:"updated_by"`
+	RowVersion        int32       `json:"row_version"`
+}
+
+type EmployeeDocument struct {
+	ID           uuid.UUID   `json:"id"`
+	EmployeeID   uuid.UUID   `json:"employee_id"`
+	DocumentType string      `json:"document_type"`
+	IssueDate    pgtype.Date `json:"issue_date"`
+	ExpiryDate   pgtype.Date `json:"expiry_date"`
+	AttachmentID uuid.UUID   `json:"attachment_id"`
+	Visibility   *string     `json:"visibility"`
+	CreatedAt    time.Time   `json:"created_at"`
+	UpdatedAt    time.Time   `json:"updated_at"`
+	CreatedBy    *uuid.UUID  `json:"created_by"`
+	UpdatedBy    *uuid.UUID  `json:"updated_by"`
+	RowVersion   int32       `json:"row_version"`
+}
+
+type EmployeeStatusChange struct {
+	ID                     uuid.UUID   `json:"id"`
+	EmployeeID             uuid.UUID   `json:"employee_id"`
+	Status                 string      `json:"status"`
+	EffectiveDate          pgtype.Date `json:"effective_date"`
+	Reason                 string      `json:"reason"`
+	SupportingAttachmentID *uuid.UUID  `json:"supporting_attachment_id"`
+	CreatedAt              time.Time   `json:"created_at"`
+	UpdatedAt              time.Time   `json:"updated_at"`
+	CreatedBy              *uuid.UUID  `json:"created_by"`
+	UpdatedBy              *uuid.UUID  `json:"updated_by"`
+	RowVersion             int32       `json:"row_version"`
+}
+
+type EmployeeTransfer struct {
+	ID                   uuid.UUID   `json:"id"`
+	EmployeeID           uuid.UUID   `json:"employee_id"`
+	FromSiteID           *uuid.UUID  `json:"from_site_id"`
+	ToSiteID             *uuid.UUID  `json:"to_site_id"`
+	FromDepartmentID     *uuid.UUID  `json:"from_department_id"`
+	ToDepartmentID       *uuid.UUID  `json:"to_department_id"`
+	NewJobTitle          *string     `json:"new_job_title"`
+	NewManagerEmployeeID *uuid.UUID  `json:"new_manager_employee_id"`
+	EffectiveDate        pgtype.Date `json:"effective_date"`
+	Reason               string      `json:"reason"`
+	Status               string      `json:"status"`
+	CreatedAt            time.Time   `json:"created_at"`
+	UpdatedAt            time.Time   `json:"updated_at"`
+	CreatedBy            *uuid.UUID  `json:"created_by"`
+	UpdatedBy            *uuid.UUID  `json:"updated_by"`
+	RowVersion           int32       `json:"row_version"`
+}
+
+type FxRate struct {
+	ID           uuid.UUID   `json:"id"`
+	FromCurrency string      `json:"from_currency"`
+	ToCurrency   string      `json:"to_currency"`
+	Rate         string      `json:"rate"`
+	RateDate     pgtype.Date `json:"rate_date"`
+	Source       string      `json:"source"`
+	ChangeReason *string     `json:"change_reason"`
+	CreatedAt    time.Time   `json:"created_at"`
+	UpdatedAt    time.Time   `json:"updated_at"`
+	CreatedBy    *uuid.UUID  `json:"created_by"`
+	UpdatedBy    *uuid.UUID  `json:"updated_by"`
+	RowVersion   int32       `json:"row_version"`
+}
+
+type IdempotencyKey struct {
+	ActorID     uuid.UUID       `json:"actor_id"`
+	Key         string          `json:"key"`
+	RequestHash string          `json:"request_hash"`
+	Status      *int32          `json:"status"`
+	Headers     json.RawMessage `json:"headers"`
+	Body        []byte          `json:"body"`
+	CreatedAt   time.Time       `json:"created_at"`
+}
+
+type MfaChallenge struct {
+	ID             uuid.UUID  `json:"id"`
+	UserID         uuid.UUID  `json:"user_id"`
+	DeviceID       *uuid.UUID `json:"device_id"`
+	Channel        string     `json:"channel"`
+	ExpiresAt      time.Time  `json:"expires_at"`
+	FailedAttempts int32      `json:"failed_attempts"`
+	ConsumedAt     *time.Time `json:"consumed_at"`
+}
+
+type ProductionLine struct {
+	ID         uuid.UUID  `json:"id"`
+	SiteID     uuid.UUID  `json:"site_id"`
+	Name       string     `json:"name"`
+	Type       string     `json:"type"`
+	Active     bool       `json:"active"`
+	CreatedAt  time.Time  `json:"created_at"`
+	UpdatedAt  time.Time  `json:"updated_at"`
+	CreatedBy  *uuid.UUID `json:"created_by"`
+	UpdatedBy  *uuid.UUID `json:"updated_by"`
+	RowVersion int32      `json:"row_version"`
+}
+
+type PublicHoliday struct {
+	ID              uuid.UUID   `json:"id"`
+	HolidayDate     pgtype.Date `json:"holiday_date"`
+	Name            string      `json:"name"`
+	AppliesToSiteID *uuid.UUID  `json:"applies_to_site_id"`
+	CreatedAt       time.Time   `json:"created_at"`
+	UpdatedAt       time.Time   `json:"updated_at"`
+	CreatedBy       *uuid.UUID  `json:"created_by"`
+	UpdatedBy       *uuid.UUID  `json:"updated_by"`
+	RowVersion      int32       `json:"row_version"`
+}
+
+type ReferenceSequence struct {
+	Prefix    string `json:"prefix"`
+	SiteCode  string `json:"site_code"`
+	Year      int32  `json:"year"`
+	LastValue int64  `json:"last_value"`
+}
+
+type RefreshToken struct {
+	ID        uuid.UUID  `json:"id"`
+	SessionID uuid.UUID  `json:"session_id"`
+	TokenHash string     `json:"token_hash"`
+	ExpiresAt time.Time  `json:"expires_at"`
+	UsedAt    *time.Time `json:"used_at"`
+}
+
+type Role struct {
+	ID             uuid.UUID  `json:"id"`
+	Key            string     `json:"key"`
+	Name           string     `json:"name"`
+	Description    *string    `json:"description"`
+	PermissionKeys []string   `json:"permission_keys"`
+	RequiresMfa    bool       `json:"requires_mfa"`
+	System         bool       `json:"system"`
+	CreatedAt      time.Time  `json:"created_at"`
+	UpdatedAt      time.Time  `json:"updated_at"`
+	CreatedBy      *uuid.UUID `json:"created_by"`
+	UpdatedBy      *uuid.UUID `json:"updated_by"`
+	RowVersion     int32      `json:"row_version"`
+}
+
+type RoleAssignment struct {
+	ID            uuid.UUID   `json:"id"`
+	UserID        uuid.UUID   `json:"user_id"`
+	RoleID        uuid.UUID   `json:"role_id"`
+	ScopeType     string      `json:"scope_type"`
+	ScopeID       *uuid.UUID  `json:"scope_id"`
+	EffectiveFrom pgtype.Date `json:"effective_from"`
+	EffectiveTo   pgtype.Date `json:"effective_to"`
+	CreatedAt     time.Time   `json:"created_at"`
+	UpdatedAt     time.Time   `json:"updated_at"`
+	CreatedBy     *uuid.UUID  `json:"created_by"`
+	UpdatedBy     *uuid.UUID  `json:"updated_by"`
+	RowVersion    int32       `json:"row_version"`
+}
+
+type Safe struct {
+	ID         uuid.UUID  `json:"id"`
+	SiteID     uuid.UUID  `json:"site_id"`
+	Code       string     `json:"code"`
+	Location   *string    `json:"location"`
+	LockStatus *string    `json:"lock_status"`
+	Active     bool       `json:"active"`
+	CreatedAt  time.Time  `json:"created_at"`
+	UpdatedAt  time.Time  `json:"updated_at"`
+	CreatedBy  *uuid.UUID `json:"created_by"`
+	UpdatedBy  *uuid.UUID `json:"updated_by"`
+	RowVersion int32      `json:"row_version"`
+}
+
+type Site struct {
+	ID                 uuid.UUID       `json:"id"`
+	Code               string          `json:"code"`
+	Name               string          `json:"name"`
+	Type               string          `json:"type"`
+	ComplexID          *uuid.UUID      `json:"complex_id"`
+	Brand              *string         `json:"brand"`
+	TradingPattern     *string         `json:"trading_pattern"`
+	OpensAt            *string         `json:"opens_at"`
+	ClosesAt           *string         `json:"closes_at"`
+	Stockholding       bool            `json:"stockholding"`
+	Address            *string         `json:"address"`
+	EscalationContacts json.RawMessage `json:"escalation_contacts"`
+	Active             bool            `json:"active"`
+	CreatedAt          time.Time       `json:"created_at"`
+	UpdatedAt          time.Time       `json:"updated_at"`
+	CreatedBy          *uuid.UUID      `json:"created_by"`
+	UpdatedBy          *uuid.UUID      `json:"updated_by"`
+	RowVersion         int32           `json:"row_version"`
+}
+
+type SodRule struct {
+	ID          uuid.UUID  `json:"id"`
+	Key         string     `json:"key"`
+	Name        string     `json:"name"`
+	ActionA     string     `json:"action_a"`
+	ActionB     string     `json:"action_b"`
+	Scope       string     `json:"scope"`
+	Enforcement string     `json:"enforcement"`
+	Active      bool       `json:"active"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	CreatedBy   *uuid.UUID `json:"created_by"`
+	UpdatedBy   *uuid.UUID `json:"updated_by"`
+	RowVersion  int32      `json:"row_version"`
+}
+
+type StorageLocation struct {
+	ID                  uuid.UUID  `json:"id"`
+	SiteID              uuid.UUID  `json:"site_id"`
+	Code                string     `json:"code"`
+	Zone                string     `json:"zone"`
+	CustodianEmployeeID *uuid.UUID `json:"custodian_employee_id"`
+	Active              bool       `json:"active"`
+	CreatedAt           time.Time  `json:"created_at"`
+	UpdatedAt           time.Time  `json:"updated_at"`
+	CreatedBy           *uuid.UUID `json:"created_by"`
+	UpdatedBy           *uuid.UUID `json:"updated_by"`
+	RowVersion          int32      `json:"row_version"`
+}
+
+type Till struct {
+	ID             uuid.UUID  `json:"id"`
+	SiteID         uuid.UUID  `json:"site_id"`
+	Code           string     `json:"code"`
+	PosTerminalRef *string    `json:"pos_terminal_ref"`
+	Active         bool       `json:"active"`
+	CreatedAt      time.Time  `json:"created_at"`
+	UpdatedAt      time.Time  `json:"updated_at"`
+	CreatedBy      *uuid.UUID `json:"created_by"`
+	UpdatedBy      *uuid.UUID `json:"updated_by"`
+	RowVersion     int32      `json:"row_version"`
+}
+
+type User struct {
+	ID               uuid.UUID  `json:"id"`
+	EmployeeID       uuid.UUID  `json:"employee_id"`
+	Channels         string     `json:"channels"`
+	MfaRequired      bool       `json:"mfa_required"`
+	LastSignInAt     *time.Time `json:"last_sign_in_at"`
+	CredentialStatus *string    `json:"credential_status"`
+	Status           string     `json:"status"`
+	CreatedAt        time.Time  `json:"created_at"`
+	UpdatedAt        time.Time  `json:"updated_at"`
+	CreatedBy        *uuid.UUID `json:"created_by"`
+	UpdatedBy        *uuid.UUID `json:"updated_by"`
+	RowVersion       int32      `json:"row_version"`
+}
+
+type UserCredential struct {
+	UserID          uuid.UUID  `json:"user_id"`
+	PasswordHash    *string    `json:"password_hash"`
+	PinHash         *string    `json:"pin_hash"`
+	TotpSecret      *string    `json:"totp_secret"`
+	TotpConfirmedAt *time.Time `json:"totp_confirmed_at"`
+	FailedLogins    int32      `json:"failed_logins"`
+	FailedPins      int32      `json:"failed_pins"`
+	PinLockedAt     *time.Time `json:"pin_locked_at"`
+	UpdatedAt       time.Time  `json:"updated_at"`
+}

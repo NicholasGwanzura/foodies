@@ -1,11 +1,16 @@
 # `make help` lists the targets. Run from the repository root.
 .DEFAULT_GOAL := help
 
+# .env at the repository root is the one place configuration lives. Everything
+# below sees it, and so does anything started from here. CI has no .env, so the
+# defaults in .env.example apply there.
+-include .env.example
+-include .env
+export
+
 API_TOOL := go tool -modfile=tools/go.mod
 WEB_DEPS := web/node_modules/.modules.yaml
 
-# Matches compose.yaml. Override for any other database.
-DATABASE_URL ?= postgres://foodies:foodies@localhost:55440/foodies?sslmode=disable
 GOOSE := GOOSE_DRIVER=postgres GOOSE_DBSTRING='$(DATABASE_URL)' GOOSE_MIGRATION_DIR=db/migrations $(API_TOOL) goose
 
 # Everything `make gen` writes. CI fails if a commit leaves these stale.
@@ -26,6 +31,7 @@ gen: gen-api gen-sql gen-web ## Regenerate all code from the spec and SQL
 
 gen-api:
 	cd api && $(API_TOOL) oapi-codegen -config codegen/oapi-codegen.yaml openapi.yaml
+	cd api && go run -modfile=tools/go.mod ./codegen/opsgen
 
 gen-sql:
 	cd api && $(API_TOOL) sqlc generate
@@ -58,7 +64,7 @@ check-web: $(WEB_DEPS)
 
 # Database --------------------------------------------------------------------
 
-.PHONY: db-up db-down migrate-up migrate-down migrate-status migrate-new migrate-check
+.PHONY: db-up db-down migrate-up migrate-down migrate-status migrate-new migrate-check seed seed-demo
 db-up: ## Start the local Postgres
 	docker compose up --detach --wait
 
@@ -83,11 +89,17 @@ migrate-check: ## Prove every migration applies and rolls back
 	cd api && $(GOOSE) reset
 	cd api && $(GOOSE) up
 
+seed: ## Load reference data
+	cd api && go run ./cmd/seed
+
+seed-demo: ## Load reference data and the made-up demo organisation
+	cd api && go run ./cmd/seed -demo
+
 # Running ---------------------------------------------------------------------
 
 .PHONY: run-api run-web
 run-api: ## Run the API against the local Postgres
-	cd api && DATABASE_URL='$(DATABASE_URL)' go run ./cmd/server
+	cd api && go run ./cmd/server
 
 run-web: $(WEB_DEPS) ## Run the web app in dev mode
 	cd web && pnpm dev

@@ -1,0 +1,51 @@
+-- Reference data every environment needs. Safe to run repeatedly.
+
+INSERT INTO currencies (code, name, symbol, decimal_places, is_base, active) VALUES
+  ('USD', 'US Dollar', 'US$', 2, true, true),
+  ('ZWG', 'Zimbabwe Gold', 'ZiG', 2, false, true)
+ON CONFLICT (code) DO NOTHING;
+
+-- Seeded from the roles named in the checklist. The merge of synonyms is an
+-- assumption to confirm (spec N-06), so permissions stay editable by admins.
+INSERT INTO roles ("key", name, permission_keys, requires_mfa, system) VALUES
+  ('system_admin', 'System Administrator', '{"org.*","iam.*","rules.*","approvals.approval_policy.*","whatsapp.*","integrations.*","retention.*","audit.*","sync.*","reporting.*","forms.*","tasks.schedule.*","exceptions.escalation_policy.*"}', true, true),
+  ('md', 'Managing Director', '{"*.read","approvals.*","signatures.*","exceptions.*","reporting.*","evidence.*","tasks.task.*","notifications.*"}', false, true),
+  ('gm', 'General Manager', '{"*.read","approvals.*","signatures.*","exceptions.*","reporting.*","evidence.*","tasks.task.*","notifications.*","rules.rule_version.*","rules.rule_definition.*"}', false, true),
+  ('chairman', 'Chairman', '{"reporting.*","exceptions.escalation.read","exceptions.escalation.acknowledge","approvals.*","notifications.*"}', false, true),
+  ('finance_manager', 'Finance Manager', '{"cash.*","procurement.*","budgets.*","payments.*","compliance.*","mgmt_reports.*","approvals.*","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","exceptions.action.*","exceptions.escalation.*","rules.*","integrations.posting.*","reporting.*","notifications.*","org.*.read","org.currency.*","org.fx_rate.*","org.get_effective_fx_rate","iam.employee.read"}', true, true),
+  ('accountant', 'Accounts Clerk', '{"cash.*.read","cash.bank_deposit.*","cash.cit_reconciliation.*","procurement.*.read","procurement.supplier_invoice.*","budgets.*.read","approvals.*.read","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","reporting.*","notifications.*","org.*.read","org.get_effective_fx_rate"}', true, true),
+  ('procurement_officer', 'Procurement Officer', '{"procurement.*","budgets.*.read","approvals.*.read","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","reporting.*","notifications.*","org.*.read"}', true, true),
+  ('operations_manager', 'Operations Manager', '{"*.read","approvals.*","signatures.*","exceptions.*","evidence.*","tasks.*","forms.form_submission.*","reporting.*","notifications.*","store_ops.*"}', false, true),
+  ('complex_manager', 'Complex Manager', '{"cash.*","stock.*.read","approvals.*","signatures.*","exceptions.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","forms.form_template_version.read","reporting.*","notifications.*","customer.*","incidents.*","maintenance.*","payments.*","keys.*","store_ops.*","lost_property.*","visitors.*","org.*.read","org.get_effective_fx_rate","iam.employee.read","hr.*.read"}', false, true),
+  ('branch_manager', 'Branch Manager', '{"cash.*","stock.*.read","approvals.*","signatures.*","exceptions.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","forms.form_template_version.read","reporting.*","notifications.*","customer.*","incidents.*","maintenance.*","payments.*","keys.*","store_ops.*","lost_property.*","visitors.*","org.*.read","org.get_effective_fx_rate","iam.employee.read"}', false, true),
+  ('shift_supervisor', 'Shift Supervisor', '{"cash.till_flush.*","cash.cash_up.*","cash.cash_variance.*","cash.float_issue.*","cash.cit_transit.*","cash.bank_deposit.*","approvals.approval_request.read","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","forms.form_template_version.read","exceptions.action.*","exceptions.escalation.read","exceptions.escalation.acknowledge","reporting.get_dashboard","reporting.search","notifications.*","customer.*","incidents.*","maintenance.fault.*","payments.*","store_ops.*","lost_property.*","visitors.*","org.*.read","org.get_effective_fx_rate","iam.employee.read"}', false, true),
+  ('cashier', 'Cashier', '{"cash.till_flush.read","cash.till_flush.write","cash.till_flush.submit","cash.cash_up.read","cash.cash_up.write","cash.cash_up.submit","signatures.*","evidence.*","tasks.task.read","tasks.task.claim","tasks.task.complete","forms.form_submission.read","forms.form_submission.write","forms.form_submission.submit","forms.form_template.read","forms.form_template_version.read","notifications.*","customer.*.write","customer.*.read","org.*.read","org.get_effective_fx_rate"}', false, true),
+  ('storekeeper', 'Storekeeper', '{"stock.*","procurement.goods_receipt.*","procurement.purchase_order.read","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","forms.form_template_version.read","notifications.*","org.*.read"}', false, true),
+  ('production_lead', 'Production Lead', '{"production.*","stock.*.read","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","forms.form_template_version.read","notifications.*","org.*.read","products.*.read"}', false, true),
+  ('driver', 'Driver', '{"stock.dispatch_note.read","stock.dispatch_note.receive","signatures.*","evidence.*","tasks.task.*","forms.form_submission.*","forms.form_template.read","notifications.*","org.*.read"}', false, true),
+  ('security_officer', 'Security Officer', '{"security.*","visitors.*","keys.*","signatures.*","evidence.*","tasks.task.*","forms.form_submission.*","forms.form_template.read","notifications.*","incidents.*","cctv.*.read","org.*.read"}', false, true),
+  ('security_manager', 'Security Manager', '{"security.*","visitors.*","keys.*","cctv.*","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","notifications.*","incidents.*","exceptions.*","reporting.*","org.*.read","iam.employee.read"}', false, true),
+  ('qa', 'Quality Assurance', '{"quality.*","products.*","forms.*","signatures.*","evidence.*","tasks.*","exceptions.*","incidents.*","reporting.*","notifications.*","approvals.*","org.*.read","stock.*.read","production.*.read"}', false, true),
+  ('sheq', 'SHEQ Officer', '{"incidents.*","exceptions.*","forms.*","signatures.*","evidence.*","tasks.*","reporting.*","notifications.*","compliance.*","org.*.read"}', false, true),
+  ('maintenance', 'Maintenance Officer', '{"maintenance.*","assets.*.read","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","notifications.*","org.*.read","reporting.get_dashboard"}', false, true),
+  ('hr_officer', 'HR Officer', '{"hr.*","iam.employee.*","iam.employee_status_change.*","iam.employee_transfer.*","iam.employee_document.*","iam.emergency_contact.*","iam.user.read","whatsapp.whatsapp_identity.*","approvals.*","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","reporting.*","notifications.*","org.*.read"}', true, true),
+  ('training_manager', 'Training Manager', '{"training.*","signatures.*","evidence.*","tasks.*","forms.form_submission.*","notifications.*","reporting.*","org.*.read","iam.employee.read","documents.*.read"}', false, true),
+  ('document_controller', 'Document Controller', '{"documents.*","signatures.*","evidence.*","tasks.*","notifications.*","approvals.*","org.*.read"}', false, true),
+  ('asset_officer', 'Asset Officer', '{"assets.*","signatures.*","evidence.*","tasks.*","forms.form_submission.*","forms.form_template.read","approvals.*","notifications.*","reporting.*","org.*.read"}', true, true),
+  ('internal_audit', 'Internal Audit', '{"*.read","audit.*","reporting.*","evidence.comment.write","notifications.*"}', false, true),
+  ('employee', 'Employee', '{"notifications.*","tasks.task.read","tasks.task.complete","tasks.task.claim","documents.document.read","training.*.read","hr.leave_request.read","hr.leave_request.write","hr.leave_request.submit","org.site.read"}', false, true)
+ON CONFLICT ("key") DO UPDATE SET name = EXCLUDED.name, permission_keys = EXCLUDED.permission_keys,
+  requires_mfa = EXCLUDED.requires_mfa, system = true;
+
+INSERT INTO sod_rules ("key", name, action_a, action_b, scope, enforcement, active) VALUES
+  ('cash_up_self_approval', 'A cashier cannot approve their own cash-up', 'cash.cash_up.submit', 'cash.cash_up.approve', 'same_record', 'block', true),
+  ('variance_self_approval', 'A cashier cannot approve their own payment correction', 'payments.payment_incident.write', 'payments.payment_incident.approve', 'same_record', 'block', true),
+  ('own_cash_count', 'No one approves their own cash count', 'cash.till_flush.submit', 'cash.till_flush.review', 'same_record', 'block', true),
+  ('requester_approver', 'Requester and approver are separate', 'procurement.purchase_requisition.submit', 'procurement.purchase_requisition.approve', 'same_record', 'block', true),
+  ('buyer_receiver', 'Buyer and receiver are separate', 'procurement.purchase_order.write', 'procurement.goods_receipt.write', 'same_record', 'block', true),
+  ('counter_adjuster', 'Counter and adjuster are separate', 'stock.stocktake.submit', 'stock.stock_adjustment.approve', 'same_record', 'block', true),
+  ('supplier_change_verifier', 'A supplier change is verified by someone else', 'procurement.supplier_amendment.write', 'procurement.supplier_amendment.verify', 'same_record', 'block', true),
+  ('payment_preparer_approver', 'Payment preparer and approver are separate', 'procurement.payment_requisition.submit', 'procurement.payment_requisition.approve', 'same_record', 'block', true),
+  ('disposal_two_people', 'A disposal needs at least two people', 'stock.disposal.write', 'stock.disposal.witness', 'same_record', 'block', true),
+  ('recall_reviewer', 'Recall reconciliation has an independent reviewer', 'quality.recall.write', 'quality.recall.review', 'same_record', 'block', true)
+ON CONFLICT ("key") DO NOTHING;

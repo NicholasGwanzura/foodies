@@ -6,10 +6,153 @@ package db
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type Querier interface {
+	ClaimIdempotencyKey(ctx context.Context, arg ClaimIdempotencyKeyParams) (bool, error)
+	ClearMfa(ctx context.Context, userID uuid.UUID) error
+	ClearPin(ctx context.Context, userID uuid.UUID) error
+	ConfirmTotp(ctx context.Context, userID uuid.UUID) error
+	ConsumeMfaChallenge(ctx context.Context, id uuid.UUID) (int64, error)
+	CreateAuthSession(ctx context.Context, arg CreateAuthSessionParams) (AuthSession, error)
+	CreateComplex(ctx context.Context, arg CreateComplexParams) (Complex, error)
+	CreateCostCentre(ctx context.Context, arg CreateCostCentreParams) (CostCentre, error)
+	CreateCurrency(ctx context.Context, arg CreateCurrencyParams) (Currency, error)
+	CreateDelegation(ctx context.Context, arg CreateDelegationParams) (Delegation, error)
+	CreateDepartment(ctx context.Context, arg CreateDepartmentParams) (Department, error)
+	CreateDevice(ctx context.Context, arg CreateDeviceParams) (Device, error)
+	CreateEmergencyContact(ctx context.Context, arg CreateEmergencyContactParams) (EmergencyContact, error)
+	CreateEmployee(ctx context.Context, arg CreateEmployeeParams) (Employee, error)
+	CreateEmployeeDocument(ctx context.Context, arg CreateEmployeeDocumentParams) (EmployeeDocument, error)
+	CreateEmployeeStatusChange(ctx context.Context, arg CreateEmployeeStatusChangeParams) (EmployeeStatusChange, error)
+	CreateEmployeeTransfer(ctx context.Context, arg CreateEmployeeTransferParams) (EmployeeTransfer, error)
+	CreateFxRate(ctx context.Context, arg CreateFxRateParams) (FxRate, error)
+	CreateMfaChallenge(ctx context.Context, arg CreateMfaChallengeParams) (uuid.UUID, error)
+	CreateProductionLine(ctx context.Context, arg CreateProductionLineParams) (ProductionLine, error)
+	CreatePublicHoliday(ctx context.Context, arg CreatePublicHolidayParams) (PublicHoliday, error)
+	CreateRefreshToken(ctx context.Context, arg CreateRefreshTokenParams) error
+	CreateRole(ctx context.Context, arg CreateRoleParams) (Role, error)
+	CreateRoleAssignment(ctx context.Context, arg CreateRoleAssignmentParams) (RoleAssignment, error)
+	CreateSafe(ctx context.Context, arg CreateSafeParams) (Safe, error)
+	CreateSite(ctx context.Context, arg CreateSiteParams) (Site, error)
+	CreateSodRule(ctx context.Context, arg CreateSodRuleParams) (SodRule, error)
+	CreateStorageLocation(ctx context.Context, arg CreateStorageLocationParams) (StorageLocation, error)
+	CreateTill(ctx context.Context, arg CreateTillParams) (Till, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteEmergencyContact(ctx context.Context, id uuid.UUID) error
+	DeleteEmployeeDocument(ctx context.Context, id uuid.UUID) error
+	DeletePublicHoliday(ctx context.Context, id uuid.UUID) error
+	DeleteRole(ctx context.Context, id uuid.UUID) error
+	DeleteRoleAssignment(ctx context.Context, id uuid.UUID) error
+	EnsureCredentials(ctx context.Context, userID uuid.UUID) error
+	FinishIdempotencyKey(ctx context.Context, arg FinishIdempotencyKeyParams) error
+	GetActiveDevice(ctx context.Context, id uuid.UUID) (Device, error)
+	GetAuditEvent(ctx context.Context, id uuid.UUID) (AuditEvent, error)
+	GetAuthSession(ctx context.Context, id uuid.UUID) (AuthSession, error)
+	GetComplex(ctx context.Context, id uuid.UUID) (Complex, error)
+	GetCostCentre(ctx context.Context, id uuid.UUID) (CostCentre, error)
+	GetCredentials(ctx context.Context, userID uuid.UUID) (UserCredential, error)
+	GetCurrency(ctx context.Context, id uuid.UUID) (Currency, error)
+	GetDelegation(ctx context.Context, id uuid.UUID) (Delegation, error)
+	GetDepartment(ctx context.Context, id uuid.UUID) (Department, error)
+	GetDevice(ctx context.Context, id uuid.UUID) (Device, error)
+	GetEmergencyContact(ctx context.Context, id uuid.UUID) (EmergencyContact, error)
+	GetEmployee(ctx context.Context, id uuid.UUID) (Employee, error)
+	GetEmployeeDocument(ctx context.Context, id uuid.UUID) (EmployeeDocument, error)
+	GetEmployeeStatusChange(ctx context.Context, id uuid.UUID) (EmployeeStatusChange, error)
+	GetEmployeeTransfer(ctx context.Context, id uuid.UUID) (EmployeeTransfer, error)
+	GetFxRate(ctx context.Context, id uuid.UUID) (FxRate, error)
+	GetIdempotencyKey(ctx context.Context, arg GetIdempotencyKeyParams) (IdempotencyKey, error)
+	GetMfaChallenge(ctx context.Context, id uuid.UUID) (MfaChallenge, error)
+	GetProductionLine(ctx context.Context, id uuid.UUID) (ProductionLine, error)
+	GetPublicHoliday(ctx context.Context, id uuid.UUID) (PublicHoliday, error)
+	GetRefreshToken(ctx context.Context, tokenHash string) (GetRefreshTokenRow, error)
+	GetRole(ctx context.Context, id uuid.UUID) (Role, error)
+	GetRoleAssignment(ctx context.Context, id uuid.UUID) (RoleAssignment, error)
+	GetSafe(ctx context.Context, id uuid.UUID) (Safe, error)
+	GetSite(ctx context.Context, id uuid.UUID) (Site, error)
+	GetSiteCode(ctx context.Context, id uuid.UUID) (string, error)
+	GetSodRule(ctx context.Context, id uuid.UUID) (SodRule, error)
+	GetStorageLocation(ctx context.Context, id uuid.UUID) (StorageLocation, error)
+	GetTill(ctx context.Context, id uuid.UUID) (Till, error)
+	GetUser(ctx context.Context, id uuid.UUID) (User, error)
+	GetUserForRequest(ctx context.Context, id uuid.UUID) (GetUserForRequestRow, error)
+	GetUserForSignIn(ctx context.Context, employeeNumber string) (GetUserForSignInRow, error)
+	InsertAuditEvent(ctx context.Context, arg InsertAuditEventParams) error
+	LastAuditHash(ctx context.Context) (*string, error)
+	ListAuditEvent(ctx context.Context, arg ListAuditEventParams) ([]AuditEvent, error)
+	ListAuthSessions(ctx context.Context, userID uuid.UUID) ([]AuthSession, error)
+	ListComplex(ctx context.Context, arg ListComplexParams) ([]Complex, error)
+	ListCostCentre(ctx context.Context, arg ListCostCentreParams) ([]CostCentre, error)
+	ListCurrency(ctx context.Context, arg ListCurrencyParams) ([]Currency, error)
+	ListDelegation(ctx context.Context, arg ListDelegationParams) ([]Delegation, error)
+	ListDepartment(ctx context.Context, arg ListDepartmentParams) ([]Department, error)
+	ListDevice(ctx context.Context, arg ListDeviceParams) ([]Device, error)
+	ListEmergencyContact(ctx context.Context, arg ListEmergencyContactParams) ([]EmergencyContact, error)
+	ListEmployee(ctx context.Context, arg ListEmployeeParams) ([]Employee, error)
+	ListEmployeeDocument(ctx context.Context, arg ListEmployeeDocumentParams) ([]EmployeeDocument, error)
+	ListEmployeeStatusChange(ctx context.Context, arg ListEmployeeStatusChangeParams) ([]EmployeeStatusChange, error)
+	ListEmployeeTransfer(ctx context.Context, arg ListEmployeeTransferParams) ([]EmployeeTransfer, error)
+	ListFxRate(ctx context.Context, arg ListFxRateParams) ([]FxRate, error)
+	ListProductionLine(ctx context.Context, arg ListProductionLineParams) ([]ProductionLine, error)
+	ListPublicHoliday(ctx context.Context, arg ListPublicHolidayParams) ([]PublicHoliday, error)
+	ListRole(ctx context.Context, arg ListRoleParams) ([]Role, error)
+	ListRoleAssignment(ctx context.Context, arg ListRoleAssignmentParams) ([]RoleAssignment, error)
+	ListSafe(ctx context.Context, arg ListSafeParams) ([]Safe, error)
+	ListSite(ctx context.Context, arg ListSiteParams) ([]Site, error)
+	ListSodRule(ctx context.Context, arg ListSodRuleParams) ([]SodRule, error)
+	ListStorageLocation(ctx context.Context, arg ListStorageLocationParams) ([]StorageLocation, error)
+	ListTill(ctx context.Context, arg ListTillParams) ([]Till, error)
+	ListUser(ctx context.Context, arg ListUserParams) ([]User, error)
+	ListUserGrants(ctx context.Context, arg ListUserGrantsParams) ([]ListUserGrantsRow, error)
+	ListUsersWithoutPassword(ctx context.Context) ([]uuid.UUID, error)
+	LockAuditChain(ctx context.Context) error
+	NextReference(ctx context.Context, arg NextReferenceParams) (int64, error)
 	Ping(ctx context.Context) (int32, error)
+	PurgeIdempotencyKeys(ctx context.Context) error
+	RecordFailedLogin(ctx context.Context, userID uuid.UUID) (int32, error)
+	RecordFailedMfa(ctx context.Context, id uuid.UUID) error
+	RecordFailedPin(ctx context.Context, arg RecordFailedPinParams) (int32, error)
+	ReleaseIdempotencyKey(ctx context.Context, arg ReleaseIdempotencyKeyParams) error
+	ResetFailedLogins(ctx context.Context, userID uuid.UUID) error
+	ResetFailedPins(ctx context.Context, userID uuid.UUID) error
+	RevokeAuthSession(ctx context.Context, id uuid.UUID) error
+	RevokeUserSessions(ctx context.Context, userID uuid.UUID) error
+	SetCredentialStatus(ctx context.Context, arg SetCredentialStatusParams) error
+	SetDelegationStatus(ctx context.Context, arg SetDelegationStatusParams) (Delegation, error)
+	SetDeviceStatus(ctx context.Context, arg SetDeviceStatusParams) (Device, error)
+	SetEmployeeTransferStatus(ctx context.Context, arg SetEmployeeTransferStatusParams) (EmployeeTransfer, error)
+	SetPassword(ctx context.Context, arg SetPasswordParams) error
+	SetPin(ctx context.Context, arg SetPinParams) error
+	SetTotpSecret(ctx context.Context, arg SetTotpSecretParams) error
+	SetUserAuthStatus(ctx context.Context, arg SetUserAuthStatusParams) error
+	SetUserMfaRequired(ctx context.Context, arg SetUserMfaRequiredParams) error
+	SetUserStatus(ctx context.Context, arg SetUserStatusParams) (User, error)
+	TouchAuthSession(ctx context.Context, id uuid.UUID) error
+	TouchSignIn(ctx context.Context, id uuid.UUID) error
+	UpdateComplex(ctx context.Context, arg UpdateComplexParams) (Complex, error)
+	UpdateCostCentre(ctx context.Context, arg UpdateCostCentreParams) (CostCentre, error)
+	UpdateCurrency(ctx context.Context, arg UpdateCurrencyParams) (Currency, error)
+	UpdateDelegation(ctx context.Context, arg UpdateDelegationParams) (Delegation, error)
+	UpdateDepartment(ctx context.Context, arg UpdateDepartmentParams) (Department, error)
+	UpdateDevice(ctx context.Context, arg UpdateDeviceParams) (Device, error)
+	UpdateEmergencyContact(ctx context.Context, arg UpdateEmergencyContactParams) (EmergencyContact, error)
+	UpdateEmployee(ctx context.Context, arg UpdateEmployeeParams) (Employee, error)
+	UpdateFxRate(ctx context.Context, arg UpdateFxRateParams) (FxRate, error)
+	UpdateProductionLine(ctx context.Context, arg UpdateProductionLineParams) (ProductionLine, error)
+	UpdatePublicHoliday(ctx context.Context, arg UpdatePublicHolidayParams) (PublicHoliday, error)
+	UpdateRole(ctx context.Context, arg UpdateRoleParams) (Role, error)
+	UpdateRoleAssignment(ctx context.Context, arg UpdateRoleAssignmentParams) (RoleAssignment, error)
+	UpdateSafe(ctx context.Context, arg UpdateSafeParams) (Safe, error)
+	UpdateSite(ctx context.Context, arg UpdateSiteParams) (Site, error)
+	UpdateSodRule(ctx context.Context, arg UpdateSodRuleParams) (SodRule, error)
+	UpdateStorageLocation(ctx context.Context, arg UpdateStorageLocationParams) (StorageLocation, error)
+	UpdateTill(ctx context.Context, arg UpdateTillParams) (Till, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
+	UseRefreshToken(ctx context.Context, id uuid.UUID) (int64, error)
+	UserRequiresMfa(ctx context.Context, userID uuid.UUID) (bool, error)
 }
 
 var _ Querier = (*Queries)(nil)

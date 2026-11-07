@@ -14,6 +14,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"foodies/api/internal/auth"
 	"foodies/api/internal/db"
 	httpapi "foodies/api/internal/http"
 	"foodies/api/internal/service"
@@ -22,6 +23,7 @@ import (
 const (
 	defaultAddr     = ":8080"
 	shutdownTimeout = 10 * time.Second
+	minSecretLen    = 32
 )
 
 func main() {
@@ -41,6 +43,10 @@ func run(ctx context.Context, logger *slog.Logger) error {
 	if databaseURL == "" {
 		return errors.New("DATABASE_URL is not set")
 	}
+	jwtSecret := os.Getenv("AUTH_JWT_SECRET")
+	if len(jwtSecret) < minSecretLen {
+		return fmt.Errorf("AUTH_JWT_SECRET must be at least %d characters", minSecretLen)
+	}
 	addr := os.Getenv("HTTP_ADDR")
 	if addr == "" {
 		addr = defaultAddr
@@ -52,7 +58,7 @@ func run(ctx context.Context, logger *slog.Logger) error {
 	}
 	defer pool.Close()
 
-	svc := service.New(db.New(pool))
+	svc := service.New(db.New(pool), pool, auth.NewSigner(jwtSecret))
 	if err := svc.Ping(ctx); err != nil {
 		return err
 	}

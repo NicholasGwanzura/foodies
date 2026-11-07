@@ -4,9 +4,14 @@ import (
 	"context"
 	"errors"
 	"testing"
+
+	"foodies/api/internal/db"
 )
 
-type stubQuerier struct{ err error }
+type stubQuerier struct {
+	db.Querier
+	err error
+}
 
 func (s stubQuerier) Ping(context.Context) (int32, error) { return 1, s.err }
 
@@ -27,7 +32,7 @@ func TestPing(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			err := New(stubQuerier{err: tt.err}).Ping(context.Background())
+			err := New(stubQuerier{err: tt.err}, nil, nil).Ping(context.Background())
 			if !errors.Is(err, tt.wantErr) {
 				t.Errorf("Ping() = %v, want %v", err, tt.wantErr)
 			}

@@ -84,7 +84,9 @@ function buildUrl(
 
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(query ?? {})) {
-    if (value !== undefined && value !== null) {
+    if (Array.isArray(value)) {
+      for (const item of value) search.append(key, String(item));
+    } else if (value !== undefined && value !== null) {
       search.set(key, String(value));
     }
   }
@@ -109,16 +111,28 @@ async function toApiError(response: Response): Promise<ApiError> {
   });
 }
 
+/** Writes the API exempts from Idempotency-Key (docs/spec.md, 12.6). */
+const noIdempotencyKey = /^\/(auth|webhooks)\/|^\/notifications\/read-all$/;
+
 async function send(
   method: Method,
   path: string,
   options: RawOptions = {},
+  defaults?: HeadersProvider,
 ): Promise<unknown> {
   const { path: pathParams, query, body, headers, signal } = options;
 
-  const requestHeaders = new Headers(headers);
+  const requestHeaders = new Headers(await defaults?.());
+  new Headers(headers).forEach((value, key) => requestHeaders.set(key, value));
   if (body !== undefined) {
     requestHeaders.set("Content-Type", "application/json");
+  }
+  if (
+    method === "post" &&
+    !noIdempotencyKey.test(path) &&
+    !requestHeaders.has("Idempotency-Key")
+  ) {
+    requestHeaders.set("Idempotency-Key", crypto.randomUUID());
   }
 
   const response = await fetch(buildUrl(path, pathParams, query), {
@@ -146,15 +160,28 @@ type MethodClient<M extends Method> = <P extends PathWith<M>>(
   ...options: Args<Operation<M, P>>
 ) => Promise<SuccessBody<Operation<M, P>>>;
 
-const forMethod = <M extends Method>(method: M) =>
+type HeadersProvider = () => HeadersInit | Promise<HeadersInit>;
+
+const forMethod = <M extends Method>(method: M, defaults?: HeadersProvider) =>
   ((path: string, options?: RawOptions) =>
-    send(method, path, options)) as unknown as MethodClient<M>;
+    send(method, path, options, defaults)) as unknown as MethodClient<M>;
+
+/** A client that adds `defaults` to each request, such as the bearer token. */
+export function createApi(defaults?: HeadersProvider) {
+  return {
+    get: forMethod("get", defaults),
+    post: forMethod("post", defaults),
+    put: forMethod("put", defaults),
+    patch: forMethod("patch", defaults),
+    delete: forMethod("delete", defaults),
+    /**
+     * For screens driven by a path known only at run time. Prefer the typed
+     * methods anywhere the path is written in the code.
+     */
+    request: (method: Method, path: string, options?: RawOptions) =>
+      send(method, path, options, defaults),
+  };
+}
 
 /** Every API call goes through here. Failures throw `ApiError`. */
-export const api = {
-  get: forMethod("get"),
-  post: forMethod("post"),
-  put: forMethod("put"),
-  patch: forMethod("patch"),
-  delete: forMethod("delete"),
-};
+export const api = createApi();

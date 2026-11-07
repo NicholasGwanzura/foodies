@@ -10,11 +10,16 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"foodies/api/internal/auth"
+	"foodies/api/internal/db"
 	"foodies/api/internal/http/apigen"
 	"foodies/api/internal/service"
 )
 
-type stubQuerier struct{ err error }
+type stubQuerier struct {
+	db.Querier
+	err error
+}
 
 func (s stubQuerier) Ping(context.Context) (int32, error) { return 1, s.err }
 
@@ -34,7 +39,7 @@ func TestHealth(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			svc := service.New(stubQuerier{err: tt.pingErr})
+			svc := service.New(stubQuerier{err: tt.pingErr}, nil, auth.NewSigner("test-secret"))
 			handler := NewHandler(svc, slog.New(slog.DiscardHandler))
 			rec := httptest.NewRecorder()
 			handler.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/api/v1/health", nil))
@@ -71,12 +76,12 @@ func TestHandlerErrorsAreProblems(t *testing.T) {
 		wantType   string
 	}{
 		{
-			name:       "operation not built yet",
+			name:       "signed-in operation without a token",
 			method:     http.MethodGet,
 			path:       "/api/v1/me",
-			wantStatus: http.StatusNotImplemented,
-			wantCode:   apigen.ErrorCodeInternalError,
-			wantType:   "/problems/not-implemented",
+			wantStatus: http.StatusUnauthorized,
+			wantCode:   apigen.ErrorCodeUnauthenticated,
+			wantType:   "/problems/unauthenticated",
 		},
 		{
 			name:       "unknown path",
@@ -109,7 +114,7 @@ func TestHandlerErrorsAreProblems(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			handler := NewHandler(nil, slog.New(slog.DiscardHandler))
+			handler := NewHandler(service.New(stubQuerier{}, nil, auth.NewSigner("test-secret")), slog.New(slog.DiscardHandler))
 			rec := httptest.NewRecorder()
 			handler.ServeHTTP(rec, httptest.NewRequest(tt.method, tt.path+tt.query, nil))
 

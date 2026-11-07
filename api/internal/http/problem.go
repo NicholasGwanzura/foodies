@@ -5,8 +5,10 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"strings"
 
 	"foodies/api/internal/http/apigen"
+	"foodies/api/internal/service"
 )
 
 const problemContentType = "application/problem+json"
@@ -19,6 +21,8 @@ type problem struct {
 	typeName string
 	title    string
 	detail   string
+	blockers []service.Blocker
+	fields   []service.FieldIssue
 }
 
 func writeProblem(w http.ResponseWriter, r *http.Request, p problem) {
@@ -33,6 +37,24 @@ func writeProblem(w http.ResponseWriter, r *http.Request, p problem) {
 	}
 	if p.detail != "" {
 		body.Detail = &p.detail
+	}
+	if len(p.fields) > 0 {
+		issues := make([]apigen.FieldIssue, 0, len(p.fields))
+		for _, f := range p.fields {
+			issues = append(issues, apigen.FieldIssue{Pointer: f.Pointer, Code: f.Code, Message: f.Message})
+		}
+		body.Errors = &issues
+	}
+	if len(p.blockers) > 0 {
+		blockers := make([]apigen.Blocker, 0, len(p.blockers))
+		for _, b := range p.blockers {
+			item := apigen.Blocker{Kind: apigen.BlockerKind(b.Kind), Message: b.Message}
+			if b.Reference != "" {
+				item.Reference = &b.Reference
+			}
+			blockers = append(blockers, item)
+		}
+		body.Blockers = &blockers
 	}
 
 	w.Header().Set("Content-Type", problemContentType)
@@ -71,6 +93,20 @@ func responseError(logger *slog.Logger) func(http.ResponseWriter, *http.Request,
 				code:     apigen.ErrorCodeInternalError,
 				typeName: "not-implemented",
 				title:    "Not implemented",
+			})
+			return
+		}
+
+		var fail *service.Error
+		if errors.As(err, &fail) {
+			writeProblem(w, r, problem{
+				status:   fail.Status,
+				code:     apigen.ErrorCode(fail.Code),
+				typeName: strings.ReplaceAll(fail.Code, "_", "-"),
+				title:    fail.Title,
+				detail:   fail.Detail,
+				blockers: fail.Blockers,
+				fields:   fail.Fields,
 			})
 			return
 		}
