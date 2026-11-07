@@ -140,11 +140,11 @@ func (s *Service) SyncManifest(ctx context.Context) (map[string]any, error) {
 }
 
 // RecordConflict sends a write the server could not apply to a supervisor.
-func (s *Service) RecordConflict(ctx context.Context, batch string, device, clientRecord uuid.UUID, reason string, payload json.RawMessage) error {
-	_, err := s.q(ctx).CreateSyncConflict(ctx, db.CreateSyncConflictParams{
+func (s *Service) RecordConflict(ctx context.Context, batch string, device, clientRecord uuid.UUID, reason string, payload json.RawMessage) (uuid.UUID, error) {
+	row, err := s.q(ctx).CreateSyncConflict(ctx, db.CreateSyncConflictParams{
 		BatchID: &batch, DeviceID: &device, ClientRecordID: &clientRecord, Reason: &reason, ClientPayload: payload, SiteID: &auth.From(ctx).SiteID,
 	})
-	return wrap(err, "record conflict")
+	return row.ID, wrap(err, "record conflict")
 }
 
 // VerifyWhatsAppToken answers Meta's webhook verification.

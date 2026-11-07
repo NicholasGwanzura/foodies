@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
+import { OfflineSync } from "@/components/offline-sync";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -24,7 +25,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en-ZW" className={nunito.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <OfflineSync />
+      </body>
     </html>
   );
 }

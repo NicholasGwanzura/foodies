@@ -273,7 +273,14 @@ func TestOfflineReplayIsIdempotentAndConflictsGoToSupervisors(t *testing.T) {
 	if len(items) != 2 || items[0].(map[string]any)["status"] != "applied" || items[1].(map[string]any)["status"] != "conflict" {
 		t.Fatalf("items = %s", first.raw)
 	}
-	want(t, call(t, token, http.MethodPost, "/sync/batches", batch), http.StatusAccepted)
+	if id, _ := items[0].(map[string]any)["record_id"].(string); id == "" {
+		t.Fatalf("no record_id: %s", first.raw)
+	}
+	again := want(t, call(t, token, http.MethodPost, "/sync/batches", batch), http.StatusAccepted)
+	repeat, _ := again.body["items"].([]any)
+	if repeat[0].(map[string]any)["status"] != "duplicate" {
+		t.Fatalf("replay status: %s", again.raw)
+	}
 	after := q1(t, `SELECT count(*)::text FROM form_submissions`)
 	if before == after || q1(t, `SELECT (count(*) = $1::int + 1)::text FROM form_submissions`, before) != "true" {
 		t.Fatalf("submissions went from %s to %s", before, after)

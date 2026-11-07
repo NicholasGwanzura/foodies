@@ -406,22 +406,39 @@ func (s *Server) SubmitSyncBatch(ctx context.Context, req apigen.SubmitSyncBatch
 	token := s.bearerFrom(ctx)
 	for _, item := range req.Body.Items {
 		result := map[string]any{"client_record_id": item.ClientRecordId}
-		status, body := s.replay(ctx, token, item)
+		status, replayed, body := s.replay(ctx, token, item)
 		if status >= 200 && status < 300 {
 			result["status"] = "applied"
+			if replayed {
+				result["status"] = "duplicate"
+			}
+			if id := recordID(body); id != "" {
+				result["record_id"] = id
+			}
 		} else {
-			result["status"] = "conflict"
 			raw, err := json.Marshal(item.Payload)
 			if err != nil {
 				return nil, fmt.Errorf("encode payload: %w", err)
 			}
-			if err := s.service.RecordConflict(ctx, batch, req.Body.DeviceId, item.ClientRecordId, string(body), raw); err != nil {
+			conflict, err := s.service.RecordConflict(ctx, batch, req.Body.DeviceId, item.ClientRecordId, string(body), raw)
+			if err != nil {
 				return nil, err
 			}
+			result["status"], result["conflict_id"] = "conflict", conflict
 		}
 		items = append(items, result)
 	}
-	return output[apigen.SubmitSyncBatch202JSONResponse](map[string]any{"batch_id": batch, "status": "processed", "items": items})
+	return output[apigen.SubmitSyncBatch202JSONResponse](map[string]any{"batch_id": batch, "status": "completed", "items": items})
+}
+
+func recordID(body []byte) string {
+	var row struct {
+		ID string `json:"id"`
+	}
+	if json.Unmarshal(body, &row) != nil {
+		return ""
+	}
+	return row.ID
 }
 
 type tokenKey struct{}
@@ -431,10 +448,10 @@ func (s *Server) bearerFrom(ctx context.Context) string {
 	return token
 }
 
-func (s *Server) replay(ctx context.Context, token string, item apigen.SyncItem) (int, []byte) {
+func (s *Server) replay(ctx context.Context, token string, item apigen.SyncItem) (int, bool, []byte) {
 	op, ok := apigen.Operations[strings.ToUpper(item.OperationId[:1])+item.OperationId[1:]]
 	if !ok || op.Method != http.MethodPost && op.Method != http.MethodPatch {
-		return http.StatusUnprocessableEntity, []byte("Unknown operation")
+		return http.StatusUnprocessableEntity, false, []byte("Unknown operation")
 	}
 	path := op.Path
 	if item.PathParams != nil {
@@ -444,11 +461,11 @@ func (s *Server) replay(ctx context.Context, token string, item apigen.SyncItem)
 	}
 	raw, err := json.Marshal(item.Payload)
 	if err != nil {
-		return http.StatusUnprocessableEntity, []byte("Bad payload")
+		return http.StatusUnprocessableEntity, false, []byte("Bad payload")
 	}
 	r, err := http.NewRequestWithContext(context.WithoutCancel(ctx), op.Method, basePath+path, bytes.NewReader(raw))
 	if err != nil {
-		return http.StatusUnprocessableEntity, []byte("Bad request")
+		return http.StatusUnprocessableEntity, false, []byte("Bad request")
 	}
 	r.Header.Set("Authorization", "Bearer "+token)
 	r.Header.Set("Content-Type", "application/json")
@@ -458,7 +475,7 @@ func (s *Server) replay(ctx context.Context, token string, item apigen.SyncItem)
 	}
 	rec := httptest.NewRecorder()
 	s.routes.ServeHTTP(rec, r)
-	return rec.Code, rec.Body.Bytes()
+	return rec.Code, rec.Header().Get("Idempotent-Replayed") == "true", rec.Body.Bytes()
 }
 
 // VerifyWhatsappWebhook answers Meta's handshake.

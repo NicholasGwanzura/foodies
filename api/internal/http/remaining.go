@@ -71,7 +71,7 @@ func (s *Server) GetSyncBatch(ctx context.Context, req apigen.GetSyncBatchReques
 	for _, r := range rows {
 		items = append(items, map[string]any{"client_record_id": r.ClientRecordID, "status": "conflict"})
 	}
-	return output[apigen.GetSyncBatch200JSONResponse](map[string]any{"batch_id": req.BatchId, "status": "processed", "items": items})
+	return output[apigen.GetSyncBatch200JSONResponse](map[string]any{"batch_id": req.BatchId, "status": "completed", "items": items})
 }
 
 // ReceiveIntegrationEvents accepts events from a system of record.

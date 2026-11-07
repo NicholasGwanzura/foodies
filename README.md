@@ -1,6 +1,6 @@
 # Foodies
 
-Internal operations and compliance platform. Start with [AGENTS.md](AGENTS.md) for conventions and [docs/spec.md](docs/spec.md) for the product.
+Internal operations and compliance platform. Start with [AGENTS.md](AGENTS.md) for conventions, [docs/spec.md](docs/spec.md) for the product and [docs/status.md](docs/status.md) for where the build stands.
 
 | Path | What it is |
 |---|---|

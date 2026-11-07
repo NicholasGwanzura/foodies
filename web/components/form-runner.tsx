@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 
 import { submitForm } from "@/app/(app)/forms/actions";
 import { FormNotice } from "@/components/form";
 import type { FormState } from "@/lib/form-state";
+import { enqueue } from "@/lib/offline-queue";
 
 export type FormFieldDef = {
   key: string;
@@ -66,6 +68,7 @@ export function FormRunner({ definition, version, site, task, id, rowVersion, in
   const [answers, setAnswers] = useState<Answers>(initial ?? {});
   const [state, setState] = useState<FormState>({});
   const [pending, start] = useTransition();
+  const [queued, setQueued] = useState(false);
   const errors = Object.fromEntries(Object.entries(state.fields ?? {}).map(([k, v]) => [k.replace("answers/", ""), v]));
   const numeric = new Set(definition.sections.flatMap((s) => s.fields).filter((f) => f.type === "number" || f.type === "reading").map((f) => f.key));
 
@@ -73,8 +76,34 @@ export function FormRunner({ definition, version, site, task, id, rowVersion, in
     const body = Object.fromEntries(Object.entries(answers).map(([k, v]) => [k, numeric.has(k) ? Number(v) : v]));
     start(async () => {
       const known = state.values?.rowVersion ? Number(state.values.rowVersion) : rowVersion;
-      setState(await submitForm({ version, site, task, id: id ?? state.values?.id, rowVersion: known, answers: body }));
+      const draft = id ?? state.values?.id;
+      try {
+        setState(await submitForm({ version, site, task, id: draft, rowVersion: known, answers: body }));
+      } catch (error) {
+        // submitForm redirects by throwing, which is success.
+        if (String((error as { digest?: string }).digest ?? "").startsWith("NEXT_REDIRECT")) throw error;
+        if (draft) {
+          setState({ error: "That did not send. Check your connection and try again." });
+          return;
+        }
+        enqueue(localStorage, {
+          clientRecordId: crypto.randomUUID(), capturedAt: new Date().toISOString(), version, site, task,
+          businessDate: new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Harare" }).format(new Date()),
+          answers: body,
+        });
+        setQueued(true);
+      }
     });
+  }
+
+  if (queued) {
+    return (
+      <section className="panel stack">
+        <h2>Saved on this device</h2>
+        <p className="muted">It sends by itself when the connection is back. You can carry on.</p>
+        <div><Link className="btn" href="/">Back to My Day</Link></div>
+      </section>
+    );
   }
 
   return (
@@ -84,7 +113,7 @@ export function FormRunner({ definition, version, site, task, id, rowVersion, in
         <section className="panel" key={section.title}>
           <h2>{section.title}</h2>
           {section.fields.map((f) => (
-            <Answer key={f.key} field={f} value={answers[f.key]} error={errors[f.key]} onChange={(v) => setAnswers({ ...answers, [f.key]: v })} />
+            <Answer key={f.key} field={f} value={answers[f.key]} error={errors[f.key]} onChange={(v) => setAnswers((a) => ({ ...a, [f.key]: v }))} />
           ))}
         </section>
       ))}

@@ -7,7 +7,7 @@ import { serverApi } from "@/lib/api/server";
 import type { FormState } from "@/lib/form-state";
 import { formError } from "@/lib/session";
 
-export async function claimTask(id: string, _: FormState): Promise<FormState> {
+export async function claimTask(id: string): Promise<FormState> {
   try {
     await serverApi.post("/tasks/{task_id}/claim", { path: { task_id: id } });
   } catch (error) {
@@ -17,7 +17,7 @@ export async function claimTask(id: string, _: FormState): Promise<FormState> {
   return { ok: "This task is yours." };
 }
 
-export async function completeTask(id: string, _: FormState): Promise<FormState> {
+export async function completeTask(id: string): Promise<FormState> {
   try {
     await serverApi.post("/tasks/{task_id}/complete", { path: { task_id: id } });
   } catch (error) {

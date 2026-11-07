@@ -4,7 +4,9 @@ import Link from "next/link";
 import { signOut } from "@/app/(auth)/sign-in/actions";
 import { Submit } from "@/components/form";
 import { serverApi } from "@/lib/api/server";
-import { getSession } from "@/lib/session";
+import { can, getSession } from "@/lib/session";
+
+import { EnrolDevice } from "./enrol-device";
 
 export const metadata: Metadata = { title: "My account" };
 
@@ -15,7 +17,8 @@ const when = new Intl.DateTimeFormat("en-ZW", {
 });
 
 export default async function AccountPage() {
-  const { me } = await getSession();
+  const session = await getSession();
+  const { me } = session;
   const sessions = await serverApi.get("/me/sessions");
   return (
     <>
@@ -49,6 +52,7 @@ export default async function AccountPage() {
           </form>
         </div>
       </section>
+      {can(session, "iam.device.write") && <EnrolDevice />}
       <section className="panel stack">
         <h2>Signed in on</h2>
         <ul className="stack-s" style={{ listStyle: "none", padding: 0 }}>

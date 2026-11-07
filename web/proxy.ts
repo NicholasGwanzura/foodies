@@ -4,7 +4,7 @@ import type { components } from "./lib/api/schema";
 
 const ACCESS_COOKIE = "foodies_at";
 const REFRESH_COOKIE = "foodies_rt";
-const PUBLIC_PATHS = ["/sign-in"];
+const PUBLIC_PATHS = ["/sign-in", "/offline"];
 /** Refresh this long before expiry, so a page never renders with a dead token. */
 const EARLY_SECONDS = 30;
 
@@ -88,5 +88,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/|favicon.ico|icon|manifest).*)"],
+  matcher: ["/((?!_next/|favicon.ico|icon|manifest|sw.js|offline).*)"],
 };
