@@ -28,4 +28,6 @@ ENTRYPOINT ["goose", "-dir", "/app/migrations"]
 FROM alpine:3.22 AS seed
 RUN apk add --no-cache ca-certificates
 COPY --from=build /out/seed /usr/local/bin/seed
-ENTRYPOINT ["/usr/local/bin/seed"]
+COPY deploy/seed-entrypoint.sh /usr/local/bin/seed-entrypoint
+RUN chmod +x /usr/local/bin/seed-entrypoint
+ENTRYPOINT ["/usr/local/bin/seed-entrypoint"]
