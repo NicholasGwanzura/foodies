@@ -88,5 +88,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/|favicon.ico|icon|manifest|sw.js|offline).*)"],
+  // API requests must reach the Next.js rewrite so the API can handle auth.
+  matcher: ["/((?!api/|_next/|favicon.ico|icon|manifest|sw.js|offline).*)"],
 };
