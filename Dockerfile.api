@@ -1,0 +1,25 @@
+FROM golang:1.27-alpine AS build
+
+RUN apk add --no-cache ca-certificates git
+WORKDIR /src/api
+COPY api/go.mod api/go.sum ./
+COPY api/tools/go.mod api/tools/go.sum ./tools/
+RUN go mod download && go mod download -modfile=tools/go.mod
+COPY api/ ./
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/server ./cmd/server \
+    && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -modfile=tools/go.mod -o /out/goose github.com/pressly/goose/v3/cmd/goose
+
+FROM alpine:3.22 AS api
+RUN apk add --no-cache ca-certificates && adduser -D -H -u 10001 app
+WORKDIR /app
+COPY --from=build /out/server /usr/local/bin/server
+USER app
+EXPOSE 8080
+ENTRYPOINT ["server"]
+
+FROM alpine:3.22 AS migrate
+RUN apk add --no-cache ca-certificates
+WORKDIR /app
+COPY --from=build /out/goose /usr/local/bin/goose
+COPY api/db/migrations ./migrations
+ENTRYPOINT ["goose", "-dir", "/app/migrations"]
