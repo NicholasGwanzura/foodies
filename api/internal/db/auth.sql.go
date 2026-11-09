@@ -122,6 +122,18 @@ func (q *Queries) CreateRefreshToken(ctx context.Context, arg CreateRefreshToken
 	return err
 }
 
+const disableRoleMfa = `-- name: DisableRoleMfa :execrows
+UPDATE roles SET requires_mfa = false WHERE requires_mfa
+`
+
+func (q *Queries) DisableRoleMfa(ctx context.Context) (int64, error) {
+	result, err := q.db.Exec(ctx, disableRoleMfa)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
+}
+
 const ensureCredentials = `-- name: EnsureCredentials :exec
 INSERT INTO user_credentials (user_id) VALUES ($1) ON CONFLICT (user_id) DO NOTHING
 `

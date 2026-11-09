@@ -124,3 +124,6 @@ SELECT * FROM devices WHERE id = $1 AND status = 'active';
 -- name: ListUsersWithoutPassword :many
 SELECT u.id FROM users u LEFT JOIN user_credentials c ON c.user_id = u.id
 WHERE c.password_hash IS NULL;
+
+-- name: DisableRoleMfa :execrows
+UPDATE roles SET requires_mfa = false WHERE requires_mfa;

@@ -454,6 +454,7 @@ type Querier interface {
 	DeleteSupplierInvoiceLines(ctx context.Context, supplierInvoiceID uuid.UUID) error
 	DeleteTrainingParticipants(ctx context.Context, trainingSessionID uuid.UUID) error
 	DeleteTrainingRequirement(ctx context.Context, id uuid.UUID) error
+	DisableRoleMfa(ctx context.Context) (int64, error)
 	DispatchesOfBatch(ctx context.Context, batchID uuid.UUID) ([]DispatchNote, error)
 	EffectiveFxRate(ctx context.Context, arg EffectiveFxRateParams) (FxRate, error)
 	EnsureActivation(ctx context.Context, arg EnsureActivationParams) error

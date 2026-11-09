@@ -71,6 +71,13 @@ func demoCredentials(ctx context.Context, pool *pgxpool.Pool) error {
 		return fmt.Errorf("SEED_PASSWORD and SEED_PIN must be set to load the demo")
 	}
 	q := db.New(pool)
+	// Demo accounts share one password and PIN, so there is no authenticator to
+	// enrol. The reference load has just restored each role's flag; turn it off.
+	n, err := q.DisableRoleMfa(ctx)
+	if err != nil {
+		return fmt.Errorf("disable demo mfa: %w", err)
+	}
+	fmt.Println("two-factor sign-in turned off for", n, "roles")
 	ids, err := q.ListUsersWithoutPassword(ctx)
 	if err != nil {
 		return fmt.Errorf("list users: %w", err)
