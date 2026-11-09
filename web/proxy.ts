@@ -9,7 +9,9 @@ const PUBLIC_PATHS = ["/sign-in", "/offline"];
 const EARLY_SECONDS = 30;
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api/v1";
+  process.env.API_INTERNAL_BASE_URL ??
+  process.env.NEXT_PUBLIC_API_BASE_URL ??
+  "http://localhost:8080/api/v1";
 
 type TokenPair = components["schemas"]["TokenPair"];
 

@@ -2,8 +2,14 @@ import type { components, paths } from "./schema";
 
 export type Problem = components["schemas"]["Problem"];
 
+// Browser requests stay same-origin and use the Next.js rewrite. Server actions
+// and Server Components call the API container directly on the Compose network.
 const baseUrl =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api/v1";
+  typeof window === "undefined"
+    ? (process.env.API_INTERNAL_BASE_URL ??
+      process.env.NEXT_PUBLIC_API_BASE_URL ??
+      "http://localhost:8080/api/v1")
+    : "/api/v1";
 
 type Method = "get" | "post" | "put" | "patch" | "delete";
 type ApiPath = keyof paths;

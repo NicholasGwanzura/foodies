@@ -98,7 +98,9 @@ export const can = (session: Session, permission: string) =>
 
 /** Turns an API failure into something a form can show. */
 export function formError(error: unknown): FormState {
-  if (!(error instanceof ApiError)) throw error;
+  if (!(error instanceof ApiError)) {
+    return { error: "Sign-in service is temporarily unavailable. Please try again." };
+  }
   const problem: Problem = error.problem;
   const fields: Record<string, string> = {};
   for (const issue of problem.errors ?? []) {
