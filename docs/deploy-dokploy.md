@@ -1,28 +1,29 @@
 # Deploy Foodies with Dokploy
 
-This deployment uses Dokploy Docker Compose, with PostgreSQL and persistent named volumes for the database and uploaded evidence.
+This deployment uses a Dokploy-managed PostgreSQL database and Docker Compose for the API and web app. Uploaded evidence is kept in a persistent named volume.
 
 ## Configure Dokploy
 
-1. Create a **Docker Compose** service and connect the `vuskhoza/foodies-platform` Git repository and `main` branch.
-2. Set the Compose Path to `./docker-compose.dokploy.yml`.
-3. Add these variables in the service's Environment tab:
+1. Create a **PostgreSQL** service in this project and environment. Set database and user names to `foodies`, and generate a database password in Dokploy.
+2. Create a **Docker Compose** service and connect the `vuskhoza/foodies-platform` repository on branch `deploy/dokploy-foodies`.
+3. Set the Compose Path to `./docker-compose.dokploy.yml`.
+4. Add these variables in the Compose service's Environment tab:
 
    | Variable | Value |
    |---|---|
-   | `POSTGRES_PASSWORD` | A unique, randomly generated 32-character hexadecimal password |
+   | `DATABASE_URL` | The internal connection URL shown by the Dokploy PostgreSQL service |
    | `AUTH_JWT_SECRET` | Output of `openssl rand -base64 48` |
    | `PUBLIC_API_URL` | `https://foodies.spiritusglobal.tech` |
    | `WHATSAPP_VERIFY_TOKEN` | Leave empty until WhatsApp is configured |
    | `WHATSAPP_APP_SECRET` | Leave empty until WhatsApp is configured |
 
-   The database password is used in a PostgreSQL URL, so use hexadecimal characters to avoid URL escaping issues. Dokploy Compose variables are written to its `.env`; the compose file explicitly passes only the needed values into each service.
+   Dokploy Compose variables are written to its `.env`; the compose file explicitly passes only the needed values into each service.
 
-4. Add `foodies.spiritusglobal.tech` in the Compose service's Domains tab and route it to the web container on port `3000`.
-5. Create an `A` record for `foodies.spiritusglobal.tech` pointing to `169.58.37.240`, then enable HTTPS for the domain in Dokploy.
-6. Deploy. PostgreSQL starts first, Goose applies pending migrations, then the API and web app start.
+5. Add `foodies.spiritusglobal.tech` in the Compose service's Domains tab and route it to the web container on port `3000`.
+6. Create an `A` record for `foodies.spiritusglobal.tech` pointing to `169.58.37.240`, then enable HTTPS for the domain in Dokploy.
+7. Deploy the PostgreSQL service first. Then deploy Compose. Goose applies pending migrations before the API and web app start.
 
-The web app proxies `/api/v1` to the API over the private Compose network, so the API and PostgreSQL have no host-published ports and only one public domain is needed. PostgreSQL data and uploaded evidence persist in named volumes; configure Dokploy volume backups before production use.
+The web app proxies `/api/v1` to the API over the private Compose network. The database should use Dokploy's internal connection URL; do not enable external database access. Uploaded evidence persists in a named volume. Configure Dokploy database backups before production use.
 
 ## First login
 

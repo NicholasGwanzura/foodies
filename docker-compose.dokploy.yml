@@ -1,21 +1,4 @@
 services:
-  postgres:
-    image: postgres:18-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: foodies
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in Dokploy}
-      POSTGRES_DB: foodies
-    volumes:
-      - foodies-postgres:/var/lib/postgresql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U foodies -d foodies"]
-      interval: 5s
-      timeout: 3s
-      retries: 20
-    networks:
-      - dokploy-network
-
   migrate:
     build:
       context: .
@@ -25,11 +8,8 @@ services:
     command: ["up"]
     environment:
       GOOSE_DRIVER: postgres
-      GOOSE_DBSTRING: postgres://foodies:${POSTGRES_PASSWORD}@postgres:5432/foodies?sslmode=disable
+      GOOSE_DBSTRING: ${DATABASE_URL:?Set DATABASE_URL in Dokploy}
       GOOSE_MIGRATION_DIR: /app/migrations
-    depends_on:
-      postgres:
-        condition: service_healthy
     networks:
       - dokploy-network
 
@@ -41,7 +21,7 @@ services:
     restart: unless-stopped
     environment:
       HTTP_ADDR: ":8080"
-      DATABASE_URL: postgres://foodies:${POSTGRES_PASSWORD}@postgres:5432/foodies?sslmode=disable
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in Dokploy}
       AUTH_JWT_SECRET: ${AUTH_JWT_SECRET:?Set AUTH_JWT_SECRET in Dokploy}
       UPLOAD_DIR: /data/uploads
       PUBLIC_API_URL: ${PUBLIC_API_URL:?Set PUBLIC_API_URL in Dokploy}
@@ -72,7 +52,6 @@ services:
       - dokploy-network
 
 volumes:
-  foodies-postgres:
   foodies-uploads:
 
 networks:
