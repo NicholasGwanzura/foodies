@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Foodies Dashboard</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fff7f0;--card:#fff;--ink:#14186b;--mute:#6b6f8f;--line:#e6e3e0;--or:#f97316;--or2:#ff8a1f;--track:#f0e6dc}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17141a;--card:#221e26;--ink:#f3f1ff;--mute:#a6a3bd;--line:#38333d;--track:#38333d}}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito","Segoe UI",system-ui,sans-serif;min-height:100%}
+header{background:linear-gradient(90deg,#f97316,#ff9a2e);color:#fff;padding:18px 18px 46px;position:relative;border-radius:0 0 50% 50%/0 0 34px 34px}
+.bar{display:flex;align-items:center;justify-content:space-between;max-width:960px;margin:0 auto}
+.logo{font-size:30px;font-weight:900;letter-spacing:-1px;cursor:pointer}
+.ic{display:flex;gap:10px}.ic span{width:38px;height:38px;border:2px solid #fff;border-radius:50%;display:grid;place-items:center;font-size:18px}
+main{max-width:960px;margin:-26px auto 0;padding:0 12px 28px;position:relative}
+.panel{background:var(--card);border-radius:22px;padding:12px;box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.sum div{background:var(--bg);border-radius:14px;padding:8px;text-align:center}
+.sum b{display:block;font-size:20px;color:var(--or)}.sum small{color:var(--mute);font-size:11px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{display:flex;align-items:center;gap:10px;padding:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%;min-height:62px}
+.tile:focus-visible,.area:focus-visible,.back:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.tile.wide{grid-column:1/-1}
+.sq{flex:none;width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-size:22px}
+.tx{flex:1;min-width:0;border-left:1px solid var(--line);padding-left:10px}
+.tx i{font-style:normal;color:var(--or);font-weight:800;font-size:13px;display:block}
+.tx strong{font-size:13.5px;line-height:1.15;display:block}
+.tx small{color:var(--mute);font-size:11px}
+.chev{color:var(--mute);font-size:20px}
+.back{background:none;border:0;color:var(--or);font:inherit;font-weight:800;padding:6px 2px;cursor:pointer}
+.mh{display:flex;gap:12px;align-items:center;margin:4px 0 10px}
+.mh h1{font-size:18px;margin:0;line-height:1.15}
+.meter{height:8px;background:var(--track);border-radius:6px;overflow:hidden;margin:4px 0 10px}
+.meter>div{height:100%;background:var(--or);width:0;transition:width .3s}
+.area{display:flex;align-items:center;gap:10px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px;margin-bottom:7px;font:inherit;color:inherit;cursor:pointer;text-align:left}
+.box{flex:none;width:22px;height:22px;border:2px solid var(--or);border-radius:6px;display:grid;place-items:center;color:#fff;font-size:14px}
+.area.on .box{background:var(--or)}.area.on .nm{text-decoration:line-through;color:var(--mute)}
+.nm{flex:1;font-size:14px;font-weight:700}.ct{color:var(--mute);font-size:12px;white-space:nowrap}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.info div{background:var(--bg);border-radius:12px;padding:9px;font-size:12px;color:var(--mute)}.info b{display:block;font-size:18px;color:var(--ink)}
+.empty{padding:22px 8px;text-align:center;color:var(--mute);font-size:14px}
+.note{font-size:11px;color:var(--mute);text-align:center;margin:10px 0 0}
+@media (min-width:700px){.grid{gap:10px}.tile{padding:12px}.tx strong{font-size:15px}}
+</style>
+</head>
+<body>
+<header><div class="bar"><div class="logo" id="home" role="button" tabindex="0" aria-label="Foodies home">☁ FOODIES</div><div class="ic"><span aria-label="Notifications">🔔</span><span aria-label="Profile">👤</span></div></div></header>
+<main><div class="panel" id="app"></div></main>
+<script>
+var M=[
+["01","Cash & Finance","#f97316","🧮",114,16,12,[["Revenue, POS & Cash Control",13],["CIT, Banking & Deposit Control",14],["Change Float & Petty Cash",16],["Accounts Payable & Supplier Management",21],["Budgeting & Expenditure Control",10],["Bank Reconciliation & Treasury",10],["Recipe Standard Costing & Profitability",12],["Finance Governance: Payroll, Assets, Tax, Journals & Audit",18]]],
+["02","Equipment & Asset Management","#1d6fe0","🛠️",64,15,9,[["Asset Register & Classification",6],["CAPEX & Asset Acquisition",8],["Depreciation & Impairment",10],["Asset Verification, Transfers & Disposal",11],["Generator Operation & Maintenance",12],["Pizza Oven Operation & Maintenance",11],["Reporting, Records & System Governance",6]]],
+["03","General Controls","#3a9a2e","✅",66,14,10,[["Management Reporting & Submission",25],["QMS Documentation & Document Control",18],["Cleaning & Sanitation",13],["Staff Uniform Issuance & Replacement",10]]],
+["04","Inventory & Stores","#f5a800","📦",76,13,9,[["Stock Planning & Master Data",7],["Receiving & Inspection",8],["Storage, Issue & Transfers",11],["Stocktake, Variance & Adjustments",8],["Procurement & Payment",15],["Central Kitchen Ordering",11],["Waste & Yield Control",9],["System, Audit & Reporting",7]]],
+["05","Production & Kitchen Operations","#8a2be2","👨‍🍳",37,5,10,[["Production planning",2],["Recipe and formulation control",1],["Production records",1],["Ingredient control",1],["Kitchen preparation",2],["Pizza production",3],["Chicken processing",5],["Potato processing",3],["Production reconciliation",2],["Waste and yield",3],["Pizza oven",3],["Finished goods dispatch",5],["Bakery operations",6]]],
+["06","Quality, Food Safety & Compliance","#0f9aa8","🛡️",91,10,10,[["Quality Control",19],["SHE Management",23],["Food Safety",18],["New Product Development",18],["Product Recall",13]]],
+["07","Sales & Customer Service","#1672e8","🛒",58,10,10,[["Revenue Management",12],["Customer Service",16],["Electronic Payments",7],["Manual Receipting",8],["Lost Property",6],["External Visits",9]]],
+["08","Store Operations","#e6288f","🏪",54,8,8,[["Store Opening",17],["Store Closing",10],["CCTV Management",10],["Customer Sitting Area Furniture",7],["Key Handling",10]]],
+["09","Human Resources","#6a42c8","👥",72,11,10,[["Employee records",6],["Recruitment",5],["Onboarding & induction",5],["Attendance & timekeeping",4],["Leave management",4],["Payroll coordination",4],["Performance management",3],["Training & development",3],["Disciplinary management",3],["Grievance management",2],["Employee relations",1],["Uniform management",10],["Communication & employee awareness",8],["Employee exit & clearance",6],["HR reporting & compliance",4],["HR access, audit & governance",4]]],
+["10","Trainings & Product Knowledge","#f5a800","🎓",72,10,10,[["Training governance",9],["Induction and onboarding",4],["Food safety and hygiene",9],["Health, safety and security",4],["Operational skills",4],["Customer service and sales",2],["Supervisory and management",1],["Assessment and competency",9],["Product knowledge governance",20],["Training and product knowledge reporting",4],["Training and product knowledge integration",3],["Training and product knowledge controls",3]]],
+["11","Security","#13808f","📹",88,12,9,[["Shift management & handover",7],["Gate & access control",6],["Visitor management",2],["Staff searches & declarations",7],["Vehicle control",4],["Receiving & dispatch control",8],["Cash & cash-up security",7],["Staff purchases & product testing",5],["Patrols & inspections",5],["CCTV management",12],["Keys & premises security",3],["Emergency & fire safety",4],["Closing procedure",5],["Incident management & reporting",4],["Security registers & records",2],["Security compliance & conduct",2],["Security reporting & dashboards",5]]],
+["12","Standard Operating Procedures (SOPs)","#d32f2f","📋",0,0,0,[]],
+["13","Complexes","#f97316","📍",0,0,0,[]]
+];
+var app=document.getElementById("app"),done={};
+try{done=JSON.parse(localStorage.getItem("foodies_done")||"{}")}catch(e){done={}}
+function save(){try{localStorage.setItem("foodies_done",JSON.stringify(done))}catch(e){}}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function tile(m,i,w){return '<button class="tile'+(w?' wide':'')+'" data-i="'+i+'"><span class="sq" style="background:'+m[2]+'">'+m[3]+'</span><span class="tx"><i>'+m[0]+'</i><strong>'+esc(m[1])+'</strong>'+(m[4]?'<small>'+m[4]+' checklist items</small>':'<small>No checklist data yet</small>')+'</span><span class="chev">›</span></button>'}
+function home(){
+ var t=0,c=0,f=0;M.forEach(function(m){t+=m[4];c+=m[5];f+=m[6]});
+ var order=[0,1,2,3,4,5,6,7,8,9,10,11],h='<div class="sum"><div><b>'+t+'</b><small>Checklist items</small></div><div><b>'+c+'</b><small>Clarifications</small></div><div><b>'+f+'</b><small>App features</small></div></div><div class="grid">';
+ order.forEach(function(i){h+=tile(M[i],i,false)});
+ h+=tile(M[12],12,true)+'</div><p class="note">Source: Foodies Application Developer Checklist</p>';
+ app.innerHTML=h;
+}
+function mod(i){
+ var m=M[i],h='<button class="back" id="bk">‹ All modules</button><div class="mh"><span class="sq" style="background:'+m[2]+'">'+m[3]+'</span><h1>'+m[0]+' · '+esc(m[1])+'</h1></div>';
+ if(!m[7].length){app.innerHTML=h+'<div class="empty">The checklist file has no items for this module yet. Send the next sheet and it will appear here.</div>';return bind()}
+ var d=m[7].filter(function(a,k){return done[i+"-"+k]}).length;
+ h+='<small class="ct" id="pg">'+d+' of '+m[7].length+' areas ticked off</small><div class="meter"><div id="mt" style="width:'+(d/m[7].length*100)+'%"></div></div>';
+ m[7].forEach(function(a,k){var on=done[i+"-"+k];h+='<button class="area'+(on?' on':'')+'" data-k="'+k+'" role="checkbox" aria-checked="'+!!on+'"><span class="box">'+(on?'✓':'')+'</span><span class="nm">'+esc(a[0])+'</span><span class="ct">'+a[1]+' items</span></button>'});
+ h+='<div class="info"><div><b>'+m[4]+'</b>Developer checklist items</div><div><b>'+m[7].length+'</b>Operational areas</div><div><b>'+m[5]+'</b>Items to confirm</div><div><b>'+m[6]+'</b>Cross-module features</div></div>';
+ app.innerHTML=h;
+ document.getElementById("bk").onclick=function(){location.hash=""};
+ Array.prototype.forEach.call(document.querySelectorAll(".area"),function(b){b.onclick=function(){var key=i+"-"+b.dataset.k;if(done[key])delete done[key];else done[key]=1;save();mod(i)}});
+ bind();
+}
+function bind(){var b=document.getElementById("bk");if(b)b.onclick=function(){location.hash=""}}
+app.addEventListener("click",function(e){var t=e.target.closest(".tile");if(t)location.hash="m"+t.dataset.i});
+document.getElementById("home").onclick=function(){location.hash=""};
+function route(){var h=location.hash.replace("#","");if(/^m\d+$/.test(h)&&M[+h.slice(1)]){mod(+h.slice(1))}else home();window.scrollTo(0,0)}
+window.addEventListener("hashchange",route);route();
+</script>
+</body>
+</html>
