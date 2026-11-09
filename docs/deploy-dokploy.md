@@ -21,10 +21,10 @@ This deployment uses a Dokploy-managed PostgreSQL database and Docker Compose fo
 
 5. Add `foodies.spiritusglobal.tech` in the Compose service's Domains tab and route it to the web container on port `3000`.
 6. Create an `A` record for `foodies.spiritusglobal.tech` pointing to `169.58.37.240`, then enable HTTPS for the domain in Dokploy.
-7. Deploy the PostgreSQL service first. Then deploy Compose. Goose applies pending migrations before the API and web app start.
+7. Deploy the PostgreSQL service first. Then deploy Compose. Goose applies pending migrations, and the seed job loads reference roles and rules before the API and web app start.
 
 The web app proxies `/api/v1` to the API over the private Compose network. The database should use Dokploy's internal connection URL; do not enable external database access. Uploaded evidence persists in a named volume. Configure Dokploy database backups before production use.
 
 ## First login
 
-This compose file does not seed demo users or sample business data. The repository currently has no first-admin bootstrap flow, so the services can start but users cannot sign in until an administrator account is provisioned separately. `make seed-demo` creates a made-up organisation and shared demo credentials; use it only on a disposable staging deployment, never on a live database.
+The seed job loads reference data by default. Without demo mode, the repository has no first-admin bootstrap flow, so the services can start but users cannot sign in until an administrator account is provisioned separately. To also load the made-up organisation and demo users, set `LOAD_DEMO_DATA=true`, `SEED_PASSWORD`, and `SEED_PIN` in Dokploy. That adds fictional employees E1001–E1028 across all 26 roles, using the same demo password and PIN for each account. Demo data is for testing only; do not enable it on a live database.

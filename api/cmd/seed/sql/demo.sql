@@ -60,7 +60,13 @@ WITH staff (number, first_name, last_name, title, dept, site, role, scope_type, 
   ('E1019', 'Tinashe',   'Ndlovu',   'HR Officer',           'HR',  'HO',    'hr_officer',         'all',     NULL),
   ('E1020', 'Yeukai',    'Madondo',  'Internal Auditor',     'AUD', 'HO',    'internal_audit',     'all',     NULL),
   ('E1021', 'Nomsa',     'Khumalo',  'Branch Manager',       'OPS', 'BYO01', 'branch_manager',     'site',    'BYO01'),
-  ('E1022', 'Lovemore',  'Sithole',  'Crew Member',          'OPS', 'HRE01', 'employee',           'site',    'HRE01')
+  ('E1022', 'Lovemore',  'Sithole',  'Crew Member',          'OPS', 'HRE01', 'employee',           'site',    'HRE01'),
+  ('E1023', 'Chiedza',   'Moyo',     'Chairman',             'EXE', 'HO',    'chairman',            'all',     NULL),
+  ('E1024', 'Kuda',      'Ndlovu',   'Security Manager',     'SEC', 'HO',    'security_manager',    'all',     NULL),
+  ('E1025', 'Farai',     'Hove',     'SHEQ Officer',         'SHQ', 'HO',    'sheq',                'all',     NULL),
+  ('E1026', 'Tapiwa',    'Dube',     'Training Manager',     'TRN', 'HO',    'training_manager',    'all',     NULL),
+  ('E1027', 'Munashe',   'Chuma',    'Document Controller',  'QMS', 'HO',    'document_controller','all',     NULL),
+  ('E1028', 'Nyasha',    'Bhebhe',   'Asset Officer',        'MNT', 'HO',    'asset_officer',       'all',     NULL)
 ), emp AS (
   INSERT INTO employees (reference, employee_number, first_name, last_name, job_title, department_id, site_id, employment_status, start_date, contract_type, phone_e164)
   SELECT 'EMP-' || s.site || '-2026-' || lpad(substr(st.number, 2), 6, '0'), st.number, st.first_name, st.last_name, st.title, d.id, s2.id, 'active', DATE '2024-01-15', 'permanent',

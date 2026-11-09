@@ -13,6 +13,31 @@ services:
     networks:
       - dokploy-network
 
+  seed:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+      target: seed
+    restart: "no"
+    entrypoint: ["/bin/sh", "-ec"]
+    command: |
+      if [ "$${LOAD_DEMO_DATA}" = "true" ]; then
+        : "$${SEED_PASSWORD:?Set SEED_PASSWORD in Dokploy for demo seeding}"
+        : "$${SEED_PIN:?Set SEED_PIN in Dokploy for demo seeding}"
+        exec /usr/local/bin/seed -demo
+      fi
+      exec /usr/local/bin/seed
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in Dokploy}
+      LOAD_DEMO_DATA: ${LOAD_DEMO_DATA:-false}
+      SEED_PASSWORD: ${SEED_PASSWORD:-}
+      SEED_PIN: ${SEED_PIN:-}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - dokploy-network
+
   api:
     build:
       context: .
@@ -30,7 +55,7 @@ services:
     volumes:
       - foodies-uploads:/data/uploads
     depends_on:
-      migrate:
+      seed:
         condition: service_completed_successfully
     expose:
       - "8080"
