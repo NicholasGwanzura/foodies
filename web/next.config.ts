@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/v1/:path*",
-        destination: "http://api:8080/api/v1/:path*",
+        destination: "http://foodies-api-internal:8080/api/v1/:path*",
       },
     ];
   },
